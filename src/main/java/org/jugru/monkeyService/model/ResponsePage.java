@@ -1,10 +1,14 @@
 package org.jugru.monkeyService.model;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
@@ -12,20 +16,34 @@ import javax.persistence.OneToMany;
 public class ResponsePage {
 
     @Id
-    private long id;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Question> questions;
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long appId;
 
-    public Set<Question> getQuestions() {
-        return questions;
+    @Column(name = "monkey_id")
+    private Long id;
+        
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Question> questions = new HashSet<>();
+
+    public Long getAppId() {
+        return appId;
     }
 
-    public long getId() {
+    public void setAppId(Long appId) {
+        this.appId = appId;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
+    }
+
+    public Set<Question> getQuestions() {
+        return questions;
     }
 
     public void setQuestions(Set<Question> questions) {
@@ -35,7 +53,7 @@ public class ResponsePage {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.id);
+        hash = 71 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -59,7 +77,9 @@ public class ResponsePage {
 
     @Override
     public String toString() {
-        return "ResponsePage{" + "id=" + id + ", questions=" + questions + '}';
+        return "ResponsePage{" + "appId=" + appId + ", id=" + id + '}';
     }
+
+    
 
 }

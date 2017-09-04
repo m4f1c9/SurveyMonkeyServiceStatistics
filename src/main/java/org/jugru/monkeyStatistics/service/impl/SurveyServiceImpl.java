@@ -1,5 +1,6 @@
 package org.jugru.monkeyStatistics.service.impl;
 
+import java.util.List;
 import org.jugru.monkeyService.model.Survey;
 import org.jugru.monkeyStatistics.repository.SurveyRepository;
 import org.jugru.monkeyStatistics.service.SurveyService;
@@ -13,10 +14,23 @@ public class SurveyServiceImpl implements SurveyService {
     private SurveyRepository surveyRepository;
 
     @Override
-    public Survey addSurvey(Survey survey) {
-        return surveyRepository.saveAndFlush(survey);
+    public Survey save(Survey survey) {
+        return surveyRepository.save(survey);
     }
-    
-    
+
+    @Override
+    public Survey get(long id) {
+        return surveyRepository.findOne(id);
+    }
+
+    @Override
+    public void delete(Survey survey) {
+        surveyRepository.delete(survey);
+    }
+
+    @Override
+    public List<Survey> getAll() {
+        return surveyRepository.findAll();
+    }
 
 }

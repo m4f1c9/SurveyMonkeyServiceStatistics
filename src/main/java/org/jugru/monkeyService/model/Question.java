@@ -5,6 +5,9 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
@@ -12,21 +15,34 @@ import javax.persistence.OneToMany;
 public class Question {
 
     @Id
-    private long id;
-    
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long AppId;
+
+    @Column(name = "monkey_id")
+    private Long id;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     Set<Answer> answers;
 
-    public long getId() {
+    public Long getAppId() {
+        return AppId;
+    }
+
+    public void setAppId(Long AppId) {
+        this.AppId = AppId;
+    }
+
+    public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Set<Answer> getAnswers() {
         return answers;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public void setAnswers(Set<Answer> answers) {
@@ -35,8 +51,8 @@ public class Question {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 89 * hash + Objects.hashCode(this.id);
+        int hash = 3;
+        hash = 97 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -60,7 +76,8 @@ public class Question {
 
     @Override
     public String toString() {
-        return "Question{" + "id=" + id + ", answers=" + answers + '}';
+        return "Question{" + "AppId=" + AppId + ", id=" + id + '}';
     }
 
+    
 }

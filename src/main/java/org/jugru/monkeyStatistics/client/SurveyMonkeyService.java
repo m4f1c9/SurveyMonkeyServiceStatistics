@@ -1,0 +1,47 @@
+package org.jugru.monkeyStatistics.client;
+
+import java.util.List;
+import java.util.Objects;
+import org.jugru.monkeyService.model.Survey;
+import org.jugru.monkeyStatistics.service.SurveyService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
+public class SurveyMonkeyService {
+
+    @Autowired
+    private SurveyService surveyService;
+
+    @Autowired
+    private SurveyMonkeyClient surveyMonkeyClient;
+
+    public void parseAndSaveAllNewSurveys() {
+        List<Survey> fromDB = surveyService.getAll();
+        List<Survey> fromSurveyMonkey = surveyMonkeyClient.getAllSurveys();
+        fromSurveyMonkey.removeAll(fromDB);
+        fromSurveyMonkey.forEach(this::parseAndSaveDetailedSurvey);
+    }
+
+    public void parseAndSaveDetailedSurvey(Survey survey) {
+        // TODO запретить повторное сохранение 
+        Survey result = surveyMonkeyClient.getSurvey(survey.getId());
+        result.setWithDetails(true);
+        surveyService.save(survey);
+    }
+
+    public void refreshAnswers() {
+        surveyService.getAll().stream().
+                filter((t) -> {
+                    return !Objects.equals(t.getStatus(), "closed");
+                }).
+                peek((survey) -> {
+                    survey.addNewResponses(surveyMonkeyClient.getAllResponsesBySurveyId(survey.getId()));
+                }).
+                peek((survey) -> {
+                    survey.setStatus(surveyMonkeyClient.getSurveyStatus(survey));
+                }).
+                forEach(surveyService::save);
+    }
+
+}

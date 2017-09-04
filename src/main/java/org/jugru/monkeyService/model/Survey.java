@@ -1,12 +1,13 @@
 package org.jugru.monkeyService.model;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
@@ -14,77 +15,86 @@ import javax.persistence.OneToMany;
 public class Survey implements Comparable<Survey> {
 
     @Id
-    private long id;
+    private Long id;
+
     @Column(name = "title")
     private String title;
     @Column(name = "nickname")
     private String nickname;
-
     @Column(name = "with_details")
     private boolean withDetails;
-
     @Column(name = "status")
     private String status;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    Set<SurveyPage> pages;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    Set<SurveyPage> pages = new HashSet<>();
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Response> responses = new HashSet<>();
 
-    
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Response> responseList = new TreeSet<Response>();
+    public void addNewResponses(Collection<Response> responses) {
+        this.responses.addAll(responses);
+    }
 
-    public long getId() {
+    public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public String getNickname() {
-        return nickname;
-    }
-
-    public boolean isWithDetails() {
-        return withDetails;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public Set<SurveyPage> getPages() {
-        return pages;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getNickname() {
+        return nickname;
     }
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
 
+    public boolean isWithDetails() {
+        return withDetails;
+    }
+
     public void setWithDetails(boolean withDetails) {
         this.withDetails = withDetails;
+    }
+
+    public String getStatus() {
+        return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
     }
 
+    public Set<SurveyPage> getPages() {
+        return pages;
+    }
+
     public void setPages(Set<SurveyPage> pages) {
         this.pages = pages;
+    }
+
+    public Set<Response> getResponses() {
+        return responses;
+    }
+
+    public void setResponses(Set<Response> responses) {
+        this.responses = responses;
     }
 
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 29 * hash + Objects.hashCode(this.id);
+        hash = 59 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -107,19 +117,19 @@ public class Survey implements Comparable<Survey> {
     }
 
     @Override
-    public String toString() {
-        return "Survey{" + "id=" + id + ", title=" + title + ", nickname=" + nickname + ", withDetails=" + withDetails + ", status=" + status + '}';
-    }
-
-    @Override
     public int compareTo(Survey o) {
-        if (id == o.id) {
+        if (Objects.equals(id, o.id)) {
             return 0;
         } else if (id > o.id) {
             return 1;
         } else {
             return -1;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Survey{" + "id=" + id + ", title=" + title + ", nickname=" + nickname + ", withDetails=" + withDetails + ", status=" + status + '}';
     }
 
 }

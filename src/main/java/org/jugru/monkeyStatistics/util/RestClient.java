@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 import org.jugru.monkeyService.model.Survey;
 import org.jugru.monkeyService.model.Survey;
+import org.jugru.monkeyService.model.util.CollectorWrapper;
+import org.jugru.monkeyService.model.util.Collector;
 import org.jugru.monkeyService.model.util.ListOfResponses;
 import org.jugru.monkeyService.model.util.ListOfSurveys;
 import org.springframework.context.annotation.Bean;
@@ -38,14 +40,17 @@ public class RestClient {
         this.headers.set("Authorization", "bearer " + token);
     }
 
+    private HttpEntity<String> createHttpEntity() {
+        return new HttpEntity<>(headers);
+    }
+
     public ListOfSurveys getListOfSurveys(int page, int per_page) {
-        HttpEntity<String> entity = new HttpEntity<>(headers);
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<ListOfSurveys> responseEntity
                 = restTemplate.
                         exchange(baseURL + "surveys?page={page}&per_page={per_page}",
                                 HttpMethod.GET,
-                                entity,
+                                createHttpEntity(),
                                 ListOfSurveys.class,
                                 page,
                                 per_page);
@@ -53,31 +58,50 @@ public class RestClient {
     }
 
     public Survey getSurvey(long id) {
-        HttpEntity<String> entity = new HttpEntity<>(headers);
         RestTemplate restTemplate = new RestTemplate();
-
         ResponseEntity<Survey> responseEntity
                 = restTemplate.
                         exchange(baseURL + "surveys/{id}/details",
                                 HttpMethod.GET,
-                                entity,
+                                createHttpEntity(),
                                 Survey.class,
                                 id);
         return responseEntity.getBody();
     }
 
     public ListOfResponses getListOfResponses(long survey, int page, int per_page) {
-        HttpEntity<String> entity = new HttpEntity<>(headers);
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<ListOfResponses> responseEntity
                 = restTemplate.
                         exchange(baseURL + "surveys/{survey}/responses/bulk?page={page}&per_page={per_page}",
                                 HttpMethod.GET,
-                                entity,
+                                createHttpEntity(),
                                 ListOfResponses.class,
                                 survey,
                                 page,
                                 per_page);
+        return responseEntity.getBody();
+    }
+
+    public CollectorWrapper getCollectorWrapper(long id) {
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<CollectorWrapper> responseEntity
+                = restTemplate.
+                        exchange(baseURL + "surveys/" + id + "/collectors",
+                                HttpMethod.GET,
+                                createHttpEntity(),
+                                CollectorWrapper.class);
+        return responseEntity.getBody();
+    }
+
+    public Collector getCollector(long id) {
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<Collector> responseEntity
+                = restTemplate.
+                        exchange(baseURL + "/collectors/" + id,
+                                HttpMethod.GET,
+                                createHttpEntity(),
+                                Collector.class);
         return responseEntity.getBody();
     }
 

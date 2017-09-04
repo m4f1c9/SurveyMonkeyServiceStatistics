@@ -1,38 +1,22 @@
 package org.jugru.monkeyService.model;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-@Entity
+@Embeddable
 public class Answers {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Choice> choices;
-
+    private Set<Choice> choices = new HashSet<>();
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Other other;
-
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Row> rows;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    private Set<Row> rows = new HashSet<>();
 
     public Set<Choice> getChoices() {
         return choices;
@@ -46,12 +30,12 @@ public class Answers {
         return other;
     }
 
-    public Set<Row> getRows() {
-        return rows;
-    }
-
     public void setOther(Other other) {
         this.other = other;
+    }
+
+    public Set<Row> getRows() {
+        return rows;
     }
 
     public void setRows(Set<Row> rows) {
@@ -60,8 +44,10 @@ public class Answers {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 71 * hash + Objects.hashCode(this.choices);
+        int hash = 7;
+        hash = 23 * hash + Objects.hashCode(this.choices);
+        hash = 23 * hash + Objects.hashCode(this.other);
+        hash = 23 * hash + Objects.hashCode(this.rows);
         return hash;
     }
 
@@ -80,12 +66,20 @@ public class Answers {
         if (!Objects.equals(this.choices, other.choices)) {
             return false;
         }
+        if (!Objects.equals(this.other, other.other)) {
+            return false;
+        }
+        if (!Objects.equals(this.rows, other.rows)) {
+            return false;
+        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "Answer{" + "choices=" + choices + ", other=" + other + ", rows=" + rows + '}';
+        return "Answers{" + "choices=" + choices + ", other=" + other + ", rows=" + rows + '}';
     }
+
+    
 
 }

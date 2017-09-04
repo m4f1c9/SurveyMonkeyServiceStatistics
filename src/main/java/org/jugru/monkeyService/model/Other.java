@@ -9,7 +9,8 @@ import javax.persistence.Id;
 public class Other {
 
     @Id
-    private long id;
+    private Long id;
+
     @Column(name = "visible")
     private Boolean visible;
     @Column(name = "is_answer_choice")
@@ -27,72 +28,72 @@ public class Other {
     @Column(name = "num_lines")
     private Integer num_lines;
 
-    public long getId() {
+    public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Boolean getVisible() {
         return visible;
     }
 
-    public Boolean getIs_answer_choice() {
-        return is_answer_choice;
-    }
-
-    public Boolean getApply_all_rows() {
-        return apply_all_rows;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public Integer getPosition() {
-        return position;
-    }
-
-    public Integer getNum_chars() {
-        return num_chars;
-    }
-
-    public String getError_text() {
-        return error_text;
-    }
-
-    public Integer getNum_lines() {
-        return num_lines;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public void setVisible(Boolean visible) {
         this.visible = visible;
+    }
+
+    public Boolean getIs_answer_choice() {
+        return is_answer_choice;
     }
 
     public void setIs_answer_choice(Boolean is_answer_choice) {
         this.is_answer_choice = is_answer_choice;
     }
 
+    public Boolean getApply_all_rows() {
+        return apply_all_rows;
+    }
+
     public void setApply_all_rows(Boolean apply_all_rows) {
         this.apply_all_rows = apply_all_rows;
+    }
+
+    public String getText() {
+        return text;
     }
 
     public void setText(String text) {
         this.text = text;
     }
 
+    public Integer getPosition() {
+        return position;
+    }
+
     public void setPosition(Integer position) {
         this.position = position;
+    }
+
+    public Integer getNum_chars() {
+        return num_chars;
     }
 
     public void setNum_chars(Integer num_chars) {
         this.num_chars = num_chars;
     }
 
+    public String getError_text() {
+        return error_text;
+    }
+
     public void setError_text(String error_text) {
         this.error_text = error_text;
+    }
+
+    public Integer getNum_lines() {
+        return num_lines;
     }
 
     public void setNum_lines(Integer num_lines) {
@@ -101,8 +102,8 @@ public class Other {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 79 * hash + Objects.hashCode(this.id);
+        int hash = 3;
+        hash = 23 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -129,4 +130,5 @@ public class Other {
         return "Other{" + "id=" + id + ", visible=" + visible + ", is_answer_choice=" + is_answer_choice + ", apply_all_rows=" + apply_all_rows + ", text=" + text + ", position=" + position + ", num_chars=" + num_chars + ", error_text=" + error_text + ", num_lines=" + num_lines + '}';
     }
 
+    
 }

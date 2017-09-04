@@ -8,7 +8,7 @@ public class ListOfSurveys {
     private int per_page;
     private int total;
     private int page;
-    private Set<Survey> surveys;
+    private Set<Survey> data;
 
     public int getPer_page() {
         return per_page;
@@ -20,10 +20,6 @@ public class ListOfSurveys {
 
     public int getPage() {
         return page;
-    }
-
-    public Set<Survey> getSurveys() {
-        return surveys;
     }
 
     public void setPer_page(int per_page) {
@@ -38,8 +34,21 @@ public class ListOfSurveys {
         this.page = page;
     }
 
-    public void setSurveys(Set<Survey> surveys) {
-        this.surveys = surveys;
+    public Set<Survey> getData() {
+        return data;
+    }
+
+    public void setData(Set<Survey> data) {
+        this.data = data;
+    }
+
+    public Set<Survey> getSurveys() {
+        return data;
+    }
+
+    @Override
+    public String toString() {
+        return "ListOfSurveys{" + "per_page=" + per_page + ", total=" + total + ", page=" + page + ", data=" + data + '}';
     }
 
 }

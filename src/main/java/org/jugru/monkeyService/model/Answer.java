@@ -12,21 +12,22 @@ public class Answer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
+
     @Column(name = "choice_id")
     private Long choice_id;
     @Column(name = "row_id")
     private Long row_id;
-    @Column(name = "text")
+    @Column(name = "text", length = 3000)
     private String text;
     @Column(name = "other_id")
     private Long other_id;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -34,28 +35,28 @@ public class Answer {
         return choice_id;
     }
 
-    public Long getRow_id() {
-        return row_id;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public Long getOther_id() {
-        return other_id;
-    }
-
     public void setChoice_id(Long choice_id) {
         this.choice_id = choice_id;
+    }
+
+    public Long getRow_id() {
+        return row_id;
     }
 
     public void setRow_id(Long row_id) {
         this.row_id = row_id;
     }
 
+    public String getText() {
+        return text;
+    }
+
     public void setText(String text) {
         this.text = text;
+    }
+
+    public Long getOther_id() {
+        return other_id;
     }
 
     public void setOther_id(Long other_id) {
@@ -101,7 +102,7 @@ public class Answer {
 
     @Override
     public String toString() {
-        return "Answer{" + "choice_id=" + choice_id + ", row_id=" + row_id + ", text=" + text + ", other_id=" + other_id + '}';
+        return "Answer{" + "id=" + id + ", choice_id=" + choice_id + ", row_id=" + row_id + ", text=" + text + ", other_id=" + other_id + '}';
     }
 
 }

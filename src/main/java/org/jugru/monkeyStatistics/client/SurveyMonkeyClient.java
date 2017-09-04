@@ -1,9 +1,14 @@
 package org.jugru.monkeyStatistics.client;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import org.jugru.monkeyService.model.Response;
 import org.jugru.monkeyService.model.Survey;
+import org.jugru.monkeyService.model.util.Collector;
+import org.jugru.monkeyService.model.util.CollectorWrapper;
 import org.jugru.monkeyService.model.util.ListOfResponses;
 import org.jugru.monkeyService.model.util.ListOfSurveys;
 import org.jugru.monkeyStatistics.util.RestClient;
@@ -23,8 +28,8 @@ public class SurveyMonkeyClient {
         this.restClient = restClient;
     }
 
-    public Set<Survey> getAllSurveys() {
-        Set<Survey> answer = new TreeSet<>();
+    public List<Survey> getAllSurveys() {
+        List<Survey> answer = new ArrayList<>(200);
         int page = 1;
         int per_page = 100;
         ListOfSurveys surveyWrapper;
@@ -46,9 +51,38 @@ public class SurveyMonkeyClient {
         } while (page++ * per_page < listOfResponses.getTotal());
         return answer;
     }
-    
-    public Survey getSurvey (long id){
+
+    public Survey getSurvey(long id) {
         return restClient.getSurvey(id);
+    }
+
+    public String getSurveyStatus(Survey survey) {
+        return getSurveyStatus(survey.getId());
+    }
+
+    //TODO разбить на методы
+    public String getSurveyStatus(long id) {
+        CollectorWrapper collectorWrapper = restClient.getCollectorWrapper(id);
+
+       Set<Long> collectorsID = new HashSet<>();
+        collectorWrapper.getData().forEach((collectors) -> {
+            collectorsID.add(collectors.getId());
+        });
+
+        if (collectorsID.isEmpty()) {
+            return null;
+        } 
+        String answer = "closed";
+
+        for (Long monkeyCollectorID : collectorsID) {
+            Collector collector = restClient.getCollector(monkeyCollectorID);
+            if (!collector.getStatus().equals("closed")) {
+                answer = "active";
+            }
+
+        }
+
+        return answer;
     }
 
 }

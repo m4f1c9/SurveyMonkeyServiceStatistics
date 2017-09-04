@@ -9,40 +9,41 @@ import javax.persistence.Id;
 public class Choice {
 
     @Id
-    private long id;
+    private Long id;
+
     @Column(name = "visible")
     private boolean visible;
-    @Column(name = "text")
+    @Column(name = "text", length = 3000)
     private String text;
     @Column(name = "position")
     private Integer position;
 
-    public long getId() {
+    public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public boolean isVisible() {
         return visible;
     }
 
-    public String getText() {
-        return text;
-    }
-
-    public Integer getPosition() {
-        return position;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public void setVisible(boolean visible) {
         this.visible = visible;
     }
 
+    public String getText() {
+        return text;
+    }
+
     public void setText(String text) {
         this.text = text;
+    }
+
+    public Integer getPosition() {
+        return position;
     }
 
     public void setPosition(Integer position) {
@@ -51,8 +52,8 @@ public class Choice {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 97 * hash + Objects.hashCode(this.id);
+        int hash = 3;
+        hash = 83 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -78,5 +79,6 @@ public class Choice {
     public String toString() {
         return "Choice{" + "id=" + id + ", visible=" + visible + ", text=" + text + ", position=" + position + '}';
     }
+    
 
 }

@@ -9,7 +9,8 @@ import javax.persistence.Id;
 public class Row {
 
     @Id
-    private long id;
+    private Long id;
+
     @Column(name = "visible")
     private Boolean visible;
     @Column(name = "text")
@@ -17,23 +18,11 @@ public class Row {
     @Column(name = "position")
     private Integer position;
 
-    public void setVisible(Boolean visible) {
-        this.visible = visible;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public void setPosition(Integer position) {
-        this.position = position;
-    }
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -41,18 +30,30 @@ public class Row {
         return visible;
     }
 
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
+    }
+
     public String getText() {
         return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     public Integer getPosition() {
         return position;
     }
 
+    public void setPosition(Integer position) {
+        this.position = position;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 29 * hash + Objects.hashCode(this.id);
+        hash = 79 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
