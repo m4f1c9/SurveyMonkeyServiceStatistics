@@ -10,4 +10,6 @@ public interface AnswerService extends Service<Answer> {
     List<Answer> getByChoice_id(long choice_id);
 
     List<Answer> getByRow_id(long row_id);
+    
+    Long countByChoice_id(long choice_id);
 }

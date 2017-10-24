@@ -11,7 +11,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan("org.jugru.monkeyStatistics.web")
+@ComponentScan(basePackages={"org.jugru.monkeyStatistics.web" , "org.jugru.monkeyService.api"})
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Bean

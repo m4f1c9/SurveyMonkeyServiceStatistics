@@ -9,9 +9,11 @@
             30
         </session-timeout>
     </session-config>
-    
+    <!--
     <persistence-unit-ref>  
         <persistence-unit-ref-name>persistence/persistenceUnit_1</persistence-unit-ref-name>  
         <persistence-unit-name>persistenceUnit_1</persistence-unit-name>  
     </persistence-unit-ref>  
+    
+    -->
 </web-app>

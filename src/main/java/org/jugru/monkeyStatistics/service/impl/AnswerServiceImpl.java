@@ -48,4 +48,9 @@ public class AnswerServiceImpl implements AnswerService {
         return answerRepository.findAnswerByRow_id(row_id);
     }
 
+    @Override
+    public Long countByChoice_id(long choice_id) {
+        return answerRepository.countByChoice_id(choice_id);
+    }
+
 }

@@ -1,4 +1,4 @@
-package org.jugru.monkeyStatistics.util;
+package org.jugru.monkeyStatistics.client;
 
 import java.util.HashSet;
 import java.util.Set;

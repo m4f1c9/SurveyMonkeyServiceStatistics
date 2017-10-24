@@ -2,8 +2,8 @@ package org.jugru.monkeyStatistics.web;
 
 import org.jugru.monkeyService.model.Survey;
 import org.jugru.monkeyStatistics.client.SurveyMonkeyClient;
-import org.jugru.monkeyStatistics.client.SurveyMonkeyService;
-import org.jugru.monkeyStatistics.util.RestClient;
+import org.jugru.monkeyStatistics.service.impl.SurveyMonkeyService;
+import org.jugru.monkeyStatistics.client.RestClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

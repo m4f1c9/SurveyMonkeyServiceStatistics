@@ -38,58 +38,17 @@ public class JpaConfig {
     @Resource
     private Environment env;
 
-//    @Bean
-//    public DataSource dataSource() {
-//        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-//
-//        dataSource.setDriverClassName(env.getRequiredProperty(PROP_DATABASE_DRIVER));
-//        dataSource.setUrl(env.getRequiredProperty(PROP_DATABASE_URL));
-//        dataSource.setUsername(env.getRequiredProperty(PROP_DATABASE_USERNAME));
-//        dataSource.setPassword(env.getRequiredProperty(PROP_DATABASE_PASSWORD));
-//
-//        return dataSource;
-//    }
-//    @Bean
-//    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-//        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
-//        entityManagerFactoryBean.setDataSource(dataSource());
-//        entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
-//        entityManagerFactoryBean.setPackagesToScan(env.getRequiredProperty(PROP_ENTITYMANAGER_PACKAGES_TO_SCAN));
-//
-//        entityManagerFactoryBean.setJpaProperties(getHibernateProperties());
-//
-//        return entityManagerFactoryBean;
-//    }
-//
-//    @Bean
-//    public JpaTransactionManager transactionManager() {
-//        JpaTransactionManager transactionManager = new JpaTransactionManager();
-//        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
-//
-//        return transactionManager;
-//    }
-//    private Properties getHibernateProperties() {
-//        Properties properties = new Properties();
-//        properties.put(PROP_HIBERNATE_DIALECT, env.getRequiredProperty(PROP_HIBERNATE_DIALECT));
-//        properties.put(PROP_HIBERNATE_SHOW_SQL, env.getRequiredProperty(PROP_HIBERNATE_SHOW_SQL));
-//        properties.put(PROP_HIBERNATE_SCHEMA_GENERATION, env.getRequiredProperty(PROP_HIBERNATE_SCHEMA_GENERATION));
-//
-//        return properties;
-//    }
-//    
-    
-    
     @Bean
     public DataSource dataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
-        // no need shutdown, EmbeddedDatabaseFactoryBean will take care of this
-        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-        EmbeddedDatabase db = builder
-                .setType(EmbeddedDatabaseType.HSQL)
-                .build();
-        return db;
+        dataSource.setDriverClassName(env.getRequiredProperty(PROP_DATABASE_DRIVER));
+        dataSource.setUrl(env.getRequiredProperty(PROP_DATABASE_URL));
+        dataSource.setUsername(env.getRequiredProperty(PROP_DATABASE_USERNAME));
+        dataSource.setPassword(env.getRequiredProperty(PROP_DATABASE_PASSWORD));
+
+        return dataSource;
     }
-
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
@@ -109,6 +68,30 @@ public class JpaConfig {
 
         return transactionManager;
     }
+    
+//    private Properties getHibernateProperties() {
+//        Properties properties = new Properties();
+//        properties.put(PROP_HIBERNATE_DIALECT, env.getRequiredProperty(PROP_HIBERNATE_DIALECT));
+//        properties.put(PROP_HIBERNATE_SHOW_SQL, env.getRequiredProperty(PROP_HIBERNATE_SHOW_SQL));
+//        properties.put(PROP_HIBERNATE_SCHEMA_GENERATION, env.getRequiredProperty(PROP_HIBERNATE_SCHEMA_GENERATION));
+//
+//        return properties;
+//    }
+//    
+    
+    
+//    @Bean
+//    public DataSource dataSource() {
+//
+//        // no need shutdown, EmbeddedDatabaseFactoryBean will take care of this
+//        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+//        EmbeddedDatabase db = builder
+//                .setType(EmbeddedDatabaseType.HSQL)
+//                .build();
+//        return db;
+//    }
+
+
 
     private Properties getHibernateProperties() {
         Properties properties = new Properties();

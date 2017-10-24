@@ -11,10 +11,13 @@ import org.jugru.monkeyService.model.util.Collector;
 import org.jugru.monkeyService.model.util.CollectorWrapper;
 import org.jugru.monkeyService.model.util.ListOfResponses;
 import org.jugru.monkeyService.model.util.ListOfSurveys;
-import org.jugru.monkeyStatistics.util.RestClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * Работает с SurveyMonkey API.
+ * 
+*/
 @Component
 public class SurveyMonkeyClient {
 

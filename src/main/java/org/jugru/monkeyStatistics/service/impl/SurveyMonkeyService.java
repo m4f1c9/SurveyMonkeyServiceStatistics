@@ -1,8 +1,9 @@
-package org.jugru.monkeyStatistics.client;
+package org.jugru.monkeyStatistics.service.impl;
 
 import java.util.List;
 import java.util.Objects;
 import org.jugru.monkeyService.model.Survey;
+import org.jugru.monkeyStatistics.client.SurveyMonkeyClient;
 import org.jugru.monkeyStatistics.service.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,10 +25,10 @@ public class SurveyMonkeyService {
     }
 
     public void parseAndSaveDetailedSurvey(Survey survey) {
-        // TODO запретить повторное сохранение 
+        // TODO запретить повторное сохранение (дублирование) 
         Survey result = surveyMonkeyClient.getSurvey(survey.getId());
         result.setWithDetails(true);
-        surveyService.save(survey);
+        surveyService.save(result);
     }
 
     public void refreshAnswers() {

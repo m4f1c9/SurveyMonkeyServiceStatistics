@@ -15,4 +15,7 @@ public interface AnswerRepository extends JpaRepository<Answer, Long> {
 
     @Query("Select answer from Answer answer where answer.row_id = ?1")
     List<Answer> findAnswerByRow_id(long row_id);
+
+    @Query("Select count(answer) from Answer answer where answer.choice_id = ?1")
+    Long countByChoice_id(long choice_id);
 }

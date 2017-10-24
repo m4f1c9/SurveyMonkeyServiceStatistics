@@ -3,7 +3,7 @@ package org.jugru.monkeyStatistics.web;
 import javax.transaction.Transactional;
 import org.jugru.monkeyService.model.Survey;
 import org.jugru.monkeyStatistics.client.SurveyMonkeyClient;
-import org.jugru.monkeyStatistics.util.RestClient;
+import org.jugru.monkeyStatistics.client.RestClient;
 import org.jugru.monkeyStatistics.repository.SurveyRepository;
 import org.jugru.monkeyStatistics.service.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +22,7 @@ public class SurveyController {
 
     @RequestMapping(value = "/survey")
     public String survey(Model model) {
-        Survey s = surveyMonkeyClient.getSurvey(88971560L);
-        s.addNewResponses(surveyMonkeyClient.getAllResponsesBySurveyId(88971560L));
+        Survey s = surveyService.get(88971560L);
         model.addAttribute("Survey", s);
         return "survey";
     }
