@@ -30,10 +30,15 @@
                 var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
 
                 chart.draw(data, google.charts.Bar.convertOptions(options));
+                
+                 var chart1 = new google.charts.Bar(document.getElementById('columnchart_material1'));
+
+                chart1.draw(data, google.charts.Bar.convertOptions(options));
             }
         </script>
     </head>
     <body>
         <div id="columnchart_material" style="width: 800px; height: 500px;"></div>
+        <div id="columnchart_material1" style="width: 800px; height: 500px;"></div>
     </body>
 </html>

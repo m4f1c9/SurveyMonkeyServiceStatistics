@@ -22,7 +22,7 @@ public class SurveyPage {
     @Column(name = "title")
     private String title;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Questions> questions;
 
     public Long getId() {

@@ -1,12 +1,20 @@
 package org.jugru.monkeyService.model.view;
 
-import java.util.Set;
-
 public class Conference {
 
     private String name;
-    private Set<ViewQuestions> questions;
+    private long id;
 
+    public Conference() {
+    }
+
+    public Conference(String name, long id) {
+        this.name = name;
+        this.id = id;
+    }
+
+    
+    
     public String getName() {
         return name;
     }
@@ -15,12 +23,12 @@ public class Conference {
         this.name = name;
     }
 
-    public Set<ViewQuestions> getQuestions() {
-        return questions;
+    public long getId() {
+        return id;
     }
 
-    public void setQuestions(Set<ViewQuestions> questions) {
-        this.questions = questions;
+    public void setId(long id) {
+        this.id = id;
     }
 
 }

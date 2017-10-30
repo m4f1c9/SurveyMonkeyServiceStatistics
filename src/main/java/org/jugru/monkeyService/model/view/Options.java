@@ -29,5 +29,48 @@ public class Options {
             this.subtitle = subtitle;
         }
 
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getSubtitle() {
+            return subtitle;
+        }
+
+        public void setSubtitle(String subtitle) {
+            this.subtitle = subtitle;
+        }
+        
+        
+
     }
+
+    public Chart getChart() {
+        return chart;
+    }
+
+    public void setChart(Chart chart) {
+        this.chart = chart;
+    }
+
+    public Integer getHeight() {
+        return height;
+    }
+
+    public void setHeight(Integer height) {
+        this.height = height;
+    }
+
+    public String getBars() {
+        return bars;
+    }
+
+    public void setBars(String bars) {
+        this.bars = bars;
+    }
+
 }

@@ -22,7 +22,7 @@ public class Question {
     @Column(name = "monkey_id")
     private Long id;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     Set<Answer> answers;
 
     public Long getAppId() {

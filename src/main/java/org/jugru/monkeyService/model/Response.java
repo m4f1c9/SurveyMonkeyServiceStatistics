@@ -25,7 +25,7 @@ public class Response implements Comparable<Response> {
     @Column(name = "collection_mode")
     private String collection_mode;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ResponsePage> pages = new HashSet<>();
 
     public Long getId() {

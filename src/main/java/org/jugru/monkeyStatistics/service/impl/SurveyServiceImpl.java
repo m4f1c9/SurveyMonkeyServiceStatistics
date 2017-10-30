@@ -1,6 +1,7 @@
 package org.jugru.monkeyStatistics.service.impl;
 
 import java.util.List;
+import javax.transaction.Transactional;
 import org.jugru.monkeyService.model.Survey;
 import org.jugru.monkeyStatistics.repository.SurveyRepository;
 import org.jugru.monkeyStatistics.service.SurveyService;
@@ -33,4 +34,12 @@ public class SurveyServiceImpl implements SurveyService {
         return surveyRepository.findAll();
     }
 
+    @Transactional
+    @Override
+    public int countAnswers(long id) {
+        return surveyRepository.findOne(id).getResponses().size(); //TODO написать запрос на count  
+    }
+
+    
+    
 }

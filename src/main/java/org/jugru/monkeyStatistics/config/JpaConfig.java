@@ -49,6 +49,7 @@ public class JpaConfig {
 
         return dataSource;
     }
+
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
@@ -68,7 +69,7 @@ public class JpaConfig {
 
         return transactionManager;
     }
-    
+
 //    private Properties getHibernateProperties() {
 //        Properties properties = new Properties();
 //        properties.put(PROP_HIBERNATE_DIALECT, env.getRequiredProperty(PROP_HIBERNATE_DIALECT));
@@ -78,8 +79,6 @@ public class JpaConfig {
 //        return properties;
 //    }
 //    
-    
-    
 //    @Bean
 //    public DataSource dataSource() {
 //
@@ -90,12 +89,9 @@ public class JpaConfig {
 //                .build();
 //        return db;
 //    }
-
-
-
     private Properties getHibernateProperties() {
         Properties properties = new Properties();
-        properties.put(PROP_HIBERNATE_DIALECT, "org.hibernate.dialect.HSQLDialect");
+        properties.put(PROP_HIBERNATE_DIALECT, env.getRequiredProperty(PROP_HIBERNATE_DIALECT));
         properties.put(PROP_HIBERNATE_SHOW_SQL, env.getRequiredProperty(PROP_HIBERNATE_SHOW_SQL));
         properties.put(PROP_HIBERNATE_SCHEMA_GENERATION, env.getRequiredProperty(PROP_HIBERNATE_SCHEMA_GENERATION));
 

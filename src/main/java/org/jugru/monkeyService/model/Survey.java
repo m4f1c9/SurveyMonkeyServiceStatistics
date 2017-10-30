@@ -26,9 +26,9 @@ public class Survey implements Comparable<Survey> {
     @Column(name = "status")
     private String status;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     Set<SurveyPage> pages = new HashSet<>();
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Response> responses = new HashSet<>();
 
     public void addNewResponses(Collection<Response> responses) {
