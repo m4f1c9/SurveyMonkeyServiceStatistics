@@ -2,6 +2,7 @@ package org.jugru.monkeyStatistics.service.impl;
 
 import java.util.List;
 import java.util.Objects;
+import javax.transaction.Transactional;
 import org.jugru.monkeyService.model.Survey;
 import org.jugru.monkeyStatistics.client.SurveyMonkeyClient;
 import org.jugru.monkeyStatistics.service.SurveyService;
@@ -17,6 +18,7 @@ public class SurveyMonkeyService {
     @Autowired
     private SurveyMonkeyClient surveyMonkeyClient;
 
+
     public void parseAndSaveAllNewSurveys() {
         List<Survey> fromDB = surveyService.getAll();
         List<Survey> fromSurveyMonkey = surveyMonkeyClient.getAllSurveys();
@@ -31,11 +33,13 @@ public class SurveyMonkeyService {
         surveyService.save(result);
     }
 
+    // TODO убрать разобратся с сессией
+    @Transactional
     public void refreshAnswers() {
         surveyService.getAll().stream().
-                filter((t) -> {
-                    return !Objects.equals(t.getStatus(), "closed");
-                }).
+//                filter((t) -> {
+//                    return !Objects.equals(t.getStatus(), "closed");
+//                }).
                 peek((survey) -> {
                     survey.addNewResponses(surveyMonkeyClient.getAllResponsesBySurveyId(survey.getId()));
                 }).

@@ -8,6 +8,10 @@ public class ChartData {
     private List<List> data = new LinkedList<>();
     private Options options;
 
+    public void addData(List list){
+        data.add(list);
+    }
+    
     public List<List> getData() {
         return data;
     }

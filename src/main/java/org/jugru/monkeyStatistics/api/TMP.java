@@ -14,13 +14,15 @@ public class TMP {
     @Autowired
     ChartDataBuilder chartDataBuilder;
 
-    @RequestMapping("/HJS")
-    public List<ChartData> gejzenbag() {
-        return chartDataBuilder.standartChart(Conferences.holyJS());
+    @RequestMapping("/HJSA")
+    public List<ChartData> holuJSA() {
+        return chartDataBuilder.standartSingleChoiceChartGroupedByAnswer(Conferences.holyJS());
+    }
+    
+    @RequestMapping("/HJSC")
+    public List<ChartData> holuJSC() {
+        return chartDataBuilder.standartSingleChoiceChartGroupedByConfirence(Conferences.holyJS());
     }
 
-    @RequestMapping("/gejzenbag1")
-    public String gejzenbag1() {
-        return chartDataBuilder.toString();
-    }
+    
 }

@@ -9,7 +9,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Embeddable
-public class Answers {
+public class AnswerMetaInformation {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Choice> choices = new HashSet<>();
@@ -39,7 +39,8 @@ public class Answers {
     }
 
     public void setRows(Set<Row> rows) {
-        this.rows = rows;
+        this.rows.clear();
+        this.rows.addAll(rows);
     }
 
     @Override
@@ -62,7 +63,7 @@ public class Answers {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Answers other = (Answers) obj;
+        final AnswerMetaInformation other = (AnswerMetaInformation) obj;
         if (!Objects.equals(this.choices, other.choices)) {
             return false;
         }

@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.transaction.Transactional;
 
 @Entity
 public class Survey implements Comparable<Survey> {
@@ -30,7 +31,9 @@ public class Survey implements Comparable<Survey> {
     Set<SurveyPage> pages = new HashSet<>();
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Response> responses = new HashSet<>();
-
+    
+    
+    // разобратся с  FetchType.LAZY, т.к. мапа пустая то  нужна сессия при добавлении
     public void addNewResponses(Collection<Response> responses) {
         this.responses.addAll(responses);
     }

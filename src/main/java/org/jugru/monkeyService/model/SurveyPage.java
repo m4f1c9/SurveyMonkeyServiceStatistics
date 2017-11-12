@@ -23,7 +23,7 @@ public class SurveyPage {
     private String title;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Questions> questions;
+    private Set<QuestionMetaInformation> questions;
 
     public Long getId() {
         return id;
@@ -57,11 +57,11 @@ public class SurveyPage {
         this.title = title;
     }
 
-    public Set<Questions> getQuestions() {
+    public Set<QuestionMetaInformation> getQuestions() {
         return questions;
     }
 
-    public void setQuestions(Set<Questions> questions) {
+    public void setQuestions(Set<QuestionMetaInformation> questions) {
         this.questions = questions;
     }
 

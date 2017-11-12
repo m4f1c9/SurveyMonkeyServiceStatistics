@@ -10,7 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class Questions {
+public class QuestionMetaInformation {
 
     @Id
     private Long id;
@@ -26,7 +26,7 @@ public class Questions {
 
     @Embedded
     @Column
-    private Answers answers;
+    private AnswerMetaInformation answers;
     @ElementCollection
     @Column
     private Set<Heading> headings = new HashSet<>();
@@ -79,11 +79,11 @@ public class Questions {
         this.visible = visible;
     }
 
-    public Answers getAnswers() {
+    public AnswerMetaInformation getAnswers() {
         return answers;
     }
 
-    public void setAnswers(Answers answers) {
+    public void setAnswers(AnswerMetaInformation answers) {
         this.answers = answers;
     }
 
@@ -105,7 +105,7 @@ public class Questions {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Questions other = (Questions) obj;
+        final QuestionMetaInformation other = (QuestionMetaInformation) obj;
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }

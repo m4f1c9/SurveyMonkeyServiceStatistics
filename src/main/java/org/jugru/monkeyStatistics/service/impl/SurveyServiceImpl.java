@@ -14,21 +14,25 @@ public class SurveyServiceImpl implements SurveyService {
     @Autowired
     private SurveyRepository surveyRepository;
 
+    @Transactional
     @Override
     public Survey save(Survey survey) {
         return surveyRepository.save(survey);
     }
 
+    @Transactional
     @Override
     public Survey get(long id) {
         return surveyRepository.findOne(id);
     }
 
+    @Transactional
     @Override
     public void delete(Survey survey) {
         surveyRepository.delete(survey);
     }
 
+    @Transactional
     @Override
     public List<Survey> getAll() {
         return surveyRepository.findAll();

@@ -11,5 +11,8 @@ public interface AnswerService extends Service<Answer> {
 
     List<Answer> getByRow_id(long row_id);
     
-    Long countByChoice_id(long choice_id);
+    Integer countByChoice_id(long choice_id);
+    
+    Integer countByOther_id(Long other_id);
+    
 }
