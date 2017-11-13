@@ -14,7 +14,6 @@ public class AnswerServiceImpl implements AnswerService {
     @Autowired
     private AnswerRepository answerRepository;
 
-    
     @Transactional
     @Override
     public Answer save(Answer answer) {
@@ -69,4 +68,9 @@ public class AnswerServiceImpl implements AnswerService {
         return answerRepository.countByOther_id(other_id);
     }
 
+    @Transactional
+    @Override
+    public Integer countByTwoChoice_id(Long first, Long second) {
+        return answerRepository.countByTwoChoice_id(first, second);
+    }
 }

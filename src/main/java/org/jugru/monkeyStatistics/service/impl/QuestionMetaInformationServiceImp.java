@@ -1,8 +1,11 @@
 package org.jugru.monkeyStatistics.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import javax.transaction.Transactional;
 import org.jugru.monkeyService.model.AnswerMetaInformation;
+import org.jugru.monkeyService.model.Choice;
 import org.jugru.monkeyService.model.QuestionMetaInformation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.jugru.monkeyStatistics.repository.QuestionMetaInformationRepository;
@@ -39,7 +42,6 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
         return questionMetaInformationRepository.findAll();
     }
 
-    
     //TODO сделать цепочку проверок
     @Transactional
     @Override
@@ -49,6 +51,15 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
         } catch (NullPointerException e) {
             return null;
         }
+    }
+
+    @Transactional
+    @Override
+    public List<Choice> getChoicesByQuestionMetaInformationId(long id) {
+        List<Choice> l = get(id).getAnswers().getChoices(); 
+        l.size(); //TODO 
+        return l;
+        
     }
 
 }

@@ -6,7 +6,7 @@ public class Options {
     private String bars;
     private String title;
 
-
+    
     
     public Options(Integer height, String bars, String title) {
         this.height = height;
@@ -37,7 +37,6 @@ public class Options {
     public void setBars(String bars) {
         this.bars = bars;
     }
-    
-    
 
+   
 }

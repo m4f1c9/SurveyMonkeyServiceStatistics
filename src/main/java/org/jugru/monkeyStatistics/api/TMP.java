@@ -23,6 +23,11 @@ public class TMP {
     public List<ChartData> holuJSC() {
         return chartDataBuilder.standartSingleChoiceChartGroupedByConfirence(Conferences.holyJS());
     }
-
+    
+    @RequestMapping("/mobi")
+    public List<ChartData> mobius() {
+        return chartDataBuilder.singleConferenceSpeakers(Conferences.mobius());
+    }
+    
     
 }

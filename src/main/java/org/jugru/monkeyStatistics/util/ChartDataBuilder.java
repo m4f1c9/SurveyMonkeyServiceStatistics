@@ -6,12 +6,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Objects.*;
+import org.jugru.monkeyService.model.Choice;
 import org.jugru.monkeyService.model.view.ChartData;
-import org.jugru.monkeyService.model.view.Conference;
-import org.jugru.monkeyService.model.view.ConferencesGroup;
+import org.jugru.monkeyService.model.view.ConferenceQuestionPair;
+import org.jugru.monkeyService.model.view.ConferenceGroup;
 import org.jugru.monkeyService.model.view.Options;
-import org.jugru.monkeyService.model.view.AnswersGroup;
-import org.jugru.monkeyService.model.view.QuestionsGroup;
+import org.jugru.monkeyService.model.view.ChoiceGroup;
+import org.jugru.monkeyService.model.view.QuestionGroup;
+import org.jugru.monkeyService.model.view.SingleConferenceStat;
+import org.jugru.monkeyService.model.view.SpeakersRatingPair;
 import org.jugru.monkeyStatistics.service.AnswerService;
 import org.jugru.monkeyStatistics.service.QuestionMetaInformationService;
 import org.jugru.monkeyStatistics.service.QuestionService;
@@ -41,68 +45,122 @@ public class ChartDataBuilder {
     private final String CUSTOM_CHOICE = "Свой вариант ответа";
     private final String NO_CHOICE = "Нет ответа";
 
-    public List<ChartData> standartSingleChoiceChartGroupedByAnswer(ConferencesGroup conferencesGroup) {
+    public List<ChartData> singleConferenceSpeakers(SingleConferenceStat singleConferenceStat) {
         List<ChartData> chartDataList = new LinkedList<>();
-
-        for (int questionGroupCount = 0; questionGroupCount < conferencesGroup.getQuestionsGroups().size(); questionGroupCount++) { // обходим все QuestionsGroup каждый будет отдельной таблицей
-            chartDataList.add(createChartDataGroupedByAnswer(conferencesGroup, questionGroupCount));
+        for (int pairsCount = 0; pairsCount < singleConferenceStat.getPairs().size(); pairsCount++) {
+            SpeakersRatingPair pair = singleConferenceStat.getPairs().get(pairsCount);
+            ChartData chartData = createChartDataFromPair(pair);
+            chartDataList.add(chartData);
         }
 
         return chartDataList;
     }
 
-    public List<ChartData> standartSingleChoiceChartGroupedByConfirence(ConferencesGroup conferencesGroup) {
+    public List<ChartData> standartSingleChoiceChartGroupedByAnswer(ConferenceGroup conferenceGroup) {
         List<ChartData> chartDataList = new LinkedList<>();
 
-        for (int questionGroupCount = 0; questionGroupCount < conferencesGroup.getQuestionsGroups().size(); questionGroupCount++) { // обходим все QuestionsGroup каждый будет отдельной таблицей
-            chartDataList.add(createChartDataGroupedByConfirence(conferencesGroup, questionGroupCount));
+        for (int questionGroupCount = 0; questionGroupCount < conferenceGroup.getQuestionGroups().size(); questionGroupCount++) { // обходим все QuestionGroup каждый будет отдельной таблицей
+            QuestionGroup questionGroup = conferenceGroup.getQuestionGroups().get(questionGroupCount);
+            ChartData chartData = createChartDataGroupedByAnswer(questionGroup);
+            chartDataList.add(chartData);
         }
 
         return chartDataList;
     }
 
-    private ChartData createChartDataGroupedByConfirence(ConferencesGroup conferencesGroup, int questionCount) {
+    public List<ChartData> standartSingleChoiceChartGroupedByConfirence(ConferenceGroup conferenceGroup) {
+        List<ChartData> chartDataList = new LinkedList<>();
 
-        QuestionsGroup questionsGroup = conferencesGroup.getQuestionsGroups().get(questionCount);
+        for (int questionGroupCount = 0; questionGroupCount < conferenceGroup.getQuestionGroups().size(); questionGroupCount++) { // обходим все QuestionGroup каждый будет отдельной таблицей
+            QuestionGroup questionGroup = conferenceGroup.getQuestionGroups().get(questionGroupCount);
+            ChartData chartData = createChartDataGroupedByConfirence(questionGroup);
+            chartDataList.add(chartData);
+
+        }
+
+        return chartDataList;
+    }
+
+    private ChartData createChartDataFromPair(SpeakersRatingPair pair) {
         ChartData chartData = new ChartData();
-
-        Options options = createOptions(questionsGroup);
+        Options options = createOptions(pair);
         chartData.setOptions(options);
 
-        List columnsNames = createColumnsNamesGroupedByConfirence(questionsGroup);
+        List columnsNames = createColumnsNamesFromPair(pair);
         chartData.addData(columnsNames);
 
-        for (int confirenceCount = 0; confirenceCount < conferencesGroup.getConferences().size(); confirenceCount++) {
-            if (isQuestionWasAscedAtConference(questionsGroup, confirenceCount)) {
-                chartData.addData(createRowWithRegularChoicesGroupedByConference(conferencesGroup, questionsGroup, confirenceCount));
+        Long speakersAnswerID = pair.getSpeakersAnswerID();
+        List<Choice> speakers = questionMetaInformationService.getChoicesByQuestionMetaInformationId(speakersAnswerID);
+
+        Long ratingAnswerID = pair.getRatingAnswerID();
+        List<Choice> rating = questionMetaInformationService.getChoicesByQuestionMetaInformationId(ratingAnswerID);
+
+        for (int speakersCount = 0; speakersCount < speakers.size(); speakersCount++) {
+            List row = new LinkedList();
+            row.add(speakers.get(speakersCount).getText());
+
+            Long speakersChoiceID = speakers.get(speakersCount).getId();
+            int speakerChoiceCount = answerService.countByChoice_id(speakersChoiceID);
+
+            for (int ratingCount = 0; ratingCount < rating.size(); ratingCount++) {
+                Long ratingChoiceID = rating.get(ratingCount).getId();
+                int pairCount = answerService.countByTwoChoice_id(speakersChoiceID, ratingChoiceID);
+                double percent = countPercentAndFormat(pairCount, speakerChoiceCount);
+
+                row.add(percent); //TODO
+                row.add(createTooltip(rating.get(ratingCount).getText(), pairCount, speakerChoiceCount, percent));
+
+                
+              
+
             }
+            chartData.addData(row);
+        }
+
+        return chartData;
+    }
+
+    private ChartData createChartDataGroupedByConfirence(QuestionGroup questionGroup) {
+
+        ChartData chartData = new ChartData();
+
+        Options options = createOptions(questionGroup);
+        chartData.setOptions(options);
+
+        List columnsNames = createColumnsNamesGroupedByConfirence(questionGroup);
+        chartData.addData(columnsNames);
+
+        for (int confirenceCount = 0; confirenceCount < questionGroup.getConferenceQuestionPairs().size(); confirenceCount++) {
+
+            chartData.addData(createRowWithRegularChoicesGroupedByConference(questionGroup, confirenceCount));
+
         }
 
         return chartData;
 
     }
 
-    private ChartData createChartDataGroupedByAnswer(ConferencesGroup conferencesGroup, int questionCount) {
-        QuestionsGroup questionsGroup = conferencesGroup.getQuestionsGroups().get(questionCount);
+    private ChartData createChartDataGroupedByAnswer(QuestionGroup questionGroup) {
         ChartData chartData = new ChartData();
 
-        Options options = createOptions(questionsGroup);
+        Options options = createOptions(questionGroup);
         chartData.setOptions(options);
 
-        List columnsNames = createColumnsNamesGroupedByAnswer(conferencesGroup, questionCount);
+        List columnsNames = createColumnsNamesGroupedByAnswer(questionGroup);
         chartData.addData(columnsNames);
 
-        for (int answerGroupCount = 0; answerGroupCount < questionsGroup.getAnswersGroups().size(); answerGroupCount++) {  // отходим AnswersGroup
-            chartData.addData(createRowWithRegularChoicesGroupedByAnswer(conferencesGroup, questionsGroup, answerGroupCount));
+        for (int answersCount = 0; answersCount < questionGroup.getChoiceGroups().size(); answersCount++) {  // отходим ChoiceGroupList
+            List row = createRowWithRegularChoicesGroupedByAnswer(questionGroup, answersCount);
+            chartData.addData(row);
         }
 
         //инфа о своих ответах 
-        if (questionsGroup.isWithCustomAnswer()) {
-            chartData.addData(createRowWithCustomChoicesGroupedByAnswer(conferencesGroup, questionsGroup));
+        if (questionGroup.isWithCustomAnswer()) {
+            chartData.addData(createRowWithCustomChoicesGroupedByAnswer(questionGroup));
         }
 
-        if (questionsGroup.isWithNoAnswer()) {
-            chartData.addData(createRowWithNoChoicesGroupedByAnswer(conferencesGroup, questionsGroup));
+        if (questionGroup.isWithNoAnswer()) {
+            chartData.addData(createRowWithNoChoicesGroupedByAnswer(questionGroup));
         }
 
         return chartData;
@@ -112,46 +170,45 @@ public class ChartDataBuilder {
     /**
      * Добавляет Value в таблицы
      */
-    private List createRowWithRegularChoicesGroupedByAnswer(ConferencesGroup conferencesGroup, QuestionsGroup questionsGroup, int answerGroupCount) {
-        AnswersGroup answersGroup = questionsGroup.getAnswersGroups().get(answerGroupCount);
+    private List createRowWithRegularChoicesGroupedByAnswer(QuestionGroup questionGroup, int answerCount) {
+        ChoiceGroup choiceGroup = questionGroup.getChoiceGroups().get(answerCount);
 
         List row = new LinkedList();
-        row.add(answersGroup.getText());
+        row.add(choiceGroup.getText());
 
-        for (int conferenceCount = 0; conferenceCount < answersGroup.getID().size(); conferenceCount++) {  // обходим конкретные ответы 
-            if (isQuestionWasAscedAtConference(questionsGroup, conferenceCount)) {
-                if (isAnswerWasAvailableAtConference(answersGroup, conferenceCount)) {
-                    String conferencesName = conferencesGroup.getConferences().get(conferenceCount).getName();
+        for (int conferenceCount = 0; conferenceCount < choiceGroup.getID().size(); conferenceCount++) {  // обходим конкретные ответы 
 
-                    int conferenceAnswers = surveyService.countAnswers(conferencesGroup.getConferences().get(conferenceCount).getId());
-                    int thisAnswers = answerService.countByChoice_id(answersGroup.getID().get(conferenceCount));
-                    double percent = countAndFormatPercent(thisAnswers, conferenceAnswers);
-                    row.add(percent);
-                    row.add(createTooltip(conferencesName, thisAnswers, conferenceAnswers, percent));
-                } else {
-                    row.add(0); //TODO
-                    row.add("");
-                }
+            if (choiceWasAvailableAtConference(choiceGroup, conferenceCount)) {
+                String conferencesName = questionGroup.getConferenceQuestionPairs().get(conferenceCount).getName();
+                int conferenceAnswers = surveyService.countAnswers(questionGroup.getConferenceQuestionPairs().get(conferenceCount).getSurveyId());
+                int thisAnswers = answerService.countByChoice_id(choiceGroup.getID().get(conferenceCount));
+                double percent = countPercentAndFormat(thisAnswers, conferenceAnswers);
+                row.add(percent);
+                row.add(createTooltip(conferencesName, thisAnswers, conferenceAnswers, percent));
+            } else {
+                row.add(0); //TODO
+                row.add("");
             }
+
         }
         return row;
     }
 
-    private List createRowWithRegularChoicesGroupedByConference(ConferencesGroup conferencesGroup, QuestionsGroup questionsGroup, int confirenceCount) {
+    private List createRowWithRegularChoicesGroupedByConference(QuestionGroup questionGroup, int confirenceCount) {
         List row = new LinkedList();
-        row.add(conferencesGroup.getConferences().get(confirenceCount).getName());
+        row.add(questionGroup.getConferenceQuestionPairs().get(confirenceCount).getName());
 
-        for (int answerCount = 0; answerCount < questionsGroup.getAnswersGroups().size(); answerCount++) {
+        for (int choiceCount = 0; choiceCount < questionGroup.getChoiceGroups().size(); choiceCount++) {
+            ChoiceGroup choiceGroup = questionGroup.getChoiceGroups().get(choiceCount);
+            if (choiceWasAvailableAtConference(choiceGroup, confirenceCount)) {
 
-            Long choice_id = questionsGroup.getAnswersGroups().get(answerCount).getID().get(confirenceCount);
-
-            if (Objects.nonNull(choice_id)) {
+                Long choice_id = choiceGroup.getID().get(confirenceCount);
                 int thisAnswers = answerService.countByChoice_id(choice_id);
-                int conferenceAnswers = surveyService.countAnswers(conferencesGroup.getConferences().get(confirenceCount).getId());
+                int conferenceAnswers = surveyService.countAnswers(questionGroup.getConferenceQuestionPairs().get(confirenceCount).getSurveyId());
 
-                String answer = questionsGroup.getAnswersGroups().get(answerCount).getText();
+                String answer = questionGroup.getChoiceGroups().get(choiceCount).getText();
 
-                double percent = countAndFormatPercent(thisAnswers, conferenceAnswers);
+                double percent = countPercentAndFormat(thisAnswers, conferenceAnswers);
                 row.add(percent);
                 row.add(createTooltip(answer, thisAnswers, conferenceAnswers, percent));
             } else {
@@ -161,16 +218,16 @@ public class ChartDataBuilder {
 
         }
 
-        if (questionsGroup.isWithCustomAnswer()) {
+        if (questionGroup.isWithCustomAnswer()) {
 
-            Long questionMetaInformationId = questionsGroup.getID().get(confirenceCount);
+            Long questionMetaInformationId = questionGroup.getConferenceQuestionPairs().get(confirenceCount).getQuestionId();
             if (Objects.nonNull(questionMetaInformationId)) {
 
                 Long other_id = questionMetaInformationService.getOther_idByQuestionMetaInformationId(questionMetaInformationId); // при касте NPE
 
-                int conferenceAnswers = surveyService.countAnswers(conferencesGroup.getConferences().get(confirenceCount).getId());
+                int conferenceAnswers = surveyService.countAnswers(questionGroup.getConferenceQuestionPairs().get(confirenceCount).getSurveyId());
                 int thisAnswers = answerService.countByOther_id(other_id);
-                double percent = countAndFormatPercent(thisAnswers, conferenceAnswers);
+                double percent = countPercentAndFormat(thisAnswers, conferenceAnswers);
                 row.add(percent);
                 row.add(createTooltip(CUSTOM_CHOICE, thisAnswers, conferenceAnswers, percent));
             } else {
@@ -179,132 +236,133 @@ public class ChartDataBuilder {
             }
         }
 
-        if (questionsGroup.isWithNoAnswer()) {
+        if (questionGroup.isWithNoAnswer()) {
 
-            Long id = questionsGroup.getID().get(confirenceCount);
-            if (Objects.nonNull(id)) {
-                int conferenceAnswers = surveyService.countAnswers(conferencesGroup.getConferences().get(confirenceCount).getId());
+            Long questionID = questionGroup.getConferenceQuestionPairs().get(confirenceCount).getQuestionId();
+            //   if (Objects.nonNull(questionID)) {
+            int conferenceAnswers = surveyService.countAnswers(questionGroup.getConferenceQuestionPairs().get(confirenceCount).getSurveyId());
 
-                int thisAnswers = questionService.countById(id);
-                thisAnswers = conferenceAnswers - thisAnswers;
+            int thisAnswers = questionService.countById(questionID);
+            thisAnswers = conferenceAnswers - thisAnswers;
 
-                double percent = countAndFormatPercent(thisAnswers, conferenceAnswers);
-                row.add(percent);
-                row.add(createTooltip(NO_CHOICE, thisAnswers, conferenceAnswers, percent));
-            }//TODO
-            else {
-                row.add(0);
-                row.add("");
-            }
+            double percent = countPercentAndFormat(thisAnswers, conferenceAnswers);
+            row.add(percent);
+            row.add(createTooltip(NO_CHOICE, thisAnswers, conferenceAnswers, percent));
+//            }
+//            else {
+//                row.add(0);
+//                row.add("");
+//            }
         }
 
         return row;
     }
 
-    private List createRowWithCustomChoicesGroupedByAnswer(ConferencesGroup conferencesGroup, QuestionsGroup questionsGroup) {
+    private List createRowWithCustomChoicesGroupedByAnswer(QuestionGroup questionsGroup) {
 
         List row = new LinkedList();
         row.add(CUSTOM_CHOICE);
 
-        for (int k = 0; k < questionsGroup.getID().size(); k++) {  // обходим конкретные ответы 
-            if (Objects.nonNull(questionsGroup.getID().get(k))) {
-                //TODO
-                try {
-                    long other_id = questionMetaInformationService.getOther_idByQuestionMetaInformationId(questionsGroup.getID().get(k)); // при касте NPE
-                    String conferencesName = conferencesGroup.getConferences().get(k).getName();
-                    int conferenceAnswers = surveyService.countAnswers(conferencesGroup.getConferences().get(k).getId());
-                    int thisAnswers = answerService.countByOther_id(other_id);
-                    double percent = countAndFormatPercent(thisAnswers, conferenceAnswers);
-                    row.add(percent);
-                    row.add(createTooltip(conferencesName, thisAnswers, conferenceAnswers, percent));
-                } catch (NullPointerException e) {
-                    row.add(null);
-                    row.add(null);
-                }
+        for (int questionsCount = 0; questionsCount < questionsGroup.getConferenceQuestionPairs().size(); questionsCount++) {  // обходим конкретные ответы 
 
+            Long other_id = questionMetaInformationService.getOther_idByQuestionMetaInformationId(questionsGroup.getConferenceQuestionPairs().get(questionsCount).getQuestionId());
+            if (Objects.nonNull(other_id)) {
+                String conferencesName = questionsGroup.getConferenceQuestionPairs().get(questionsCount).getName();
+                int conferenceAnswers = surveyService.countAnswers(questionsGroup.getConferenceQuestionPairs().get(questionsCount).getSurveyId());
+                int thisAnswers = answerService.countByOther_id(other_id);
+                double percent = countPercentAndFormat(thisAnswers, conferenceAnswers);
+                row.add(percent);
+                row.add(createTooltip(conferencesName, thisAnswers, conferenceAnswers, percent));
+            } else {
+                row.add(0);
+                row.add("");
             }
-            //else {
-//                row.add(null);
-//                row.add(null);
-//            }
 
         }
         return row;
     }
 
-    private List createRowWithNoChoicesGroupedByAnswer(ConferencesGroup conferencesGroup, QuestionsGroup questionsGroup) {
+    private List createRowWithNoChoicesGroupedByAnswer(QuestionGroup questionsGroup) {
 
         List row = new LinkedList();
         row.add(NO_CHOICE);
 
-        for (int questionCount = 0; questionCount < questionsGroup.getID().size(); questionCount++) {  // обходим конкретные ответы 
-            if (Objects.nonNull(questionsGroup.getID().get(questionCount))) {
-                //TODO
-                try {
-                    String conferencesName = conferencesGroup.getConferences().get(questionCount).getName();
-                    long id = questionsGroup.getID().get(questionCount);
+        for (int questionsCount = 0; questionsCount < questionsGroup.getConferenceQuestionPairs().size(); questionsCount++) {  // обходим конкретные ответы 
 
-                    int conferenceAnswers = surveyService.countAnswers(conferencesGroup.getConferences().get(questionCount).getId());
+            String conferencesName = questionsGroup.getConferenceQuestionPairs().get(questionsCount).getName();
+            long questionID = questionsGroup.getConferenceQuestionPairs().get(questionsCount).getQuestionId();
 
-                    int thisAnswers = questionService.countById(id);
+            int conferenceAnswers = surveyService.countAnswers(questionsGroup.getConferenceQuestionPairs().get(questionsCount).getSurveyId());
 
-                    thisAnswers = conferenceAnswers - thisAnswers;
+            int thisAnswers = questionService.countById(questionID);
 
-                    double percent = countAndFormatPercent(thisAnswers, conferenceAnswers);
-                    row.add(percent);
-                    row.add(createTooltip(conferencesName, thisAnswers, conferenceAnswers, percent));
+            thisAnswers = conferenceAnswers - thisAnswers;
 
-                } catch (NullPointerException e) {
-                    row.add(null);
-                    row.add(null);
-                }
-            } else {
-//                row.add(null);
-//                row.add(null);
-            }
+            double percent = countPercentAndFormat(thisAnswers, conferenceAnswers);
+            row.add(percent);
+            row.add(createTooltip(conferencesName, thisAnswers, conferenceAnswers, percent));
 
         }
         return row;
     }
 
-    private Options createOptions(QuestionsGroup questionsGroup) {
-        int answers = questionsGroup.getAnswersGroups().size();
-        if (questionsGroup.isWithCustomAnswer()) {
+    private Options createOptions(QuestionGroup questionGroup) {
+        int answers = questionGroup.getChoiceGroups().size();
+        if (questionGroup.isWithCustomAnswer()) {
             answers++;
         }
-        if (questionsGroup.isWithNoAnswer()) {
+        if (questionGroup.isWithNoAnswer()) {
             answers++;
         }
-        int questions = (int) questionsGroup.getID().stream().filter(Objects::nonNull).count();
+        int questions = (int) questionGroup.getConferenceQuestionPairs().size();
         int height = answers * questions * 50;
         Options options = new Options(height,
                 "horizontal",
-                questionsGroup.getName()); //TODO подумать про высоту
+                questionGroup.getName()); //TODO подумать про высоту
         return options;
     }
 
-    /**
-     * Единые названия для всех таблиц
-     */
-    private List createColumnsNamesGroupedByAnswer(ConferencesGroup conferencesGroup, int questionCount) {
+    private Options createOptions(SpeakersRatingPair pair) {
+
+        int height = 1400;  //TODO убрать константу
+        Options options = new Options(height,
+                "horizontal",
+                pair.getText());
+        return options;
+    }
+
+    private List createColumnsNamesFromPair(SpeakersRatingPair pair) {
         List columns = new LinkedList<>();
         columns.add("");    //не нужен, но не может быть null, поэтому ""
+        Long RatingAnswerID = pair.getRatingAnswerID();
+        List<Choice> choices = questionMetaInformationService.getChoicesByQuestionMetaInformationId(RatingAnswerID);
 
-        for (int confirenceCount = 0; confirenceCount < conferencesGroup.getConferences().size(); confirenceCount++) {
-            if (isQuestionWasAscedAtConference(conferencesGroup.getQuestionsGroups().get(questionCount), confirenceCount)) {
-//      if (Objects.nonNull(conferencesGroup.getQuestionsGroups().get(questionCount).getID().get(confirenceCount))) {
-                columns.add(conferencesGroup.getConferences().get(confirenceCount).getName());
-                columns.add(Role.getTooltipRole());
-            }
+        for (int choiceCount = 0; choiceCount < choices.size(); choiceCount++) {
+            columns.add(choices.get(choiceCount).getText());
+            columns.add(Role.getTooltipRole());
         }
 
         return columns;
     }
 
-    private List createColumnsNamesGroupedByConfirence(QuestionsGroup questionsGroup) {
+    private List createColumnsNamesGroupedByAnswer(QuestionGroup questionGroup) {
         List columns = new LinkedList<>();
         columns.add("");    //не нужен, но не может быть null, поэтому ""
-        questionsGroup.getAnswersGroups().forEach((t) -> {
+
+        for (int confirenceCount = 0; confirenceCount < questionGroup.getConferenceQuestionPairs().size(); confirenceCount++) {
+
+            columns.add(questionGroup.getConferenceQuestionPairs().get(confirenceCount).getName());
+            columns.add(Role.getTooltipRole());
+
+        }
+
+        return columns;
+    }
+
+    private List createColumnsNamesGroupedByConfirence(QuestionGroup questionsGroup) {
+        List columns = new LinkedList<>();
+        columns.add("");    //не нужен, но не может быть null, поэтому ""
+        questionsGroup.getChoiceGroups().forEach((t) -> {
             columns.add(t.getText());
             columns.add(Role.getTooltipRole());
         });
@@ -322,7 +380,7 @@ public class ChartDataBuilder {
         return columns;
     }
 
-    private double countAndFormatPercent(int thisAnswers, int totalAnswers) {
+    private double countPercentAndFormat(int thisAnswers, int totalAnswers) {
         if (totalAnswers != 0) {
             double percent = (((double) thisAnswers / (double) totalAnswers) * 100.00);
             DecimalFormat df = new DecimalFormat("#.##", new DecimalFormatSymbols(Locale.US)); //локаль для правильного разделитеся дроби
@@ -345,11 +403,8 @@ public class ChartDataBuilder {
         return sb.toString();
     }
 
-    private boolean isQuestionWasAscedAtConference(QuestionsGroup questionsGroup, int confirenceCount) {
-        return Objects.nonNull(questionsGroup.getID().get(confirenceCount));
+    private boolean choiceWasAvailableAtConference(ChoiceGroup choiceGroup, int conferenceCount) {
+        return Objects.nonNull(choiceGroup.getID().get(conferenceCount));
     }
 
-    private boolean isAnswerWasAvailableAtConference(AnswersGroup answersGroup, int conferenceCount) {
-        return Objects.nonNull(answersGroup.getID().get(conferenceCount));
-    }
 }

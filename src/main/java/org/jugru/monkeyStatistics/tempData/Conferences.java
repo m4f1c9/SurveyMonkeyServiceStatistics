@@ -2,35 +2,32 @@ package org.jugru.monkeyStatistics.tempData;
 
 import java.util.LinkedList;
 import java.util.List;
-import org.jugru.monkeyService.model.view.Conference;
-import org.jugru.monkeyService.model.view.ConferencesGroup;
-import org.jugru.monkeyService.model.view.AnswersGroup;
-import org.jugru.monkeyService.model.view.QuestionsGroup;
+import org.jugru.monkeyService.model.view.ConferenceQuestionPair;
+import org.jugru.monkeyService.model.view.ConferenceGroup;
+import org.jugru.monkeyService.model.view.ChoiceGroup;
+import org.jugru.monkeyService.model.view.Keynote;
+import org.jugru.monkeyService.model.view.QuestionGroup;
+import org.jugru.monkeyService.model.view.SingleConferenceStat;
+import org.jugru.monkeyService.model.view.SpeakersRatingPair;
 
 public class Conferences {
 
-    public static ConferencesGroup holyJS() {
-        ConferencesGroup HolyJS = new ConferencesGroup();
+    public static ConferenceGroup holyJS() {
+        ConferenceGroup HolyJS = new ConferenceGroup();
         HolyJS.setName("HolyJS");
 
-        List<Conference> confList = new LinkedList<>();
-        confList.add(new Conference("HolyJS 2016 Piter", 80191211));
-        confList.add(new Conference("HolyJS 2016 Moscow", 87269535));
-        confList.add(new Conference("HolyJS 2017 Piter", 117652322));
-        HolyJS.setConferences(confList);
-
         {
-            QuestionsGroup position = new QuestionsGroup();
+            QuestionGroup position = new QuestionGroup();
             position.setName("Ваша позиция в компании?");
 
-            position.getID().add(966831639L);
-            position.getID().add(1045020001L);
-            position.getID().add(118678197L);
+            position.AddConferenceQuestionPair(new ConferenceQuestionPair("HolyJS 2016 Piter", 80191211, 966831639L));
+            position.AddConferenceQuestionPair(new ConferenceQuestionPair("HolyJS 2016 Moscow", 87269535, 1045020001L));
+            position.AddConferenceQuestionPair(new ConferenceQuestionPair("HolyJS 2017 Piter", 117652322, 118678197L));
 
             position.setWithCustomAnswer(true);
             position.setWithNoAnswer(false);
 
-            AnswersGroup answer1 = new AnswersGroup();
+            ChoiceGroup answer1 = new ChoiceGroup();
             answer1.setText("Junior Developer");
             answer1.setID(new LinkedList<Long>() {
                 {
@@ -40,7 +37,7 @@ public class Conferences {
                 }
             });
 
-            AnswersGroup answer2 = new AnswersGroup();
+            ChoiceGroup answer2 = new ChoiceGroup();
             answer2.setText("Middle Developer");
             answer2.setID(new LinkedList<Long>() {
                 {
@@ -50,7 +47,7 @@ public class Conferences {
                 }
             });
 
-            AnswersGroup answer3 = new AnswersGroup();
+            ChoiceGroup answer3 = new ChoiceGroup();
             answer3.setText("Senior Developer");
             answer3.setID(new LinkedList<Long>() {
                 {
@@ -60,7 +57,7 @@ public class Conferences {
                 }
             });
 
-            AnswersGroup answer4 = new AnswersGroup();
+            ChoiceGroup answer4 = new ChoiceGroup();
             answer4.setText("Team Lead");
             answer4.setID(new LinkedList<Long>() {
                 {
@@ -70,7 +67,7 @@ public class Conferences {
                 }
             });
 
-            AnswersGroup answer5 = new AnswersGroup();
+            ChoiceGroup answer5 = new ChoiceGroup();
             answer5.setText("Технический директор");
             answer5.setID(new LinkedList<Long>() {
                 {
@@ -80,7 +77,7 @@ public class Conferences {
                 }
             });
 
-            AnswersGroup answer6 = new AnswersGroup();
+            ChoiceGroup answer6 = new ChoiceGroup();
             answer6.setText("Менеджер");
             answer6.setID(new LinkedList<Long>() {
                 {
@@ -90,7 +87,7 @@ public class Conferences {
                 }
             });
 
-            AnswersGroup answer7 = new AnswersGroup();
+            ChoiceGroup answer7 = new ChoiceGroup();
             answer7.setText("Директор");
             answer7.setID(new LinkedList<Long>() {
                 {
@@ -100,7 +97,7 @@ public class Conferences {
                 }
             });
 
-            AnswersGroup answer8 = new AnswersGroup();
+            ChoiceGroup answer8 = new ChoiceGroup();
             answer8.setText("Architect");
             answer8.setID(new LinkedList<Long>() {
                 {
@@ -110,31 +107,31 @@ public class Conferences {
                 }
             });
 
-            position.AddAnswerGroup(answer1);
-            position.AddAnswerGroup(answer2);
-            position.AddAnswerGroup(answer3);
-            position.AddAnswerGroup(answer4);
-            position.AddAnswerGroup(answer5);
-            position.AddAnswerGroup(answer6);
-            position.AddAnswerGroup(answer7);
-            position.AddAnswerGroup(answer8);
+            position.AddChoiceGroup(answer1);
+            position.AddChoiceGroup(answer2);
+            position.AddChoiceGroup(answer3);
+            position.AddChoiceGroup(answer4);
+            position.AddChoiceGroup(answer5);
+            position.AddChoiceGroup(answer6);
+            position.AddChoiceGroup(answer7);
+            position.AddChoiceGroup(answer8);
 
             HolyJS.addQuestionGroup(position);
 
         }
 
         {
-            QuestionsGroup position = new QuestionsGroup();
+            QuestionGroup position = new QuestionGroup();
             position.setName("Cтатус на конференции?");
 
-            position.getID().add(966831645L);
-            position.getID().add(1045020006L);
-            position.getID().add(118678199L);
+            position.AddConferenceQuestionPair(new ConferenceQuestionPair("HolyJS 2016 Piter", 80191211, 966831645L));
+            position.AddConferenceQuestionPair(new ConferenceQuestionPair("HolyJS 2016 Moscow", 87269535, 1045020006L));
+            position.AddConferenceQuestionPair(new ConferenceQuestionPair("HolyJS 2017 Piter", 117652322, 118678199L));
 
             position.setWithCustomAnswer(true);
             position.setWithNoAnswer(false);
 
-            AnswersGroup answer1 = new AnswersGroup();
+            ChoiceGroup answer1 = new ChoiceGroup();
             answer1.setText("Участник");
             answer1.setID(new LinkedList<Long>() {
                 {
@@ -144,7 +141,7 @@ public class Conferences {
                 }
             });
 
-            AnswersGroup answer2 = new AnswersGroup();
+            ChoiceGroup answer2 = new ChoiceGroup();
             answer2.setText("Спикер");
             answer2.setID(new LinkedList<Long>() {
                 {
@@ -154,7 +151,7 @@ public class Conferences {
                 }
             });
 
-            AnswersGroup answer3 = new AnswersGroup();
+            ChoiceGroup answer3 = new ChoiceGroup();
             answer3.setText("Спонсор");
             answer3.setID(new LinkedList<Long>() {
                 {
@@ -164,7 +161,7 @@ public class Conferences {
                 }
             });
 
-            AnswersGroup answer4 = new AnswersGroup();
+            ChoiceGroup answer4 = new ChoiceGroup();
             answer4.setText("Организатор / Волонтер");
             answer4.setID(new LinkedList<Long>() {
                 {
@@ -174,26 +171,26 @@ public class Conferences {
                 }
             });
 
-            position.AddAnswerGroup(answer1);
-            position.AddAnswerGroup(answer2);
-            position.AddAnswerGroup(answer3);
-            position.AddAnswerGroup(answer4);
+            position.AddChoiceGroup(answer1);
+            position.AddChoiceGroup(answer2);
+            position.AddChoiceGroup(answer3);
+            position.AddChoiceGroup(answer4);
 
             HolyJS.addQuestionGroup(position);
         }
 
         {
-            QuestionsGroup position = new QuestionsGroup();
+            QuestionGroup position = new QuestionGroup();
             position.setName("Конференции на какие другие темы вы посетили бы?");
 
-            position.getID().add(966831648L);
-            position.getID().add(1045020011L);
-            position.getID().add(118678250L);
+            position.AddConferenceQuestionPair(new ConferenceQuestionPair("HolyJS 2016 Piter", 80191211, 966831648L));
+            position.AddConferenceQuestionPair(new ConferenceQuestionPair("HolyJS 2016 Moscow", 87269535, 1045020011L));
+            position.AddConferenceQuestionPair(new ConferenceQuestionPair("HolyJS 2017 Piter", 117652322, 118678250L));
 
             position.setWithCustomAnswer(true);
             position.setWithNoAnswer(true);
 
-            AnswersGroup answer1 = new AnswersGroup();
+            ChoiceGroup answer1 = new ChoiceGroup();
             answer1.setText("Web-разработка");
             answer1.setID(new LinkedList<Long>() {
                 {
@@ -203,7 +200,7 @@ public class Conferences {
                 }
             });
 
-            AnswersGroup answer2 = new AnswersGroup();
+            ChoiceGroup answer2 = new ChoiceGroup();
             answer2.setText("С++");
             answer2.setID(new LinkedList<Long>() {
                 {
@@ -213,7 +210,7 @@ public class Conferences {
                 }
             });
 
-            AnswersGroup answer3 = new AnswersGroup();
+            ChoiceGroup answer3 = new ChoiceGroup();
             answer3.setText("GNU/Linux");
             answer3.setID(new LinkedList<Long>() {
                 {
@@ -223,7 +220,7 @@ public class Conferences {
                 }
             });
 
-            AnswersGroup answer4 = new AnswersGroup();
+            ChoiceGroup answer4 = new ChoiceGroup();
             answer4.setText("Методологии разработки");
             answer4.setID(new LinkedList<Long>() {
                 {
@@ -233,7 +230,7 @@ public class Conferences {
                 }
             });
 
-            AnswersGroup answer5 = new AnswersGroup();
+            ChoiceGroup answer5 = new ChoiceGroup();
             answer5.setText("OpenSource");
             answer5.setID(new LinkedList<Long>() {
                 {
@@ -243,65 +240,81 @@ public class Conferences {
                 }
             });
 
-            position.AddAnswerGroup(answer1);
-            position.AddAnswerGroup(answer2);
-            position.AddAnswerGroup(answer3);
-            position.AddAnswerGroup(answer4);
-            position.AddAnswerGroup(answer5);
+            position.AddChoiceGroup(answer1);
+            position.AddChoiceGroup(answer2);
+            position.AddChoiceGroup(answer3);
+            position.AddChoiceGroup(answer4);
+            position.AddChoiceGroup(answer5);
 
             HolyJS.addQuestionGroup(position);
         }
 
         {
-            QuestionsGroup position = new QuestionsGroup();
+            QuestionGroup position = new QuestionGroup();
             position.setName("Вы смотрели интервью со спикерами в перерывах между трансляциями докладов?");
 
-            position.getID().add(null);
-            position.getID().add(null);
-            position.getID().add(118678212L);
+            position.AddConferenceQuestionPair(new ConferenceQuestionPair("HolyJS 2017 Piter", 117652322, 118678212L));
 
             position.setWithCustomAnswer(false);
             position.setWithNoAnswer(true);
 
-            AnswersGroup answer1 = new AnswersGroup();
+            ChoiceGroup answer1 = new ChoiceGroup();
             answer1.setText("Смотрел полностью");
             answer1.setID(new LinkedList<Long>() {
                 {
-                    add(null);
-                    add(null);
+
                     add(874803096L);
                 }
             });
 
-            AnswersGroup answer2 = new AnswersGroup();
+            ChoiceGroup answer2 = new ChoiceGroup();
             answer2.setText("Смотрел несколько частей");
             answer2.setID(new LinkedList<Long>() {
                 {
-                    add(null);
-                    add(null);
+
                     add(874803097L);
                 }
             });
 
-            AnswersGroup answer3 = new AnswersGroup();
+            ChoiceGroup answer3 = new ChoiceGroup();
             answer3.setText("Не смотрел");
             answer3.setID(new LinkedList<Long>() {
                 {
-                    add(null);
-                    add(null);
+
                     add(874803098L);
                 }
             });
 
-            position.AddAnswerGroup(answer1);
-            position.AddAnswerGroup(answer2);
-            position.AddAnswerGroup(answer3);
-
+            position.AddChoiceGroup(answer1);
+            position.AddChoiceGroup(answer2);
+            position.AddChoiceGroup(answer3);
 
             HolyJS.addQuestionGroup(position);
         }
 
         return HolyJS;
+    }
+
+    public static SingleConferenceStat mobius() {
+        SingleConferenceStat mobius = new SingleConferenceStat();
+        List<SpeakersRatingPair> pairs = new LinkedList<>();
+        pairs.add(new SpeakersRatingPair(203789246L, 203789403L, "Слот 10:30 – 11:20."));
+        pairs.add(new SpeakersRatingPair(203746738L, 203746745L, "Слот 11:40 – 12:30"));
+        pairs.add(new SpeakersRatingPair(203746739L, 203746748L, "Слот 12:50 – 13:40"));
+        pairs.add(new SpeakersRatingPair(203746741L, 203746751L, "Слот 14:25 – 15:15"));
+        pairs.add(new SpeakersRatingPair(203746740L, 203746754L, "Слот 15:35 – 16:25"));
+        pairs.add(new SpeakersRatingPair(203746761L, 203746762L, "Слот 16:45 – 17:35"));
+        mobius.setPairs(pairs);
+        
+        
+        
+        
+        List<Keynote> keynotes = new LinkedList<>();
+        keynotes.add(new Keynote(203803150L, "Кейноут 17:50 – 18:40. Йонатан Левин — Как самому запилить новую фичу и при этом не быть убитым своим менеджером"));
+        mobius.setKeynotes(keynotes);
+
+        
+        return mobius;
     }
 
 }

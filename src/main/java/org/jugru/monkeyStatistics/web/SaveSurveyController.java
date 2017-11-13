@@ -17,17 +17,20 @@ public class SaveSurveyController {
 
     @RequestMapping(value = "/save")
     public String save(Model model) {
-////        Survey survey = new Survey();
-////        survey.setId(80191211L);
-////        surveyMonkeyService.parseAndSaveDetailedSurvey(survey);
-////
-////        Survey survey2 = new Survey();
-////        survey2.setId(87269535L);
-////        surveyMonkeyService.parseAndSaveDetailedSurvey(survey2);
-////
-////        Survey survey3 = new Survey();
-////        survey3.setId(117652322L);
-////        surveyMonkeyService.parseAndSaveDetailedSurvey(survey3);
+//        Survey survey = new Survey();
+//        survey.setId(80191211L);
+//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey);
+//
+//        Survey survey2 = new Survey();
+//        survey2.setId(87269535L);
+//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey2);
+//
+//        Survey survey3 = new Survey();
+//        survey3.setId(117652322L);
+//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey3);
+//        Survey survey4 = new Survey();
+//       survey4.setId(125742994L);
+//       surveyMonkeyService.parseAndSaveDetailedSurvey(survey4);
 
         surveyMonkeyService.refreshAnswers();
         return "OK";

@@ -3,7 +3,7 @@ package org.jugru.monkeyService.model.view;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnswersGroup {
+public class ChoiceGroup {
 
     private String text;
     private List<Long> ID = new ArrayList<>();

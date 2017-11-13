@@ -1,6 +1,8 @@
 package org.jugru.monkeyService.model;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -12,18 +14,22 @@ import javax.persistence.OneToOne;
 public class AnswerMetaInformation {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Choice> choices = new HashSet<>();
+    private List<Choice> choices = new LinkedList<>();
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Other other;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Row> rows = new HashSet<>();
+    private List<Row> rows = new LinkedList<>();
 
-    public Set<Choice> getChoices() {
+    public List<Choice> getChoices() {
         return choices;
     }
 
-    public void setChoices(Set<Choice> choices) {
+    public void setChoices(List<Choice> choices) {
         this.choices = choices;
+    }
+
+    public List<Row> getRows() {
+        return rows;
     }
 
     public Other getOther() {
@@ -34,11 +40,7 @@ public class AnswerMetaInformation {
         this.other = other;
     }
 
-    public Set<Row> getRows() {
-        return rows;
-    }
-
-    public void setRows(Set<Row> rows) {
+    public void setRows(List<Row> rows) {
         this.rows.clear();
         this.rows.addAll(rows);
     }
@@ -80,7 +82,5 @@ public class AnswerMetaInformation {
     public String toString() {
         return "Answers{" + "choices=" + choices + ", other=" + other + ", rows=" + rows + '}';
     }
-
-    
 
 }

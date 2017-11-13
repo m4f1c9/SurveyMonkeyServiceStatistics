@@ -15,4 +15,5 @@ public interface AnswerService extends Service<Answer> {
     
     Integer countByOther_id(Long other_id);
     
+    Integer countByTwoChoice_id(Long first, Long second);
 }
