@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+        <style>
+            body {background-color: powderblue;}
+            h1   {color: blue;}
+            p    {color: red;}
+        </style>
+
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script type="text/javascript">
+
+
+            google.charts.load('current', {'packages': ['corechart']});
+            google.charts.setOnLoadCallback(drawChart);
+            function drawChart() {
+
+
+
+                var div = document.createElement('div');
+                div.id = 'chart';
+                document.body.appendChild(div);
+                var data = google.visualization.arrayToDataTable([
+                    [["ss", "Junior Developer", {
+                                "role": "tooltip"
+                            }, "Middle Developer", {
+                                "role": "tooltip"
+                            }, "Senior Developer", {
+                                "role": "tooltip"
+                            }, "Team Lead", {
+                                "role": "tooltip"
+                            }, "Технический директор", {
+                                "role": "tooltip"
+                            }, "Менеджер", {
+                                "role": "tooltip"
+                            }, "Директор", {
+                                "role": "tooltip"
+                            }, "Architect", {
+                                "role": "tooltip"
+                            }, "Свой вариант ответа", {
+                                "role": "tooltip"
+                            }], ["HolyJS 2016 Piter", 7.5, "Junior Developer: 24 из 320 (7.5%)", 35.62, "Middle Developer: 114 из 320 (35.62%)", 34.06, "Senior Developer: 109 из 320 (34.06%)", 9.69, "Team Lead: 31 из 320 (9.69%)", 3.12, "Технический директор: 10 из 320 (3.12%)", 1.56, "Менеджер: 5 из 320 (1.56%)", 1.25, "Директор: 4 из 320 (1.25%)", 0.31, "Architect: 1 из 320 (0.31%)", 6.88, "Свой вариант ответа: 22 из 320 (6.88%)"], ["HolyJS 2016 Moscow", 7.55, "Junior Developer: 29 из 384 (7.55%)", 38.28, "Middle Developer: 147 из 384 (38.28%)", 30.73, "Senior Developer: 118 из 384 (30.73%)", 13.8, "Team Lead: 53 из 384 (13.8%)", 1.82, "Технический директор: 7 из 384 (1.82%)", 1.56, "Менеджер: 6 из 384 (1.56%)", 0.0, "Директор: 0 из 384 (0.0%)", 1.56, "Architect: 6 из 384 (1.56%)", 4.69, "Свой вариант ответа: 18 из 384 (4.69%)"], ["HolyJS 2017 Piter", 7.22, "Junior Developer: 27 из 374 (7.22%)", 38.77, "Middle Developer: 145 из 374 (38.77%)", 32.89, "Senior Developer: 123 из 374 (32.89%)", 14.44, "Team Lead: 54 из 374 (14.44%)", 1.87, "Технический директор: 7 из 374 (1.87%)", null, null, 1.07, "Директор: 4 из 374 (1.07%)", 1.34, "Architect: 5 из 374 (1.34%)", 2.41, "Свой вариант ответа: 9 из 374 (2.41%)"]]
+                ]);
+                var options = {
+
+                    "height": 1080,
+                    "bars": "horizontal",
+                    "title": "Ваша позиция в компании?",
+                    "chartArea": {
+                        "width": "70%",
+                        "height": "95%",
+                        "left": "15%"
+                    },
+                    "axisTitlesPosition": "none"
+
+                };
+                var chart = new google.visualization.ColumnChart(document.getElementById('chart'));
+                chart.draw(data, options);
+            }
+
+        </script>
+    </head>
+    <body>
+
+    </body>
+</html>

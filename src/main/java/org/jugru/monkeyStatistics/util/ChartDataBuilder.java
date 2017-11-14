@@ -45,6 +45,65 @@ public class ChartDataBuilder {
     private final String CUSTOM_CHOICE = "Свой вариант ответа";
     private final String NO_CHOICE = "Нет ответа";
 
+    
+    
+    public List<ChartData> singleConferenceSpeakers2(SingleConferenceStat singleConferenceStat) {
+        List<ChartData> chartDataList = new LinkedList<>();
+        for (int pairsCount = 0; pairsCount < singleConferenceStat.getPairs().size(); pairsCount++) {
+            SpeakersRatingPair pair = singleConferenceStat.getPairs().get(pairsCount);
+            ChartData chartData = createChartDataFromPair2(pair);
+            chartDataList.add(chartData);
+        }
+
+        return chartDataList;
+    }
+    
+    
+    private ChartData createChartDataFromPair2(SpeakersRatingPair pair) {
+        ChartData chartData = new ChartData();
+        Options options = createOptions(pair);
+        chartData.setOptions(options);
+
+        List columnsNames = createColumnsNamesFromPair(pair);
+        chartData.addData(columnsNames);
+
+        Long speakersAnswerID = pair.getSpeakersAnswerID();
+        List<Choice> speakers = questionMetaInformationService.getChoicesByQuestionMetaInformationId(speakersAnswerID);
+
+        Long ratingAnswerID = pair.getRatingAnswerID();
+        List<Choice> rating = questionMetaInformationService.getChoicesByQuestionMetaInformationId(ratingAnswerID);
+
+        for (int speakersCount = 0; speakersCount < speakers.size(); speakersCount++) {
+            List row = new LinkedList();
+            row.add(speakers.get(speakersCount).getText());
+
+            Long speakersChoiceID = speakers.get(speakersCount).getId();
+            int speakerChoiceCount = answerService.countByChoice_id(speakersChoiceID);
+
+            for (int ratingCount = 0; ratingCount < rating.size(); ratingCount++) {
+                Long ratingChoiceID = rating.get(ratingCount).getId();
+                int pairCount = answerService.countByTwoChoice_id(speakersChoiceID, ratingChoiceID);
+                double percent = countPercentAndFormat(pairCount, speakerChoiceCount);
+
+                row.add(percent); //TODO
+                row.add(createTooltip(rating.get(ratingCount).getText(), pairCount, speakerChoiceCount, percent));
+
+                
+              
+
+            }
+            chartData.addData(row);
+        }
+
+        return chartData;
+    }
+    
+    
+    
+    
+    
+    
+    
     public List<ChartData> singleConferenceSpeakers(SingleConferenceStat singleConferenceStat) {
         List<ChartData> chartDataList = new LinkedList<>();
         for (int pairsCount = 0; pairsCount < singleConferenceStat.getPairs().size(); pairsCount++) {
@@ -87,6 +146,8 @@ public class ChartDataBuilder {
         chartData.setOptions(options);
 
         List columnsNames = createColumnsNamesFromPair(pair);
+        columnsNames.remove(columnsNames.size()-1);
+        columnsNames.remove(columnsNames.size()-1);
         chartData.addData(columnsNames);
 
         Long speakersAnswerID = pair.getSpeakersAnswerID();
@@ -95,14 +156,14 @@ public class ChartDataBuilder {
         Long ratingAnswerID = pair.getRatingAnswerID();
         List<Choice> rating = questionMetaInformationService.getChoicesByQuestionMetaInformationId(ratingAnswerID);
 
-        for (int speakersCount = 0; speakersCount < speakers.size(); speakersCount++) {
+        for (int speakersCount = 0; speakersCount < speakers.size()-1; speakersCount++) {
             List row = new LinkedList();
             row.add(speakers.get(speakersCount).getText());
 
             Long speakersChoiceID = speakers.get(speakersCount).getId();
             int speakerChoiceCount = answerService.countByChoice_id(speakersChoiceID);
 
-            for (int ratingCount = 0; ratingCount < rating.size(); ratingCount++) {
+            for (int ratingCount = 0; ratingCount < rating.size()-1; ratingCount++) {
                 Long ratingChoiceID = rating.get(ratingCount).getId();
                 int pairCount = answerService.countByTwoChoice_id(speakersChoiceID, ratingChoiceID);
                 double percent = countPercentAndFormat(pairCount, speakerChoiceCount);
@@ -315,7 +376,7 @@ public class ChartDataBuilder {
             answers++;
         }
         int questions = (int) questionGroup.getConferenceQuestionPairs().size();
-        int height = answers * questions * 50;
+        int height = answers * questions * 40 + 200;
         Options options = new Options(height,
                 "horizontal",
                 questionGroup.getName()); //TODO подумать про высоту
@@ -324,7 +385,7 @@ public class ChartDataBuilder {
 
     private Options createOptions(SpeakersRatingPair pair) {
 
-        int height = 1400;  //TODO убрать константу
+        int height = 900;  //TODO убрать константу
         Options options = new Options(height,
                 "horizontal",
                 pair.getText());

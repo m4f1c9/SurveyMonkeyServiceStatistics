@@ -24,9 +24,14 @@ public class TMP {
         return chartDataBuilder.standartSingleChoiceChartGroupedByConfirence(Conferences.holyJS());
     }
     
-    @RequestMapping("/mobi")
+    @RequestMapping("/mobi2")
     public List<ChartData> mobius() {
         return chartDataBuilder.singleConferenceSpeakers(Conferences.mobius());
+    }
+    
+    @RequestMapping("/mobi")
+    public List<ChartData> mobius2() {
+        return chartDataBuilder.singleConferenceSpeakers2(Conferences.mobius());
     }
     
     

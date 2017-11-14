@@ -6,7 +6,11 @@ public class Options {
     private String bars;
     private String title;
 
-    
+    public String theme = "material";
+    public int fontSize = 25;
+    public ChartArea chartArea = new ChartArea();
+    public Legend legend = new Legend();
+    public TextStyle titleTextStyle = new TextStyle(30);
     
     public Options(Integer height, String bars, String title) {
         this.height = height;
@@ -38,5 +42,25 @@ public class Options {
         this.bars = bars;
     }
 
-   
+    public class ChartArea {
+
+        public String width = "70%";
+        public String height = "80%";
+        public String left = "15%";
+
+    }
+
+    public class Legend {
+        public TextStyle textStyle = new TextStyle(20);
+    }
+
+    public class TextStyle {
+
+        public int fontSize;
+
+        public TextStyle(int fontSize) {
+            this.fontSize = fontSize;
+        }
+
+    }
 }
