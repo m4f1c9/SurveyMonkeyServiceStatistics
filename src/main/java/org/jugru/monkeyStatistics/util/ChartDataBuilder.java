@@ -13,6 +13,7 @@ import org.jugru.monkeyService.model.view.ConferenceQuestionPair;
 import org.jugru.monkeyService.model.view.ConferenceGroup;
 import org.jugru.monkeyService.model.view.Options;
 import org.jugru.monkeyService.model.view.ChoiceGroup;
+import org.jugru.monkeyService.model.view.Keynote;
 import org.jugru.monkeyService.model.view.QuestionGroup;
 import org.jugru.monkeyService.model.view.SingleConferenceStat;
 import org.jugru.monkeyService.model.view.SpeakersRatingPair;
@@ -45,70 +46,17 @@ public class ChartDataBuilder {
     private final String CUSTOM_CHOICE = "Свой вариант ответа";
     private final String NO_CHOICE = "Нет ответа";
 
-    
-    
-    public List<ChartData> singleConferenceSpeakers2(SingleConferenceStat singleConferenceStat) {
-        List<ChartData> chartDataList = new LinkedList<>();
-        for (int pairsCount = 0; pairsCount < singleConferenceStat.getPairs().size(); pairsCount++) {
-            SpeakersRatingPair pair = singleConferenceStat.getPairs().get(pairsCount);
-            ChartData chartData = createChartDataFromPair2(pair);
-            chartDataList.add(chartData);
-        }
-
-        return chartDataList;
-    }
-    
-    
-    private ChartData createChartDataFromPair2(SpeakersRatingPair pair) {
-        ChartData chartData = new ChartData();
-        Options options = createOptions(pair);
-        chartData.setOptions(options);
-
-        List columnsNames = createColumnsNamesFromPair(pair);
-        chartData.addData(columnsNames);
-
-        Long speakersAnswerID = pair.getSpeakersAnswerID();
-        List<Choice> speakers = questionMetaInformationService.getChoicesByQuestionMetaInformationId(speakersAnswerID);
-
-        Long ratingAnswerID = pair.getRatingAnswerID();
-        List<Choice> rating = questionMetaInformationService.getChoicesByQuestionMetaInformationId(ratingAnswerID);
-
-        for (int speakersCount = 0; speakersCount < speakers.size(); speakersCount++) {
-            List row = new LinkedList();
-            row.add(speakers.get(speakersCount).getText());
-
-            Long speakersChoiceID = speakers.get(speakersCount).getId();
-            int speakerChoiceCount = answerService.countByChoice_id(speakersChoiceID);
-
-            for (int ratingCount = 0; ratingCount < rating.size(); ratingCount++) {
-                Long ratingChoiceID = rating.get(ratingCount).getId();
-                int pairCount = answerService.countByTwoChoice_id(speakersChoiceID, ratingChoiceID);
-                double percent = countPercentAndFormat(pairCount, speakerChoiceCount);
-
-                row.add(percent); //TODO
-                row.add(createTooltip(rating.get(ratingCount).getText(), pairCount, speakerChoiceCount, percent));
-
-                
-              
-
-            }
-            chartData.addData(row);
-        }
-
-        return chartData;
-    }
-    
-    
-    
-    
-    
-    
-    
     public List<ChartData> singleConferenceSpeakers(SingleConferenceStat singleConferenceStat) {
         List<ChartData> chartDataList = new LinkedList<>();
         for (int pairsCount = 0; pairsCount < singleConferenceStat.getPairs().size(); pairsCount++) {
             SpeakersRatingPair pair = singleConferenceStat.getPairs().get(pairsCount);
             ChartData chartData = createChartDataFromPair(pair);
+            chartDataList.add(chartData);
+        }
+
+        for (int keynotesCount = 0; keynotesCount < singleConferenceStat.getKeynotes().size(); keynotesCount++) {
+            Keynote keynote = singleConferenceStat.getKeynotes().get(keynotesCount);
+            ChartData chartData = createChartDataFromKeynote(keynote);
             chartDataList.add(chartData);
         }
 
@@ -146,8 +94,8 @@ public class ChartDataBuilder {
         chartData.setOptions(options);
 
         List columnsNames = createColumnsNamesFromPair(pair);
-        columnsNames.remove(columnsNames.size()-1);
-        columnsNames.remove(columnsNames.size()-1);
+        columnsNames.remove(columnsNames.size() - 1); // TODO
+        columnsNames.remove(columnsNames.size() - 1);
         chartData.addData(columnsNames);
 
         Long speakersAnswerID = pair.getSpeakersAnswerID();
@@ -156,29 +104,70 @@ public class ChartDataBuilder {
         Long ratingAnswerID = pair.getRatingAnswerID();
         List<Choice> rating = questionMetaInformationService.getChoicesByQuestionMetaInformationId(ratingAnswerID);
 
-        for (int speakersCount = 0; speakersCount < speakers.size()-1; speakersCount++) {
+        int conferenceAnswers = surveyService.countAnswers(pair.getSurveyID());
+
+        for (int speakersCount = 0; speakersCount < speakers.size() - 1; speakersCount++) {
             List row = new LinkedList();
             row.add(speakers.get(speakersCount).getText());
 
             Long speakersChoiceID = speakers.get(speakersCount).getId();
-            int speakerChoiceCount = answerService.countByChoice_id(speakersChoiceID);
+            int speakerChoiceCount = answerService.countByChoice_id(speakersChoiceID); //люди на конкретном докладчике
 
-            for (int ratingCount = 0; ratingCount < rating.size()-1; ratingCount++) {
+            for (int ratingCount = 0; ratingCount < rating.size() - 1; ratingCount++) {
                 Long ratingChoiceID = rating.get(ratingCount).getId();
                 int pairCount = answerService.countByTwoChoice_id(speakersChoiceID, ratingChoiceID);
-                double percent = countPercentAndFormat(pairCount, speakerChoiceCount);
+                double percent = countPercentAndFormat(pairCount, conferenceAnswers);
 
                 row.add(percent); //TODO
-                row.add(createTooltip(rating.get(ratingCount).getText(), pairCount, speakerChoiceCount, percent));
-
-                
-              
+                if (pairCount > 0) {
+                    row.add(createTooltip(rating.get(ratingCount).getText(), pairCount, conferenceAnswers, speakerChoiceCount, percent));
+                } else {
+                    row.add(null);
+                }
 
             }
             chartData.addData(row);
         }
 
         return chartData;
+    }
+
+    private ChartData createChartDataFromKeynote(Keynote keynote) {
+        ChartData chartData = new ChartData();
+        Options options = createOptions(keynote);
+        chartData.setOptions(options);
+
+        List columnsNames = createColumnsNamesFromKeynote(keynote);
+        chartData.addData(columnsNames);
+
+        Long keynoteQuestionMetaInfID = keynote.getKeynoteQuestionMetaInfID();
+        List<Choice> choices = questionMetaInformationService.getChoicesByQuestionMetaInformationId(keynoteQuestionMetaInfID);
+
+        List row = new LinkedList();
+        row.add(keynote.getText());
+
+        for (int choiceCount = 0; choiceCount < choices.size(); choiceCount++) {
+
+            Choice choice = choices.get(choiceCount);
+
+            String conferencesName = choice.getText();
+            int conferenceAnswers = surveyService.countAnswers(keynote.getSurveyID());
+            int thisAnswers = answerService.countByChoice_id(choice.getId());
+            double percent = countPercentAndFormat(thisAnswers, conferenceAnswers);
+            row.add(percent);
+            if (thisAnswers > 0) {
+                row.add(createTooltip(conferencesName, thisAnswers, conferenceAnswers, percent));
+            }
+            else{
+                row.add(null);
+            }
+
+        }
+
+        chartData.addData(row);
+
+        return chartData;
+
     }
 
     private ChartData createChartDataGroupedByConfirence(QuestionGroup questionGroup) {
@@ -245,7 +234,8 @@ public class ChartDataBuilder {
                 int thisAnswers = answerService.countByChoice_id(choiceGroup.getID().get(conferenceCount));
                 double percent = countPercentAndFormat(thisAnswers, conferenceAnswers);
                 row.add(percent);
-                row.add(createTooltip(conferencesName, thisAnswers, conferenceAnswers, percent));
+               row.add(createTooltip(conferencesName, thisAnswers, conferenceAnswers, percent));
+
             } else {
                 row.add(0); //TODO
                 row.add("");
@@ -383,12 +373,21 @@ public class ChartDataBuilder {
         return options;
     }
 
-    private Options createOptions(SpeakersRatingPair pair) {
-
-        int height = 900;  //TODO убрать константу
+    private Options createOptions(Keynote keynote) {
+        int choicesCount = questionMetaInformationService.getChoicesByQuestionMetaInformationId(keynote.getKeynoteQuestionMetaInfID()).size();
+        int height = choicesCount * 50;  //TODO убрать константу
         Options options = new Options(height,
                 "horizontal",
-                pair.getText());
+                "Кейноуты", true); // TODO
+        return options;
+    }
+
+    private Options createOptions(SpeakersRatingPair pair) {
+
+        int height = 1000;  //TODO убрать константу
+        Options options = new Options(height,
+                "horizontal",
+                pair.getText(), true);
         return options;
     }
 
@@ -400,7 +399,22 @@ public class ChartDataBuilder {
 
         for (int choiceCount = 0; choiceCount < choices.size(); choiceCount++) {
             columns.add(choices.get(choiceCount).getText());
-            columns.add(Role.getTooltipRole());
+            columns.add(Role.getAnnotationTextRole());
+        }
+
+        return columns;
+    }
+
+    private List createColumnsNamesFromKeynote(Keynote keynote) {
+        List columns = new LinkedList<>();
+        columns.add("");    //не нужен, но не может быть null, поэтому ""
+
+        Long keynoteQuestionMetaInfID = keynote.getKeynoteQuestionMetaInfID();
+        List<Choice> choices = questionMetaInformationService.getChoicesByQuestionMetaInformationId(keynoteQuestionMetaInfID);
+
+        for (int choiceCount = 0; choiceCount < choices.size(); choiceCount++) {
+            columns.add(choices.get(choiceCount).getText());
+            columns.add(Role.getAnnotationTextRole());
         }
 
         return columns;
@@ -458,6 +472,23 @@ public class ChartDataBuilder {
         sb.append(thisAnswers);
         sb.append(" из ");
         sb.append(totalAnswers);
+        sb.append(" (");
+        sb.append(percent);
+        sb.append("%)");
+        return sb.toString();
+    }
+
+    private String createTooltip(String text, int thisAnswers, int speakerAnswers, int totalAnswers, double percent) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(text);
+        sb.append(": ");
+        sb.append(thisAnswers);
+        sb.append(" из ");
+        sb.append(totalAnswers);
+
+        sb.append("/");
+        sb.append(speakerAnswers);
+
         sb.append(" (");
         sb.append(percent);
         sb.append("%)");

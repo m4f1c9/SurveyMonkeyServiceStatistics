@@ -5,11 +5,21 @@ public class SpeakersRatingPair {
     private Long speakersAnswerID;
     private Long RatingAnswerID;
     private String text;
+    private Long surveyID;
 
-    public SpeakersRatingPair(Long speakersAnswerID, Long RatingAnswerID, String text) {
+    public SpeakersRatingPair(Long speakersAnswerID, Long RatingAnswerID, String text, Long surveyID) {
         this.speakersAnswerID = speakersAnswerID;
         this.RatingAnswerID = RatingAnswerID;
         this.text = text;
+        this.surveyID = surveyID;
+    }
+
+    public Long getSurveyID() {
+        return surveyID;
+    }
+
+    public void setSurveyID(Long surveyID) {
+        this.surveyID = surveyID;
     }
 
     public Long getSpeakersAnswerID() {
@@ -36,6 +46,4 @@ public class SpeakersRatingPair {
         this.text = text;
     }
 
-    
-    
 }

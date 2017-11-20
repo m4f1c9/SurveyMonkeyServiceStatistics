@@ -32,7 +32,24 @@ public class SaveSurveyController {
 //       survey4.setId(125742994L);
 //       surveyMonkeyService.parseAndSaveDetailedSurvey(survey4);
 
-        surveyMonkeyService.refreshAnswers();
+
+//
+//        Survey survey = new Survey();
+//        survey.setId(88971560L);
+//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey);
+//
+//        Survey survey2 = new Survey();
+//        survey2.setId(89185175L);
+//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey2);
+//
+//        Survey survey3 = new Survey();
+//        survey3.setId(78199292L);
+//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey3);
+//        Survey survey4 = new Survey();
+//        survey4.setId(63616183L);
+//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey4);
+
+       surveyMonkeyService.refreshAnswers();
         return "OK";
     }
 }

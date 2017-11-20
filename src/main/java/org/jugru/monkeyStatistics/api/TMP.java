@@ -18,21 +18,26 @@ public class TMP {
     public List<ChartData> holuJSA() {
         return chartDataBuilder.standartSingleChoiceChartGroupedByAnswer(Conferences.holyJS());
     }
-    
+
     @RequestMapping("/HJSC")
     public List<ChartData> holuJSC() {
         return chartDataBuilder.standartSingleChoiceChartGroupedByConfirence(Conferences.holyJS());
     }
-    
+
     @RequestMapping("/mobi2")
     public List<ChartData> mobius() {
         return chartDataBuilder.singleConferenceSpeakers(Conferences.mobius());
     }
-    
-    @RequestMapping("/mobi")
-    public List<ChartData> mobius2() {
-        return chartDataBuilder.singleConferenceSpeakers2(Conferences.mobius());
+
+    @RequestMapping("/JPA")
+    public List<ChartData> JPointA() {
+        return chartDataBuilder.standartSingleChoiceChartGroupedByAnswer(Conferences.JPoint());
     }
     
     
+    @RequestMapping("/JPС")
+    public List<ChartData> JPointС() {
+        return chartDataBuilder.standartSingleChoiceChartGroupedByConfirence(Conferences.JPoint());
+    }
+
 }
