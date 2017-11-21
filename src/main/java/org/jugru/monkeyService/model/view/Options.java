@@ -9,6 +9,8 @@ public class Options {
     private Integer height;
     private String bars;
     private String title;
+    
+   
 
     public String theme = "material";
 //    public int fontSize = 25;
