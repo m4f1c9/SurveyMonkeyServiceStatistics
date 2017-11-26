@@ -5,9 +5,11 @@ import java.util.Set;
 import org.jugru.monkeyService.model.AnswerMetaInformation;
 import org.jugru.monkeyService.model.Choice;
 import org.jugru.monkeyService.model.QuestionMetaInformation;
+import org.jugru.monkeyService.model.Row;
 
 public interface QuestionMetaInformationService extends Service<QuestionMetaInformation> {
 
-    Long getOther_idByQuestionMetaInformationId(long id);
-    List<Choice> getChoicesByQuestionMetaInformationId(long id);
+    Long getOther_idByQuestionMetaInformationId(Long id);
+    List<Choice> getChoicesByQuestionMetaInformationId(Long id);
+    List<Row> getRowsByQuestionMetaInformationId(Long id);
 }

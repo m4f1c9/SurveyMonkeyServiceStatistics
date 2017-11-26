@@ -73,4 +73,11 @@ public class AnswerServiceImpl implements AnswerService {
     public Integer countByTwoChoice_id(Long first, Long second) {
         return answerRepository.countByTwoChoice_id(first, second);
     }
+
+    @Override
+    public Integer countByRow_id(long row_id) {
+        return answerRepository.countByRow_id(row_id);
+    }
+    
+    
 }

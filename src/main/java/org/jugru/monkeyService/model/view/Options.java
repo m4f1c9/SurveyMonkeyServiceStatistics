@@ -9,17 +9,18 @@ public class Options {
     private Integer height;
     private String bars;
     private String title;
-    
-   
 
-    public String theme = "material";
 //    public int fontSize = 25;
     public ChartArea chartArea = new ChartArea();
-//    public Legend legend = new Legend();
+    public Legend legend = new Legend();
 //    public TextStyle titleTextStyle = new TextStyle(30);
     public List<String> colors;
     public Annotations annotations = new Annotations();
-   //  public HAxis hAxis = new HAxis();
+    public HAxis hAxis = new HAxis();
+    public VAxis vAxis = new VAxis();
+    public String theme = "material";
+    public TextStyle titleTextStyle = new TextStyle(20);
+  //  public String axisTitlesPosition = "in";
 
     public Options(Integer height, String bars, String title) {
         this(height, bars, title, false);
@@ -62,21 +63,31 @@ public class Options {
 
     public class ChartArea {
 
+//        public String width = "70%";
+//        public String height = "80%";
+//        public String left = "15%";
+//        public String top = "15%";
+        
         public String width = "70%";
-        public String height = "80%";
+        public String height = "100%";
         public String left = "15%";
-        public String top = "15%";
+        public String top = "50";
 
     }
 
     public class Legend {
 
-        public TextStyle textStyle = new TextStyle(20);
+        public TextStyle textStyle = new TextStyle(15);
     }
 
     public class TextStyle {
 
         public int fontSize;
+        public String color = "black";
+
+        public TextStyle() {
+
+        }
 
         public TextStyle(int fontSize) {
             this.fontSize = fontSize;
@@ -87,14 +98,23 @@ public class Options {
     public class Annotations {
 
         public boolean alwaysOutside = false;
-        //public TextStyle textStyle = new TextStyle(10);
+        public TextStyle textStyle = new TextStyle(17);
         public String style = "point";
     }
 
     public class HAxis {
 
-        public String textPosition = "none";
-        //public TextStyle textStyle = new TextStyle(30);
-       
+        //  public String textPosition = "none";
+        public TextStyle textStyle = new TextStyle(20);
+
     }
+
+    public class VAxis {
+
+    //  public String viewWindowMode = "maximized";
+        public TextStyle textStyle = new TextStyle(14);
+
+    }
+
+   
 }

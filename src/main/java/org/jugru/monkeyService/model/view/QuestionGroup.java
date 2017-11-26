@@ -44,7 +44,7 @@ public class QuestionGroup {
     }
 
 
-    public void AddChoiceGroup(ChoiceGroup choiceGroup) {
+    public void addChoiceGroup(ChoiceGroup choiceGroup) {
         choiceGroups.add(choiceGroup);
     }
 

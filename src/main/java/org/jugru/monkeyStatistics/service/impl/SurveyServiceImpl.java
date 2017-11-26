@@ -41,9 +41,9 @@ public class SurveyServiceImpl implements SurveyService {
     @Transactional
     @Override
     public int countAnswers(long id) {
-        return surveyRepository.findOne(id).getResponses().size(); //TODO написать запрос на count  
+       
+            return surveyRepository.findOne(id).getResponses().size(); //TODO написать запрос на count  
+       
     }
 
-    
-    
 }

@@ -13,6 +13,8 @@ public interface AnswerService extends Service<Answer> {
     
     Integer countByChoice_id(long choice_id);
     
+    Integer countByRow_id(long row_id);
+    
     Integer countByOther_id(Long other_id);
     
     Integer countByTwoChoice_id(Long first, Long second);

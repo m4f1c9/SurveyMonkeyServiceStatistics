@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 import org.jugru.monkeyService.model.AnswerMetaInformation;
 import org.jugru.monkeyService.model.Choice;
 import org.jugru.monkeyService.model.QuestionMetaInformation;
+import org.jugru.monkeyService.model.Row;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.jugru.monkeyStatistics.repository.QuestionMetaInformationRepository;
 import org.jugru.monkeyStatistics.service.QuestionMetaInformationService;
@@ -45,7 +46,7 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
     //TODO сделать цепочку проверок
     @Transactional
     @Override
-    public Long getOther_idByQuestionMetaInformationId(long id) {
+    public Long getOther_idByQuestionMetaInformationId(Long id) {
         try {
             return questionMetaInformationRepository.findOne(id).getAnswers().getOther().getId();
         } catch (NullPointerException e) {
@@ -55,11 +56,23 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
 
     @Transactional
     @Override
-    public List<Choice> getChoicesByQuestionMetaInformationId(long id) {
-        List<Choice> l = get(id).getAnswers().getChoices(); 
+    public List<Choice> getChoicesByQuestionMetaInformationId(Long id) {
+        List<Choice> l = get(id).getAnswers().getChoices();
         l.size(); //TODO 
         return l;
+
+    }
+
+    @Transactional
+    @Override
+    public List<Row> getRowsByQuestionMetaInformationId(Long id) {
         
+
+        List<Row> l = get(id).getAnswers().getRows();
+        l.size(); //TODO 
+        return l;
+       
+
     }
 
 }
