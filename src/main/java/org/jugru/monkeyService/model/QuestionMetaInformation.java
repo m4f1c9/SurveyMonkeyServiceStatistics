@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 
 @Entity
@@ -27,9 +28,15 @@ public class QuestionMetaInformation {
     @Embedded
     @Column
     private AnswerMetaInformation answers;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @Column
     private Set<Heading> headings = new HashSet<>();
+
+    public String getHedingAsString() {
+        StringBuilder sb = new StringBuilder();
+        headings.forEach(sb::append);
+        return sb.toString();
+    }
 
     public Long getId() {
         return id;

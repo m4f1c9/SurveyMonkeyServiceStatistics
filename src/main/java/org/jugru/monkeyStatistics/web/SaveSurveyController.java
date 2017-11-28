@@ -17,57 +17,68 @@ public class SaveSurveyController {
 
     @RequestMapping(value = "/save")
     public String save(Model model) {
-//        Survey survey = new Survey();
+
+//        Survey survey;
+//        
+//        survey = new Survey();
 //        survey.setId(80191211L);
 //        surveyMonkeyService.parseAndSaveDetailedSurvey(survey);
 //
-//        Survey survey2 = new Survey();
-//        survey2.setId(87269535L);
-//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey2);
-//
-//        Survey survey3 = new Survey();
-//        survey3.setId(117652322L);
-//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey3);
-//        Survey survey4 = new Survey();
-//       survey4.setId(125742994L);
-//       surveyMonkeyService.parseAndSaveDetailedSurvey(survey4);
-
-
-//
-//        Survey survey = new Survey();
-//        survey.setId(88971560L);
+//        survey = new Survey();
+//        survey.setId(87269535L);
+//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey);
+//        
+//        survey = new Survey();
+//        survey.setId(117652322L);
 //        surveyMonkeyService.parseAndSaveDetailedSurvey(survey);
 //
-//        Survey survey2 = new Survey();
-//        survey2.setId(89185175L);
-//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey2);
-//
-//        Survey survey3 = new Survey();
-//        survey3.setId(78199292L);
-//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey3);
-//        Survey survey4 = new Survey();
-//        survey4.setId(63616183L);
-//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey4);
-
-
-
-//        Survey survey = new Survey();
+//         survey = new Survey();
 //        survey.setId(125742994L);
 //        surveyMonkeyService.parseAndSaveDetailedSurvey(survey);
 //
-//        Survey survey2 = new Survey();
-//        survey2.setId(89235000L);
-//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey2);
+//        survey = new Survey();
+//        survey.setId(88971560L);
+//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey);
+//        
+//        survey = new Survey();
+//        survey.setId(78199292L);
+//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey);
 //
-//        Survey survey3 = new Survey();
-//        survey3.setId(80136513L);
-//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey3);
-//        Survey survey4 = new Survey();
-//        survey4.setId(63175554L);
-//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey4);
-
-
-
+//         survey = new Survey();
+//        survey.setId(63616183L);
+//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey);
+//
+//        survey = new Survey();
+//        survey.setId(89235000L);
+//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey);
+//        
+//        survey = new Survey();
+//        survey.setId(80136513L);
+//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey);
+//
+//         survey = new Survey();
+//        survey.setId(63175554L);
+//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey);
+//
+//        survey = new Survey();
+//        survey.setId(70153290L);
+//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey);
+//        
+//        survey = new Survey();
+//        survey.setId(85694193L);
+//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey);
+//
+//         survey = new Survey();
+//        survey.setId(125137353L);
+//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey);
+//
+//        survey = new Survey();
+//        survey.setId(76600618L);
+//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey);
+//        
+//        survey = new Survey();
+//        survey.setId(88993967L);
+//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey);
 
        surveyMonkeyService.refreshAnswers();
         return "OK";

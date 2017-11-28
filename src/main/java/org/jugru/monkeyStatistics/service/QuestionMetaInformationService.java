@@ -6,10 +6,12 @@ import org.jugru.monkeyService.model.AnswerMetaInformation;
 import org.jugru.monkeyService.model.Choice;
 import org.jugru.monkeyService.model.QuestionMetaInformation;
 import org.jugru.monkeyService.model.Row;
+import org.jugru.monkeyService.model.Survey;
 
 public interface QuestionMetaInformationService extends Service<QuestionMetaInformation> {
 
     Long getOther_idByQuestionMetaInformationId(Long id);
     List<Choice> getChoicesByQuestionMetaInformationId(Long id);
     List<Row> getRowsByQuestionMetaInformationId(Long id);
+    List<QuestionMetaInformation> getQuestionMetaInformationFromSurvey(Long id);
 }

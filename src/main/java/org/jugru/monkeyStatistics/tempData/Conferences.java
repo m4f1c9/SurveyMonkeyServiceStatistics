@@ -1396,89 +1396,161 @@ public class Conferences {
     public static ChartsPreset test() {
 
         ChartsPreset preset = new ChartsPreset("1111!!!!!");
-        {
-            UngroupedCharts ungroupedCharts = new UngroupedCharts();
-            ungroupedCharts.setChartName("Оцените организацию онлайн-трансляции");
-            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.FULL, false, false);
-            chartOptions.setShowTitle(true);
-            ungroupedCharts.setChartOptions(chartOptions);
+        //        {
+        //            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+        //            ungroupedCharts.setChartName("Оцените организацию онлайн-трансляции");
+        //            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.FULL, false, false);
+        //            chartOptions.setShowTitle(true);
+        //            ungroupedCharts.setChartOptions(chartOptions);
+        //
+        //            List<SingleQuestionChart> charts = new ArrayList<>();
+        //            SingleQuestionChart cqc;
+        //            cqc = new SingleQuestionChart("JPoint 2015", 63616183L, 790944403L, true);
+        //            cqc.setUseRow_idInstedOfChoice_id(false);
+        //            charts.add(cqc);
+        //            
+        //            cqc = new SingleQuestionChart("JPoint 2016", 78199292L, 945412851L, true);
+        //            cqc.setUseRow_idInstedOfChoice_id(false);
+        //            charts.add(cqc);
+        //            
+        //            cqc = new SingleQuestionChart("JPoint 2017", 88971560L, 1072183354L, true);
+        //            cqc.setUseRow_idInstedOfChoice_id(false);
+        //            charts.add(cqc);
+        //            
+        //            System.out.println(charts);
+        //            System.out.println(charts);
+        //            System.out.println(charts);
+        //
+        //            ungroupedCharts.setCharts(charts);
+        //            preset.AddChart(ungroupedCharts);
+        //
+        //        }
+        //        {
+        //            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, true, true);
+        //            CrossGroupingChart cgc = new CrossGroupingChart("Слот 10:30 – 11:20.", 125742994L, 203789246L, 203789403L, chartOptions);
+        //             cgc.setHideLastChoiceInFirst(true);
+        //            cgc.setHideLastChoiceInSecond(true);
+        //            preset.AddChart(cgc);
+        //
+        //        }
 
-            List<SingleQuestionChart> charts = new ArrayList<>();
-            SingleQuestionChart cqc;
-            cqc = new SingleQuestionChart("JPoint 2015", 63616183L, 790944403L, true);
-            cqc.setUseRow_idInstedOfChoice_id(true);
-            charts.add(cqc);
-            
-            cqc = new SingleQuestionChart("JPoint 2016", 78199292L, 945412851L, true);
-            cqc.setUseRow_idInstedOfChoice_id(true);
-            charts.add(cqc);
-            
-            cqc = new SingleQuestionChart("JPoint 2017", 88971560L, 1072183354L, true);
-            cqc.setUseRow_idInstedOfChoice_id(true);
-            charts.add(cqc);
-            
-            System.out.println(charts);
-            System.out.println(charts);
-            System.out.println(charts);
-
-            ungroupedCharts.setCharts(charts);
-            preset.AddChart(ungroupedCharts);
-
-        }
         {
             ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, true, true);
-            CrossGroupingChart cgc = new CrossGroupingChart("Слот 10:30 – 11:20.", 125742994L, 203789246L, 203789403L, chartOptions);
-            cgc.setUseRow_idInstedOfChoice_idForFirstQuestion(true);
-            cgc.setUseRow_idInstedOfChoice_idForSecondQuestion(true);
+            CrossGroupingChart cgc = new CrossGroupingChart("Как вы покупали билет?", 125742994L, 203746709L, 203746713L, chartOptions);
+            cgc.setHideLastChoiceInFirst(false);
+            cgc.setHideLastChoiceInSecond(false);
             preset.AddChart(cgc);
 
         }
 
         {
-
             ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, true, true);
-            GroupedByChoiceChart chart = new GroupedByChoiceChart("Ваша позиция в компании?", chartOptions);
+            CrossGroupingChart cgc = new CrossGroupingChart("Насколько конференция в целом соответствовала вашим ожиданиям?", 125742994L, 203746709L, 203746770L, chartOptions);
+            cgc.setHideLastChoiceInFirst(false);
+            cgc.setHideLastChoiceInSecond(false);
+            preset.AddChart(cgc);
 
-            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("HolyJS 2016 Piter", 80191211, 966831639L));
-            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("HolyJS 2016 Moscow", 87269535, 1045020001L));
-            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("HolyJS 2017 Piter", 117652322, 118678197L));
-
-            ChoiceGroup answer1 = new ChoiceGroup();
-            answer1.setText("Junior Developer");
-            answer1.setID(new LinkedList<Long>() {
-                {
-                    add(10239887091L);
-                    add(10789207613L);
-                    add(874803001L);
-                }
-            });
-
-            ChoiceGroup answer2 = new ChoiceGroup();
-            answer2.setText("Middle Developer");
-            answer2.setID(new LinkedList<Long>() {
-                {
-                    add(10239887092L);
-                    add(10789207614L);
-                    add(874803002L);
-                }
-            });
-
-            ChoiceGroup answer3 = new ChoiceGroup();
-            answer3.setText("Senior Developer");
-            answer3.setID(new LinkedList<Long>() {
-                {
-                    add(10239887093L);
-                    add(10789207615L);
-                    add(874803003L);
-                }
-            });
-
-            chart.addChoiceGroup(answer1);
-            chart.addChoiceGroup(answer2);
-            chart.addChoiceGroup(answer3);
-
-            preset.AddChart(chart);
         }
+
+        {
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, true, true);
+            CrossGroupingChart cgc = new CrossGroupingChart("Оцените программу конференции в целом", 125742994L, 203746709L, 203746764L, chartOptions);
+            cgc.setHideLastChoiceInFirst(false);
+            cgc.setHideLastChoiceInSecond(false);
+            preset.AddChart(cgc);
+
+        }
+
+        {
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, true, true);
+            CrossGroupingChart cgc = new CrossGroupingChart("Оцените техническую глубину программы", 125742994L, 203746709L, 203746765L, chartOptions);
+            cgc.setHideLastChoiceInFirst(false);
+            cgc.setHideLastChoiceInSecond(false);
+            preset.AddChart(cgc);
+
+        }
+
+        {
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, true, true);
+            CrossGroupingChart cgc = new CrossGroupingChart("Насколько техническая глубина соответствовала вашим ожиданиям?", 125742994L, 203746709L, 203746768L, chartOptions);
+            cgc.setHideLastChoiceInFirst(false);
+            cgc.setHideLastChoiceInSecond(false);
+            preset.AddChart(cgc);
+
+        }
+
+        {
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, true, true);
+            CrossGroupingChart cgc = new CrossGroupingChart("Оцените практическую применимость услышанного вами в докладах", 125742994L, 203746709L, 203746766L, chartOptions);
+            cgc.setHideLastChoiceInFirst(false);
+            cgc.setHideLastChoiceInSecond(false);
+            preset.AddChart(cgc);
+
+        }
+
+        {
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, true, true);
+            CrossGroupingChart cgc = new CrossGroupingChart("Насколько практическая применимость услышанного вами на конференции соответствовала вашим ожиданиям?", 125742994L, 203746709L, 203746769L, chartOptions);
+            cgc.setHideLastChoiceInFirst(false);
+            cgc.setHideLastChoiceInSecond(false);
+            preset.AddChart(cgc);
+
+        }
+
+        {
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, true, true);
+            CrossGroupingChart cgc = new CrossGroupingChart("Конференции на какие другие темы вы бы посетили ?", 125742994L, 203746709L, 203746759L, chartOptions);
+            cgc.setHideLastChoiceInFirst(false);
+            cgc.setHideLastChoiceInSecond(false);
+            preset.AddChart(cgc);
+
+        }
+
+//        {
+//
+//            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, true, true);
+//            GroupedByChoiceChart chart = new GroupedByChoiceChart("Ваша позиция в компании?", chartOptions);
+//
+//            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("HolyJS 2016 Piter", 80191211, 966831639L));
+//            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("HolyJS 2016 Moscow", 87269535, 1045020001L));
+//            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("HolyJS 2017 Piter", 117652322, 118678197L));
+//
+//            ChoiceGroup answer1 = new ChoiceGroup();
+//            answer1.setText("Junior Developer");
+//            answer1.setID(new LinkedList<Long>() {
+//                {
+//                    add(10239887091L);
+//                    add(10789207613L);
+//                    add(874803001L);
+//                }
+//            });
+//
+//            ChoiceGroup answer2 = new ChoiceGroup();
+//            answer2.setText("Middle Developer");
+//            answer2.setID(new LinkedList<Long>() {
+//                {
+//                    add(10239887092L);
+//                    add(10789207614L);
+//                    add(874803002L);
+//                }
+//            });
+//
+//            ChoiceGroup answer3 = new ChoiceGroup();
+//            answer3.setText("Senior Developer");
+//            answer3.setID(new LinkedList<Long>() {
+//                {
+//                    add(10239887093L);
+//                    add(10789207615L);
+//                    add(874803003L);
+//                }
+//            });
+//
+//            chart.addChoiceGroup(answer1);
+//            chart.addChoiceGroup(answer2);
+//            chart.addChoiceGroup(answer3);
+//
+//            preset.AddChart(chart);
+//        }
         return preset;
 
     }
@@ -2316,6 +2388,1222 @@ public class Conferences {
 //
 //            preset.AddChart(chart);
 //
+//        }
+        return preset;
+    }
+
+    public static ChartsPreset joker() {
+        ChartsPreset preset = new ChartsPreset("joker");
+
+        {
+
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, true, true);
+            chartOptions.setShowTitle(true);
+            GroupedByChoiceChart chart = new GroupedByChoiceChart("Ваша позиция в компании?", chartOptions);  //!!!
+
+            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("Joker 2015", 70153290L, 861919609L));
+            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("Joker 2016", 85694193L, 1023191960L));
+            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("Joker 2017", 125137353L, 197148960L));
+
+            ChoiceGroup choices;
+
+            choices = new ChoiceGroup();
+            choices.setText("Junior Developer");
+            choices.setID(new LinkedList<>(Arrays.asList(9487397398L, 10633811347L, 1394626358L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Middle Developer");
+            choices.setID(new LinkedList<>(Arrays.asList(9487397399L, 10633811348L, 1394626359L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Senior Developer");
+            choices.setID(new LinkedList<>(Arrays.asList(9487397400L, 10633811349L, 1394626360L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Team Lead");
+            choices.setID(new LinkedList<>(Arrays.asList(9487397401L, 10633811350L, 1394626361L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("QA /QA Head");
+            choices.setID(new LinkedList<>(Arrays.asList(null, null, 1394863705L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Architect ");
+            choices.setID(new LinkedList<>(Arrays.asList(null, 10633811354L, 1394626362L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("DevOps");
+            choices.setID(new LinkedList<>(Arrays.asList(null, null, 1394863706L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("CTO / CIO");
+            choices.setID(new LinkedList<>(Arrays.asList(null, 10633811351L, 1394626363L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("CEO ");
+            choices.setID(new LinkedList<>(Arrays.asList(null, 10633811353L, 1394626364L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Менеджер");
+            choices.setID(new LinkedList<>(Arrays.asList(null, 10633811352L, null)));
+            chart.addChoiceGroup(choices);
+
+            preset.AddChart(chart);
+
+        }
+        {
+
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, false);
+            chartOptions.setShowTitle(true);
+            GroupedByChoiceChart chart = new GroupedByChoiceChart("Ваш стаж работы Java-разработчиком", chartOptions);  //!!!
+
+            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("Joker 2016", 85694193L, 1023191961L));
+            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("Joker 2017", 125137353L, 197148961L));
+
+            ChoiceGroup choices;
+
+            choices = new ChoiceGroup();
+            choices.setText("Менее 1 года");
+            choices.setID(new LinkedList<>(Arrays.asList(10633811361L, 1394626013L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("1-3 года");
+            choices.setID(new LinkedList<>(Arrays.asList(10633811362L, 1394626014L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("4-6 лет");
+            choices.setID(new LinkedList<>(Arrays.asList(10633811363L, 1394626015L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Более 6 лет");
+            choices.setID(new LinkedList<>(Arrays.asList(10633811364L, 1394626016L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Я не работаю с Java");
+            choices.setID(new LinkedList<>(Arrays.asList(10633811365L, 1394626017L)));
+            chart.addChoiceGroup(choices);
+
+            preset.AddChart(chart);
+
+        }
+
+        {
+
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, false);
+            chartOptions.setShowTitle(true);
+            GroupedByChoiceChart chart = new GroupedByChoiceChart("Укажите ваш статус на конференции:", chartOptions);  //!!!
+
+            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("Joker 2016", 85694193L, 1023191963L));
+            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("Joker 2017", 125137353L, 197148962L));
+
+            ChoiceGroup choices;
+
+            choices = new ChoiceGroup();
+            choices.setText("Участник");
+            choices.setID(new LinkedList<>(Arrays.asList(10633811374L, 1394626020L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Спикер");
+            choices.setID(new LinkedList<>(Arrays.asList(10633811375L, 1394626021L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Спонсор");
+            choices.setID(new LinkedList<>(Arrays.asList(10633811376L, 1394626022L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Организатор / Волонтер");
+            choices.setID(new LinkedList<>(Arrays.asList(10633811377L, 1394626023L)));
+            chart.addChoiceGroup(choices);
+
+            preset.AddChart(chart);
+
+        }
+
+        {
+
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, true, true);
+            chartOptions.setShowTitle(true);
+            GroupedByChoiceChart chart = new GroupedByChoiceChart("Как вы покупали билет?", chartOptions);  //!!!
+
+            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("Joker 2015", 70153290L, 862022968L));
+            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("Joker 2016", 85694193L, 1023191967L));
+            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("Joker 2017", 125137353L, 197148964L));
+
+            ChoiceGroup choices;
+
+            choices = new ChoiceGroup();
+            choices.setText("Покупал сам, компания не компенсирует");
+            choices.setID(new LinkedList<>(Arrays.asList(9488252965L, 10633811392L, 1394626026L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Покупал сам, компания компенсирует частично");
+            choices.setID(new LinkedList<>(Arrays.asList(9488252966L, 10633811393L, 1394626027L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Покупал сам, компания полностью компенсирует");
+            choices.setID(new LinkedList<>(Arrays.asList(9488252967L, 10633811394L, 1394626028L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Билет мне покупала компания");
+            choices.setID(new LinkedList<>(Arrays.asList(9488252968L, 10633811395L, 1394626029L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Не покупал, я организатор / спикер / волонтер / спонсор");
+            choices.setID(new LinkedList<>(Arrays.asList(null, 10633811396L, 1394626030L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Не покупал — организаторы дали проходку");
+            choices.setID(new LinkedList<>(Arrays.asList(null, 10633811397L, 1394626031L)));
+            chart.addChoiceGroup(choices);
+
+            preset.AddChart(chart);
+
+        }
+
+        {
+
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("В каких конференциях JUG.ru Group вы участвовали ранее? (или смотрели онлайн)");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, true, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(false);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+
+            charts.add(new SingleQuestionChart("Joker 2016", 85694193L, 1023191968L, true));
+            charts.add(new SingleQuestionChart("Joker 2017", 125137353L, 197148965L, true));
+
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+
+        }
+
+        {
+
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("В каких других конференциях вы участвовали за прошедший год? (или смотрели онлайн)");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, true, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(false);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+
+            charts.add(new SingleQuestionChart("Joker 2016", 85694193L, 1026044958L, true));
+            charts.add(new SingleQuestionChart("Joker 2017", 125137353L, 197204980L, true));
+
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+
+        }
+        {
+
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, true);
+            chartOptions.setShowTitle(true);
+            GroupedByChoiceChart chart = new GroupedByChoiceChart("Укажите форму участия в конференции", chartOptions);  //!!!
+
+            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("Joker 2016", 85694193L, 1023191969L));
+            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("Joker 2017", 125137353L, 197148966L));
+
+            ChoiceGroup choices;
+
+            choices = new ChoiceGroup();
+            choices.setText("Присутствовал лично");
+            choices.setID(new LinkedList<>(Arrays.asList(10633811412L, 1394626039L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Смотрел трансляцию (один или в составе группы коллег)");
+            choices.setID(new LinkedList<>(Arrays.asList(10633811413L, 1394626040L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Не смог поучаствовать лично, хочу видео");
+            choices.setID(new LinkedList<>(Arrays.asList(10633811414L, 1394626041L)));
+            chart.addChoiceGroup(choices);
+
+            preset.AddChart(chart);
+
+        }
+
+        {
+
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("Оцените организацию онлайн-трансляции");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(true);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+
+            charts.add(new SingleQuestionChart("Joker 2015", 70153290L, 861897522L, true));
+            charts.add(new SingleQuestionChart("Joker 2016", 85694193L, 1023191975L, true));
+            charts.add(new SingleQuestionChart("Joker 2017", 125137353L, 197148969L, true));
+
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+
+        }
+
+        {
+
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("Насколько быстро решались технические проблемы");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(true);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+
+            charts.add(new SingleQuestionChart("Joker 2016", 85694193L, 1023191977L, true));
+            charts.add(new SingleQuestionChart("Joker 2017", 125137353L, 197148970L, true));
+
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+
+        }
+        {
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, true);
+            chartOptions.setShowTitle(true);
+            GroupedByChoiceChart chart = new GroupedByChoiceChart("Вы смотрели интервью со спикерами в перерывах между трансляциями докладов?", chartOptions);  //!!!
+
+            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("Joker 2017", 125137353L, 197148974L));
+
+            ChoiceGroup choices;
+
+            choices = new ChoiceGroup();
+            choices.setText("Смотрел полностью");
+            choices.setID(new LinkedList<>(Arrays.asList(1394626083L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Смотрел несколько частей");
+            choices.setID(new LinkedList<>(Arrays.asList(1394626084L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Не смотрел");
+            choices.setID(new LinkedList<>(Arrays.asList(1394626085L)));
+            chart.addChoiceGroup(choices);
+
+            preset.AddChart(chart);
+        }
+
+        {
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("Оцените онлайн-трансляцию интервью со спикерами в перерывах между докладами");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(true);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+
+            charts.add(new SingleQuestionChart("Joker 2017", 125137353L, 197148973L, true));
+
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+        }
+        {
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("Оцените удобство места проведения");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(true);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+
+            charts.add(new SingleQuestionChart("Joker 2015", 70153290L, 861897512L, true));
+            charts.add(new SingleQuestionChart("Joker 2016", 85694193L, 1023191982L, true));
+            charts.add(new SingleQuestionChart("Joker 2017", 125137353L, 197148978L, true));
+
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+        }
+        {
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("Оцените удобство навигации в месте проведения");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(true);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+
+            charts.add(new SingleQuestionChart("Joker 2016", 85694193L, 1023211765L, true));
+            charts.add(new SingleQuestionChart("Joker 2017", 125137353L, 197148983L, true));
+
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+        }
+
+        {
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("Оцените техническую организацию конференции");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(true);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+
+            charts.add(new SingleQuestionChart("Joker 2015", 70153290L, 861897514L, true));
+            charts.add(new SingleQuestionChart("Joker 2016", 85694193L, 1023191989L, true));
+            charts.add(new SingleQuestionChart("Joker 2017", 125137353L, 197149027L, true));
+
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+        }
+
+        {
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("Оцените сайт конференции");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(true);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+
+            charts.add(new SingleQuestionChart("Joker 2017", 125137353L, 197148981L, true));
+
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+        }
+
+        {
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("Оцените обед");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(true);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+
+            charts.add(new SingleQuestionChart("Joker 2015", 70153290L, 861897517L, true));
+            charts.add(new SingleQuestionChart("Joker 2016", 85694193L, 1023191980L, true));
+            charts.add(new SingleQuestionChart("Joker 2017", 125137353L, 197148976L, true));
+
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+        }
+
+        {
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("Оцените вечеринку первого дня конференции");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(true);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+
+            charts.add(new SingleQuestionChart("Joker 2016", 85694193L, 1030045773L, true));
+            charts.add(new SingleQuestionChart("Joker 2017", 125137353L, 197149030L, true));
+
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+        }
+
+        {
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("Насколько в целом понравилась конференция?");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(true);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+
+            charts.add(new SingleQuestionChart("Joker 2017", 125137353L, 197149018L, true));
+
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+        }
+        {
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("Насколько конференция в целом соответствовала вашим ожиданиям?");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(true);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+
+            charts.add(new SingleQuestionChart("Joker 2017", 125137353L, 197149021L, true));
+
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+        }
+
+        {
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("Насколько вероятно, что вы станете (онлайн или оффлайн) участником следующей конференции Joker?");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(true);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+
+            charts.add(new SingleQuestionChart("Joker 2015", 70153290L, 861897527L, true));
+            charts.add(new SingleQuestionChart("Joker 2016", 85694193L, 1023191994L, true));
+            charts.add(new SingleQuestionChart("Joker 2017", 125137353L, 197148985L, true));
+
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+        }
+        {
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("Какова вероятность, что Вы порекомендуете Joker другу или коллеге?");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(true);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+
+            charts.add(new SingleQuestionChart("Joker 2015", 70153290L, 861897528L, true));
+            charts.add(new SingleQuestionChart("Joker 2016", 85694193L, 1023191995L, true));
+            charts.add(new SingleQuestionChart("Joker 2017", 125137353L, 197148986L, true));
+
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+        }
+
+        {
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("Откуда вы узнали о конференции?");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, true, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(false);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+            SingleQuestionChart sqc;
+
+            sqc = new SingleQuestionChart("Joker 2015", 70153290L, 861897530L, true);
+            sqc.setUseRow_idInstedOfChoice_id(false);
+            charts.add(sqc);
+
+            sqc = new SingleQuestionChart("Joker 2016", 85694193L, 1023191996L, true);
+            sqc.setUseRow_idInstedOfChoice_id(true);
+            charts.add(sqc);
+
+            sqc = new SingleQuestionChart("Joker 2017", 125137353L, 197148987L, true);
+            sqc.setUseRow_idInstedOfChoice_id(true);
+            charts.add(sqc);
+
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+        }
+
+        {
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("Оцените программу конференции в целом");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(true);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+
+            charts.add(new SingleQuestionChart("Joker 2017", 125137353L, 197149015L, true));
+
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+        }
+
+        {
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("Оцените техническую глубину программы");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(true);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+
+            charts.add(new SingleQuestionChart("Joker 2017", 125137353L, 197149016L, true));
+
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+        }
+
+        {
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("Насколько техническая глубина соответствовала вашим ожиданиям?");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(true);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+
+            charts.add(new SingleQuestionChart("Joker 2017", 125137353L, 197149019L, true));
+
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+        }
+
+        {
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("Оцените практическую применимость услышанного вами в докладах");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(true);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+
+            charts.add(new SingleQuestionChart("Joker 2017", 125137353L, 197149017L, true));
+
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+        }
+
+        {
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("Насколько практическая применимость услышанного вами на конференции соответствовала вашим ожиданиям?");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(true);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+
+            charts.add(new SingleQuestionChart("Joker 2017", 125137353L, 197149020L, true));
+
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+        }
+
+        {
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, true, true);
+            chartOptions.setShowTitle(true);
+            GroupedByChoiceChart chart = new GroupedByChoiceChart("Конференции на какие другие темы вы бы посетили ?", chartOptions);  //!!!
+
+            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("Joker 2016", 85694193L, 1023192011L));
+            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("Joker 2017", 125137353L, 197149010L));
+
+            ChoiceGroup choices;
+
+            choices = new ChoiceGroup();
+            choices.setText("Web-разработка");
+            choices.setID(new LinkedList<>(Arrays.asList(10633811670L, 1394626227L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText(".NET");
+            choices.setID(new LinkedList<>(Arrays.asList(10633811679L, 1394626399L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Тестирование");
+            choices.setID(new LinkedList<>(Arrays.asList(10633811680L, 1394626400L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("DevOps");
+            choices.setID(new LinkedList<>(Arrays.asList(10633811674L, 1394626401L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("С++");
+            choices.setID(new LinkedList<>(Arrays.asList(10633811671L, 1394626228L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("GNU/Linux");
+            choices.setID(new LinkedList<>(Arrays.asList(10633811672L, 1394626229L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Методологии разработки");
+            choices.setID(new LinkedList<>(Arrays.asList(10633811673L, 1394626230L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("OpenSource");
+            choices.setID(new LinkedList<>(Arrays.asList(10633811675L, 1394626231L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Высоконагруженные системы / Highload");
+            choices.setID(new LinkedList<>(Arrays.asList(10633811676L, 1394626232L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Performance / Производительность");
+            choices.setID(new LinkedList<>(Arrays.asList(10653362143L, 1394626237L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Распределённые системы");
+            choices.setID(new LinkedList<>(Arrays.asList(10633811677L, 1394626233L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Enterprise-разработка");
+            choices.setID(new LinkedList<>(Arrays.asList(10633811678L, 1394626234L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("JavаSсript");
+            choices.setID(new LinkedList<>(Arrays.asList(10633811683L, 1394626235L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Больше Java!");
+            choices.setID(new LinkedList<>(Arrays.asList(10634204008L, 1394626255L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("GO (Golang)");
+            choices.setID(new LinkedList<>(Arrays.asList(null, 1394626316L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Функциональное программирование");
+            choices.setID(new LinkedList<>(Arrays.asList(null, 1428372438L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Мобильная разработка");
+            choices.setID(new LinkedList<>(Arrays.asList(10633811681L, null)));
+            chart.addChoiceGroup(choices);
+
+            preset.AddChart(chart);
+        }
+
+        return preset;
+
+    }
+
+    public static ChartsPreset jbreak() {
+        ChartsPreset preset = new ChartsPreset("jbreak");
+        {
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, true, false);
+            chartOptions.setShowTitle(true);
+            GroupedByChoiceChart chart = new GroupedByChoiceChart("Ваша позиция в компании?", chartOptions);  //!!!
+
+            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("JBreak 2016", 76600618L, 928398045L));
+            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("JBreak 2017", 88993967L, 1072543727L));
+
+            ChoiceGroup choices;
+
+            choices = new ChoiceGroup();
+            choices.setText("Junior Developer");
+            choices.setID(new LinkedList<>(Arrays.asList(9975891551L, 10985992218L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Middle Developer");
+            choices.setID(new LinkedList<>(Arrays.asList(9975891552L, 10985992219L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Senior Developer");
+            choices.setID(new LinkedList<>(Arrays.asList(9975891553L, 10985992220L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Team Lead");
+            choices.setID(new LinkedList<>(Arrays.asList(9975891554L, 10985992221L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("CTO / CIO");
+            choices.setID(new LinkedList<>(Arrays.asList(null, 10985992222L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Менеджер");
+            choices.setID(new LinkedList<>(Arrays.asList(null, 10985992223L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Директор / CEO");
+            choices.setID(new LinkedList<>(Arrays.asList(null, 10985992224L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Architect");
+            choices.setID(new LinkedList<>(Arrays.asList(null, 10985992225L)));
+            chart.addChoiceGroup(choices);
+
+            preset.AddChart(chart);
+        }
+
+        {
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, false);
+            chartOptions.setShowTitle(true);
+            GroupedByChoiceChart chart = new GroupedByChoiceChart("Ваш стаж работы Java-разработчиком", chartOptions);  //!!!
+
+            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("JBreak 2016", 76600618L, 928399753L));
+            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("JBreak 2017", 88993967L, 1072543728L));
+
+            ChoiceGroup choices;
+
+            choices = new ChoiceGroup();
+            choices.setText("Менее 1 года");
+            choices.setID(new LinkedList<>(Arrays.asList(9975902672L, 10985992232L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("1-3 года");
+            choices.setID(new LinkedList<>(Arrays.asList(9975902673L, 10985992233L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("4-6 лет");
+            choices.setID(new LinkedList<>(Arrays.asList(9975902674L, 10985992234L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Более 6 лет");
+            choices.setID(new LinkedList<>(Arrays.asList(9975902675L, 10985992235L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Я не работаю с Java");
+            choices.setID(new LinkedList<>(Arrays.asList(null, 10985992236L)));
+            chart.addChoiceGroup(choices);
+
+            preset.AddChart(chart);
+        }
+
+        {
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, true);
+            chartOptions.setShowTitle(true);
+            GroupedByChoiceChart chart = new GroupedByChoiceChart("Укажите ваш статус на конференции:", chartOptions);  //!!!
+
+            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("JBreak 2017", 88993967L, 266282679L));
+
+            ChoiceGroup choices;
+
+            choices = new ChoiceGroup();
+            choices.setText("Участник");
+            choices.setID(new LinkedList<>(Arrays.asList(10985992246L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Спикер");
+            choices.setID(new LinkedList<>(Arrays.asList(10985992247L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Спонсор");
+            choices.setID(new LinkedList<>(Arrays.asList(10985992248L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Организатор / Волонтер");
+            choices.setID(new LinkedList<>(Arrays.asList(10985992249L)));
+            chart.addChoiceGroup(choices);
+
+            preset.AddChart(chart);
+        }
+
+        {
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, true, true);
+            chartOptions.setShowTitle(true);
+            GroupedByChoiceChart chart = new GroupedByChoiceChart("Как вы покупали билет?", chartOptions);  //!!!
+
+            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("JBreak 2016", 76600618L, 928398054L));
+            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("JBreak 2017", 88993967L, 1072543734L));
+
+            ChoiceGroup choices;
+
+            choices = new ChoiceGroup();
+            choices.setText("Покупал сам, компания не компенсирует");
+            choices.setID(new LinkedList<>(Arrays.asList(9975891598L, 10985992263L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Покупал сам, компания компенсирует частично");
+            choices.setID(new LinkedList<>(Arrays.asList(9975891599L, 10985992264L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Покупал сам, компания полностью компенсирует");
+            choices.setID(new LinkedList<>(Arrays.asList(9975891600L, 10985992265L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Билет мне покупала компания");
+            choices.setID(new LinkedList<>(Arrays.asList(9975891601L, 10985992266L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Не покупал, я организатор / спикер / волонтер / спонсор");
+            choices.setID(new LinkedList<>(Arrays.asList(null, 10985992267L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Не покупал — организаторы дали проходку");
+            choices.setID(new LinkedList<>(Arrays.asList(null, 10985992268L)));
+            chart.addChoiceGroup(choices);
+
+            preset.AddChart(chart);
+        }
+
+        {
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("В каких конференциях JUG.ru Group вы участвовали ранее?");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, true, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(false);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+
+            charts.add(new SingleQuestionChart("JBreak 2017", 88993967L, 1072543735L, true));
+
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+        }
+        {
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("В каких других конференциях вы участвовали за прошедший год?");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, true, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(false);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+
+            charts.add(new SingleQuestionChart("JBreak 2017", 88993967L, 1072543737L, true));
+
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+        }
+
+        {
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("Оцените удобство места проведения?");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(true);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+
+            charts.add(new SingleQuestionChart("JBreak 2016", 76600618L, 928398029L, true));
+            charts.add(new SingleQuestionChart("JBreak 2017", 88993967L, 1072543749L, true));
+
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+        }
+
+        {
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("Оцените удобство навигации места проведения?");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(true);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+
+            charts.add(new SingleQuestionChart("JBreak 2017", 88993967L, 1074763723L, true));
+
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+        }
+
+        {
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("Оцените техническую организацию конференции");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(true);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+
+            charts.add(new SingleQuestionChart("JBreak 2016", 76600618L, 928398031L, true));
+            charts.add(new SingleQuestionChart("JBreak 2017", 88993967L, 1072543755L, true));
+
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+        }
+        {
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("Оцените обед");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(true);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+
+            charts.add(new SingleQuestionChart("JBreak 2016", 76600618L, 928398033L, true));
+            charts.add(new SingleQuestionChart("JBreak 2017", 88993967L, 1072543747L, true));
+
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+        }
+
+        {
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("Насколько вероятно, что вы станете (онлайн или оффлайн) участником следующей конференции JBreak?");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(true);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+
+            charts.add(new SingleQuestionChart("JBreak 2016", 76600618L, 928398055L, true));
+            charts.add(new SingleQuestionChart("JBreak 2017", 88993967L, 1072543762L, true));
+
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+        }
+
+        {
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("Какова вероятность, что Вы порекомендуете JBreak другу или коллеге?");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(true);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+
+            charts.add(new SingleQuestionChart("JBreak 2016", 76600618L, 928398056L, true));
+            charts.add(new SingleQuestionChart("JBreak 2017", 88993967L, 1072543763L, true));
+
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+        }
+
+        {
+            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+            ungroupedCharts.setChartName("Откуда вы узнали о конференции?");  //!!!
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, false, true);
+            chartOptions.setShowTitle(true);
+            chartOptions.setUseGradient(false);
+            ungroupedCharts.setChartOptions(chartOptions);
+
+            List<SingleQuestionChart> charts = new ArrayList<>();
+
+            SingleQuestionChart sqc = new SingleQuestionChart("JBreak 2016", 76600618L, 928398057L, true);
+            sqc.setUseRow_idInstedOfChoice_id(true);
+            charts.add(sqc);
+            
+             sqc = new SingleQuestionChart("JBreak 2017", 88993967L, 1072543764L, true);
+            sqc.setUseRow_idInstedOfChoice_id(true);
+            charts.add(sqc);
+            
+            
+            ungroupedCharts.setCharts(charts);
+            preset.AddChart(ungroupedCharts);
+        }
+
+        {
+            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, true, true);
+            chartOptions.setShowTitle(true);
+            GroupedByChoiceChart chart = new GroupedByChoiceChart("Конференции на какие другие темы вы посетили бы?", chartOptions);  //!!!
+
+            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("JBreak 2016", 76600618L, 928398050L));
+            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("JBreak 2017", 88993967L, 1072543769L));
+
+            ChoiceGroup choices;
+
+            choices = new ChoiceGroup();
+            choices.setText("Web-раработка");
+            choices.setID(new LinkedList<>(Arrays.asList(9975891565L, 10985992471L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("С++");
+            choices.setID(new LinkedList<>(Arrays.asList(9975891566L, 10985992472L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("GNU/Linux");
+            choices.setID(new LinkedList<>(Arrays.asList(9975891567L, 10985992473L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Методологии разработки");
+            choices.setID(new LinkedList<>(Arrays.asList(9976660431L, 10985992474L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("DevOps");
+            choices.setID(new LinkedList<>(Arrays.asList(null, 10985992475L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("OpenSource");
+            choices.setID(new LinkedList<>(Arrays.asList(9975891568L, 10985992476L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Высоконагруженные системы / Highload");
+            choices.setID(new LinkedList<>(Arrays.asList(9975891569L, 10985992477L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Performance / Производительность");
+            choices.setID(new LinkedList<>(Arrays.asList(null, 10985992486L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Распределенные системы");
+            choices.setID(new LinkedList<>(Arrays.asList(9975891570L, 10985992478L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Enterprise-разработка");
+            choices.setID(new LinkedList<>(Arrays.asList(9975891571L, 10985992479L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText(".NET");
+            choices.setID(new LinkedList<>(Arrays.asList(null, 10985992480L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("QA/тестирование");
+            choices.setID(new LinkedList<>(Arrays.asList(9975891573L, 10985992481L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Мобильная разработка");
+            choices.setID(new LinkedList<>(Arrays.asList(9975891564L, 10985992482L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("JavаSсript");
+            choices.setID(new LinkedList<>(Arrays.asList(null, 10985992483L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("Больше Java!");
+            choices.setID(new LinkedList<>(Arrays.asList(null, 10985992485L)));
+            chart.addChoiceGroup(choices);
+
+            choices = new ChoiceGroup();
+            choices.setText("методологии разработки 2");
+            choices.setID(new LinkedList<>(Arrays.asList(9975891572L, null)));
+            chart.addChoiceGroup(choices);
+
+            preset.AddChart(chart);
+        }
+
+//        
+//        
+//        
+//        
+//        
+//        {
+//            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+//            ungroupedCharts.setChartName("");  //!!!
+//            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, true, true);
+//            chartOptions.setShowTitle(true);
+//            chartOptions.setUseGradient(true);
+//            ungroupedCharts.setChartOptions(chartOptions);
+//
+//            List<SingleQuestionChart> charts = new ArrayList<>();
+//
+//            charts.add(new SingleQuestionChart("JBreak 2016", 76600618L, L, true));
+//            charts.add(new SingleQuestionChart("JBreak 2017", 88993967L, L, true));
+//
+//            ungroupedCharts.setCharts(charts);
+//            preset.AddChart(ungroupedCharts);
+//        }
+//
+//        {
+//            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, true, true);
+//            chartOptions.setShowTitle(true);
+//            GroupedByChoiceChart chart = new GroupedByChoiceChart("", chartOptions);  //!!!
+//
+//            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("JBreak 2016", 76600618L, L));
+//            chart.AddConferenceQuestionPair(new ConferenceQuestionPair("JBreak 2017", 88993967L, L));
+//
+//            ChoiceGroup choices;
+//
+//            choices = new ChoiceGroup();
+//            choices.setText("");
+//            choices.setID(new LinkedList<>(Arrays.asList(L, L)));
+//            chart.addChoiceGroup(choices);
+//
+//            choices = new ChoiceGroup();
+//            choices.setText("");
+//            choices.setID(new LinkedList<>(Arrays.asList(L, L)));
+//            chart.addChoiceGroup(choices);
+//
+//            choices = new ChoiceGroup();
+//            choices.setText("");
+//            choices.setID(new LinkedList<>(Arrays.asList(L, L)));
+//            chart.addChoiceGroup(choices);
+//
+//            choices = new ChoiceGroup();
+//            choices.setText("");
+//            choices.setID(new LinkedList<>(Arrays.asList(L, L)));
+//            chart.addChoiceGroup(choices);
+//
+//            choices = new ChoiceGroup();
+//            choices.setText("");
+//            choices.setID(new LinkedList<>(Arrays.asList(L, L)));
+//            chart.addChoiceGroup(choices);
+//
+//            choices = new ChoiceGroup();
+//            choices.setText("");
+//            choices.setID(new LinkedList<>(Arrays.asList(L, L)));
+//            chart.addChoiceGroup(choices);
+//
+//            choices = new ChoiceGroup();
+//            choices.setText("");
+//            choices.setID(new LinkedList<>(Arrays.asList(L, L)));
+//            chart.addChoiceGroup(choices);
+//
+//            choices = new ChoiceGroup();
+//            choices.setText("");
+//            choices.setID(new LinkedList<>(Arrays.asList(L, L)));
+//            chart.addChoiceGroup(choices);
+//
+//            choices = new ChoiceGroup();
+//            choices.setText("");
+//            choices.setID(new LinkedList<>(Arrays.asList(L, L)));
+//            chart.addChoiceGroup(choices);
+//
+//            choices = new ChoiceGroup();
+//            choices.setText("");
+//            choices.setID(new LinkedList<>(Arrays.asList(L, L)));
+//            chart.addChoiceGroup(choices);
+//
+//            preset.AddChart(chart);
 //        }
         return preset;
     }

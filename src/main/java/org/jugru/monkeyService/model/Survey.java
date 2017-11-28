@@ -1,7 +1,9 @@
 package org.jugru.monkeyService.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -28,11 +30,10 @@ public class Survey implements Comparable<Survey> {
     private String status;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    Set<SurveyPage> pages = new HashSet<>();
+    List<SurveyPage> pages = new ArrayList<>();
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Response> responses = new HashSet<>();
-    
-    
+
     // разобратся с  FetchType.LAZY, т.к. мапа пустая то  нужна сессия при добавлении
     public void addNewResponses(Collection<Response> responses) {
         this.responses.addAll(responses);
@@ -78,11 +79,11 @@ public class Survey implements Comparable<Survey> {
         this.status = status;
     }
 
-    public Set<SurveyPage> getPages() {
+    public List<SurveyPage> getPages() {
         return pages;
     }
 
-    public void setPages(Set<SurveyPage> pages) {
+    public void setPages(List<SurveyPage> pages) {
         this.pages = pages;
     }
 

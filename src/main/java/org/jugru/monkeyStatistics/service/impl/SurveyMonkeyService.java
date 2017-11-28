@@ -37,14 +37,16 @@ public class SurveyMonkeyService {
     @Transactional
     public void refreshAnswers() {
         surveyService.getAll().stream().
-//                filter((t) -> {
-//                    return !Objects.equals(t.getStatus(), "closed");
-//                }).
+                filter((t) -> {
+                    return !Objects.equals(t.getStatus(), "closed");
+                }).
+                limit(5).
                 peek((survey) -> {
                     survey.addNewResponses(surveyMonkeyClient.getAllResponsesBySurveyId(survey.getId()));
                 }).
                 peek((survey) -> {
-                    survey.setStatus(surveyMonkeyClient.getSurveyStatus(survey));
+                 //   survey.setStatus(surveyMonkeyClient.getSurveyStatus(survey));
+                     survey.setStatus("closed");
                 }).
                 forEach(surveyService::save);
     }

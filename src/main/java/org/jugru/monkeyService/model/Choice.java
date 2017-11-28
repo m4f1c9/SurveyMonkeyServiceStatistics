@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class Choice {
+public class Choice implements ChoiceOrRow{
 
     @Id
     private Long id;

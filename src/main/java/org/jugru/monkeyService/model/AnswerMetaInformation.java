@@ -1,5 +1,6 @@
 package org.jugru.monkeyService.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,11 +15,11 @@ import javax.persistence.OneToOne;
 public class AnswerMetaInformation {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Choice> choices = new LinkedList<>();
+    private List<Choice> choices = new ArrayList<>();
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Other other;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Row> rows = new LinkedList<>();
+    private List<Row> rows = new ArrayList<>();
 
     public List<Choice> getChoices() {
         return choices;

@@ -45,7 +45,7 @@ public class Heading {
 
     @Override
     public String toString() {
-        return "Heading{" + "heading=" + heading + '}';
+        return heading;
     }
 
 }

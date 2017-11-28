@@ -15,8 +15,26 @@ public class CrossGroupingChart implements Chart {
     private Long surveyID;
     private boolean useRow_idInstedOfChoice_idForFirstQuestion;
     private boolean useRow_idInstedOfChoice_idForSecondQuestion;
+    private boolean hideLastChoiceInFirst;
+    private boolean hideLastChoiceInSecond;
 
     private ChartOptions chartOptions;
+
+    public boolean isHideLastChoiceInFirst() {
+        return hideLastChoiceInFirst;
+    }
+
+    public void setHideLastChoiceInFirst(boolean hideLastChoiceInFirst) {
+        this.hideLastChoiceInFirst = hideLastChoiceInFirst;
+    }
+
+    public boolean isHideLastChoiceInSecond() {
+        return hideLastChoiceInSecond;
+    }
+
+    public void setHideLastChoiceInSecond(boolean hideLastChoiceInSecond) {
+        this.hideLastChoiceInSecond = hideLastChoiceInSecond;
+    }
 
     public boolean isUseRow_idInstedOfChoice_idForFirstQuestion() {
         return useRow_idInstedOfChoice_idForFirstQuestion;

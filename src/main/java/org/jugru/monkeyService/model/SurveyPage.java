@@ -1,5 +1,7 @@
 package org.jugru.monkeyService.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -14,7 +16,7 @@ public class SurveyPage {
 
     @Id
     private Long id;
-    
+
     @Column(name = "position")
     private Integer position;
     @Column(name = "description")
@@ -23,7 +25,7 @@ public class SurveyPage {
     private String title;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<QuestionMetaInformation> questions;
+    private List<QuestionMetaInformation> questions = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -57,11 +59,11 @@ public class SurveyPage {
         this.title = title;
     }
 
-    public Set<QuestionMetaInformation> getQuestions() {
+    public List<QuestionMetaInformation> getQuestions() {
         return questions;
     }
 
-    public void setQuestions(Set<QuestionMetaInformation> questions) {
+    public void setQuestions(List<QuestionMetaInformation> questions) {
         this.questions = questions;
     }
 
@@ -95,6 +97,4 @@ public class SurveyPage {
         return "SurveyPage{" + "id=" + id + ", position=" + position + ", description=" + description + ", title=" + title + '}';
     }
 
-    
-    
 }

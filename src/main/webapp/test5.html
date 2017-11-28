@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script type="text/javascript">
+            google.charts.load('current', {'packages': ['corechart']});
+
+            function showSurveys() {
+                var surveysData = $.ajax({
+                    url: "/MonkeyStatistics/surveys",
+                    dataType: "json",
+                    async: false
+                }).responseText;
+                surveysData = JSON.parse(surveysData);
+                var surveys = document.getElementById('surveys');
+                for (var i = 0; i < surveysData.length; i++) {
+                    var t = surveysData[i];
+                    surveys.options[i] = new Option(t.Title, t.Id);
+                }
+            }
+
+            function onSurveyChoice() {
+                let surveys = document.getElementById('surveys');
+                //   alert(surveys.options[surveys.selectedIndex].value);
+                let data = $.ajax({
+                    url: "/MonkeyStatistics/questions?id=" + surveys.options[surveys.selectedIndex].value,
+                    dataType: "json",
+                    async: false
+                }).responseText;
+                data = JSON.parse(data);
+
+                var questions = document.getElementById('question1');
+                questions.innerHTML = '';
+                for (var i = 0; i < data.length; i++) {
+                    let t = data[i];
+                    questions.options[i] = new Option(t.Title, t.Id);
+                }
+                var questions = document.getElementById('question2');
+                questions.innerHTML = '';
+                for (var i = 0; i < data.length; i++) {
+                    let t = data[i];
+
+                    questions.options[i] = new Option(t.Title, t.Id);
+                }
+
+            }
+
+            function onButtonClick() {
+                let i1 = document.getElementById('surveys').options[document.getElementById('surveys').selectedIndex].value;
+                let i2 = document.getElementById('question1').options[document.getElementById('question1').selectedIndex].value;
+                let i3 = document.getElementById('question2').options[document.getElementById('question2').selectedIndex].value;
+
+                
+
+                let jsonData = $.ajax({
+                    url: "/MonkeyStatistics/сrossGroupingChart?surveyId=" + i1 + "&fQuestionId=" + i2 + "&sQuestionId=" + i3,
+                    dataType: "json",
+                    async: false
+                }).responseText;
+
+                jsonData = JSON.parse(jsonData);
+                let div = document.getElementById('chart');
+                div.innerHTML = '';
+                var data = google.visualization.arrayToDataTable(jsonData.data)
+                var options = jsonData.options;
+                var chart = new google.visualization.BarChart(div);
+                chart.draw(data, options);
+            }
+        </script>
+
+
+    </head>
+    <body onload ='showSurveys()' >
+        <form>
+            <select id="surveys" onchange="onSurveyChoice()">
+
+            </select>
+        </form>
+        <form>
+            <select id="question1">
+            </select>
+        </form>
+        <form>
+            <select id="question2">
+            </select>
+        </form>
+        <button id="button" onclick="onButtonClick()">Кнопка</button>
+        <div id="chart">
+
+        </div>
+
+    </body>
+</html>
