@@ -11,7 +11,18 @@ import org.jugru.monkeyService.model.Survey;
 public interface QuestionMetaInformationService extends Service<QuestionMetaInformation> {
 
     Long getOther_idByQuestionMetaInformationId(Long id);
+
     List<Choice> getChoicesByQuestionMetaInformationId(Long id);
+
     List<Row> getRowsByQuestionMetaInformationId(Long id);
-    List<QuestionMetaInformation> getQuestionMetaInformationFromSurvey(Long id);
+
+    List<QuestionMetaInformation> getQuestionMetaInformationsBySurveyId(Long id);
+
+    Integer countChoicesByQuestionMetaInformationId(Long id);
+
+    Integer countRowsByQuestionMetaInformationId(Long id);
+
+    Long findQuestionMetaInformationIdByChoiceId(Long id);
+
+    Long findQuestionMetaInformationIdByRowId(Long id);
 }

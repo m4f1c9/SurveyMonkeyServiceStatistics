@@ -6,7 +6,12 @@ import org.jugru.monkeyService.model.SurveyPage;
 
 public interface SurveyService extends Service<Survey> {
 
-    int countAnswers(long id);
+    /*
+    * Считает количество уникальных ответов на опрос
+     */
+    Long findSurveyIdByQuestionMetaInformationId(Long id);
 
-     List<SurveyPage>getSurveyPagesFromSurvey(Long id);
+    int countResponsesBySurveyId(long id);
+
+    List<SurveyPage> getSurveyPagesFromSurvey(Long id);
 }

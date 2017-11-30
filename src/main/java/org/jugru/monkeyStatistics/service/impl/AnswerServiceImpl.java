@@ -5,12 +5,16 @@ import javax.transaction.Transactional;
 import org.jugru.monkeyService.model.Answer;
 import org.jugru.monkeyStatistics.repository.AnswerRepository;
 import org.jugru.monkeyStatistics.service.AnswerService;
+import org.jugru.monkeyStatistics.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AnswerServiceImpl implements AnswerService {
 
+    @Autowired
+    QuestionService questionService;
+    
     @Autowired
     private AnswerRepository answerRepository;
 
@@ -68,6 +72,11 @@ public class AnswerServiceImpl implements AnswerService {
         return answerRepository.countByOther_id(other_id);
     }
 
+    @Override
+    public Integer countByRow_id(long row_id) {
+        return answerRepository.countByRow_id(row_id);
+    }
+
     @Transactional
     @Override
     public Integer countByTwoChoice_id(Long first, Long second) {
@@ -75,9 +84,24 @@ public class AnswerServiceImpl implements AnswerService {
     }
 
     @Override
-    public Integer countByRow_id(long row_id) {
-        return answerRepository.countByRow_id(row_id);
+    public Integer countByTwoOther_id(Long first, Long second) {
+        return answerRepository.countByTwoOther_id(first, second);
     }
-    
+
+    @Override
+    public Integer countByChoice_idAndOther_id(Long first, Long second) {
+        return answerRepository.countByChoice_idAndOther_id(first, second);
+    }
+
+    @Override
+    public Integer countByOther_idAndChoice_id(Long first, Long second) {
+        return answerRepository.countByOther_idAndChoice_id(first, second);
+    }
+
+    @Override
+    public Integer countUniqueAnswersByQuestionMetaInformationId(long id) {
+        return questionService.countByQuestionMetaInformationId(id);
+    }
+
     
 }

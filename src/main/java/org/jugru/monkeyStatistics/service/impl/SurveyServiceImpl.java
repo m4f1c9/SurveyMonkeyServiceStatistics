@@ -44,8 +44,7 @@ public class SurveyServiceImpl implements SurveyService {
 
     @Transactional
     @Override
-    public int countAnswers(long id) {
-
+    public int countResponsesBySurveyId(long id) {
         return surveyRepository.findOne(id).getResponses().size(); //TODO написать запрос на count  
 
     }
@@ -53,11 +52,13 @@ public class SurveyServiceImpl implements SurveyService {
     @Transactional
     @Override
     public List<SurveyPage> getSurveyPagesFromSurvey(Long id) {
-        List<SurveyPage> list;
-        Survey survey = get(id);
-        list = new ArrayList<>(survey.getPages());
-
-        return list;
+        return get(id).getPages();
     }
 
+    @Override
+    public Long findSurveyIdByQuestionMetaInformationId(Long id) {
+        return surveyRepository.findSurveyIdByQuestionMetaInformationId(id);
+    }
+
+    
 }

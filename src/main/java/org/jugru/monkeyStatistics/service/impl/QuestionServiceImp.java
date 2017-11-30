@@ -1,4 +1,3 @@
-
 package org.jugru.monkeyStatistics.service.impl;
 
 import java.util.List;
@@ -10,14 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class QuestionServiceImp implements QuestionService{
+public class QuestionServiceImp implements QuestionService {
+
+    
+
     @Autowired
     private QuestionRepository questionRepository;
-
-    @Override
-    public Integer countById(long other_id) {
-       return questionRepository.countById(other_id);
-    }
 
     @Override
     public Question save(Question t) {
@@ -39,9 +36,9 @@ public class QuestionServiceImp implements QuestionService{
         return questionRepository.findAll();
     }
 
-   
+    @Override
+    public Integer countByQuestionMetaInformationId(long id) {
+        return questionRepository.countById(id);
+    }
 
-   
-    
-    
 }

@@ -33,51 +33,13 @@ public class TMP {
     @Autowired
     ChartDataBuilder chartDataBuilder;
 
-    @RequestMapping("/HJSA")
-    public List<ChartData> holuJSA() {
-        return chartDataBuilder.standartSingleChoiceChartGroupedByAnswer(Conferences.holyJS());
-    }
-
-    @RequestMapping("/HJSC")
-    public List<ChartData> holuJSC() {
-        return chartDataBuilder.standartSingleChoiceChartGroupedByConfirence(Conferences.holyJS());
-    }
-
-    @RequestMapping("/mobi2")
-    public List<ChartData> mobius() {
-        return chartDataBuilder.singleConferenceSpeakers(Conferences.mobius());
-    }
-
-    @RequestMapping("/JPA")
-    public List<ChartData> JPointA() {
-        return chartDataBuilder.standartSingleChoiceChartGroupedByAnswer(Conferences.JPoint());
-    }
-
-    @RequestMapping("/JPС")
-    public List<ChartData> JPointС() {
-        return chartDataBuilder.standartSingleChoiceChartGroupedByConfirence(Conferences.JPoint());
-    }
 
     @RequestMapping("/test")
     public List<ChartData> test() {
         return chartDataBuilder.createChartDataFromChartsPreset(Conferences.test());
     }
 
-    @RequestMapping("/mobius2")
-    public List<ChartData> mobius2() {
-        return chartDataBuilder.createChartDataFromChartsPreset(Conferences.mobius2());
-    }
-
-    @RequestMapping("/joker2")
-    public List<ChartData> joker2() {
-        return chartDataBuilder.createChartDataFromChartsPreset(Conferences.joker());
-    }
-
-    @RequestMapping("/jbreak2")
-    public List<ChartData> jbreak2() {
-        return chartDataBuilder.createChartDataFromChartsPreset(Conferences.jbreak());
-    }
-
+  
     @Transactional  //TODO !!!!!!!!!111111oneone
     @RequestMapping("/surveys")
     public Set<StringLongPair> surveys() {
@@ -89,11 +51,11 @@ public class TMP {
         return set;
     }
 
-    //TODO !!!!!!!!!111111oneone
+   
     @RequestMapping("/questions")
     public List<StringLongPair> questions(@RequestParam(value = "id") long id) {
         List<StringLongPair> list2 = new ArrayList<>();
-        List<QuestionMetaInformation> list = questionMetaInformationService.getQuestionMetaInformationFromSurvey(id);
+        List<QuestionMetaInformation> list = questionMetaInformationService.getQuestionMetaInformationsBySurveyId(id);
         list.forEach((t) -> {
             list2.add(new StringLongPair(t.getId(), ChartDataBuilder.removeTags(t.getHedingAsString())));
             // set.add(new StringLongPair(t.getId(), t.getHedingAsString()));
