@@ -1,13 +1,36 @@
 package org.jugru.monkeyService.model.chart;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class ChartOptions {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Column
     private Tooltip tooltip;
+    @Column
     private Annotation annotation;
-    private boolean withCustomChoice;
-    private boolean withNoChoice;
-    private boolean showTitle;
+    @Column
     private boolean useGradient;
+
+    public ChartOptions() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public boolean isUseGradient() {
         return useGradient;
@@ -15,39 +38,6 @@ public class ChartOptions {
 
     public void setUseGradient(boolean useGradient) {
         this.useGradient = useGradient;
-    }
-    
-    
-    
-    public boolean isShowTitle() {
-        return showTitle;
-    }
-
-    public void setShowTitle(boolean showTitle) {
-        this.showTitle = showTitle;
-    }
-
-    public boolean isWithCustomChoice() {
-        return withCustomChoice;
-    }
-
-    public void setWithCustomChoice(boolean withCustomChoice) {
-        this.withCustomChoice = withCustomChoice;
-    }
-
-    public boolean isWithNoChoice() {
-        return withNoChoice;
-    }
-
-    public void setWithNoChoice(boolean withNoChoice) {
-        this.withNoChoice = withNoChoice;
-    }
-
-    public ChartOptions(Tooltip tooltip, Annotation annotation, boolean withCustomChoice, boolean withNoChoice) {
-        this.tooltip = tooltip;
-        this.annotation = annotation;
-        this.withCustomChoice = withCustomChoice;
-        this.withNoChoice = withNoChoice;
     }
 
     public ChartOptions(Tooltip tooltip, Annotation annotation) {

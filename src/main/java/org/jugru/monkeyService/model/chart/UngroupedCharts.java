@@ -2,14 +2,31 @@ package org.jugru.monkeyService.model.chart;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.jugru.monkeyService.model.view.ChartData;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.jugru.monkeyStatistics.util.ChartDataBuilder;
 import org.springframework.context.ApplicationContextAware;
 
-public class UngroupedCharts implements Chart {
+@Entity
+public class UngroupedCharts extends Chart {
 
+    @Column
     private String chartName;
-    private List<SingleQuestionChart> charts;
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SingleQuestionChart> charts = new ArrayList<>();
+    @OneToOne
     private ChartOptions chartOptions;
 
     public ChartOptions getChartOptions() {

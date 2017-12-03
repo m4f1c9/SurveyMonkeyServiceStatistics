@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.transaction.Transactional;
 import org.jugru.monkeyService.model.AnswerMetaInformation;
 import org.jugru.monkeyService.model.Choice;
+import org.jugru.monkeyService.model.ChoiceOrRow;
 import org.jugru.monkeyService.model.Other;
 import org.jugru.monkeyService.model.QuestionMetaInformation;
 import org.jugru.monkeyService.model.Row;
@@ -17,6 +18,7 @@ import org.jugru.monkeyStatistics.service.QuestionMetaInformationService;
 import org.jugru.monkeyStatistics.service.SurveyService;
 import org.springframework.stereotype.Service;
 
+@Transactional
 @Service
 public class QuestionMetaInformationServiceImp implements QuestionMetaInformationService {
 
@@ -79,6 +81,16 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
 
     }
 
+    
+    @Override
+    public List<? extends ChoiceOrRow> getChoiceOrRowsByQuestionMetaInformationId(Long id, boolean UseRow_idInstedOfChoice_id) {
+        if (UseRow_idInstedOfChoice_id) {
+            return getRowsByQuestionMetaInformationId(id);
+        } else {
+            return getChoicesByQuestionMetaInformationId(id);
+        }
+    }
+
     @Transactional
     @Override
     public List<QuestionMetaInformation> getQuestionMetaInformationsBySurveyId(Long id) {
@@ -111,5 +123,4 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
         return questionMetaInformationRepository.findQuestionMetaInformationIdByRowId(id);
     }
 
-    
 }

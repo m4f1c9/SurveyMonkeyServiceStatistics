@@ -17,7 +17,7 @@ public class Question {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long AppId;
+    private Long appId;
 
     @Column(name = "monkey_id")
     private Long id;
@@ -26,11 +26,11 @@ public class Question {
     Set<Answer> answers;
 
     public Long getAppId() {
-        return AppId;
+        return appId;
     }
 
     public void setAppId(Long AppId) {
-        this.AppId = AppId;
+        this.appId = AppId;
     }
 
     public Long getId() {
@@ -76,7 +76,7 @@ public class Question {
 
     @Override
     public String toString() {
-        return "Question{" + "AppId=" + AppId + ", id=" + id + '}';
+        return "Question{" + "AppId=" + appId + ", id=" + id + '}';
     }
 
     

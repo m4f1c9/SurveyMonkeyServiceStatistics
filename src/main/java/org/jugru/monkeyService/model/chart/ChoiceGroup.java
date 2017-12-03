@@ -4,25 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-
 @Entity
-public class ChartsPreset {
+public class ChoiceGroup {
 
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
-    private String name;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Chart> charts = new ArrayList<>();
+    private String text;
+    @ElementCollection
+    private List<Long> ID = new ArrayList<>();
 
-    public ChartsPreset() {
+    public ChoiceGroup() {
     }
 
     public Long getId() {
@@ -33,28 +34,26 @@ public class ChartsPreset {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    
+    
+    public void addID(Long id) {
+        ID.add(id);
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getText() {
+        return text;
     }
 
-    public List<Chart> getCharts() {
-        return charts;
+    public void setText(String text) {
+        this.text = text;
     }
 
-    public void setCharts(List<Chart> charts) {
-        this.charts = charts;
+    public List<Long> getID() {
+        return ID;
     }
 
-    public ChartsPreset(String name) {
-        this.name = name;
-    }
-
-    public void AddChart(Chart chart) {
-        charts.add(chart);
+    public void setID(List<Long> ID) {
+        this.ID = ID;
     }
 
 }

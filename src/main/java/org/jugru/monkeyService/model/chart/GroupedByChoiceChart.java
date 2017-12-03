@@ -4,21 +4,50 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import org.jugru.monkeyService.model.view.ChartData;
-import org.jugru.monkeyService.model.view.ChoiceGroup;
-import org.jugru.monkeyService.model.view.ConferenceQuestionPair;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.jugru.monkeyStatistics.util.ChartDataBuilder;
+@Entity
+public class GroupedByChoiceChart extends Chart {
 
-public class GroupedByChoiceChart implements Chart {
-
+    @Column
     private String name;
-
-    private List<ChoiceGroup> choiceGroups = new LinkedList<>();
-    private List<ConferenceQuestionPair> conferenceQuestionPairs = new ArrayList<>();
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ChoiceGroup> choiceGroups = new ArrayList<>();
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<QuestionDetails> questionDetails = new ArrayList<>();
+    @OneToOne
     private ChartOptions chartOptions;
+    @OneToOne
+    private QuestionOptions questionOptions;
 
-    public void AddConferenceQuestionPair(ConferenceQuestionPair conferenceQuestionPair) {
-        conferenceQuestionPairs.add(conferenceQuestionPair);
+    public GroupedByChoiceChart() {
+    }
+
+    
+    public List<QuestionDetails> getQuestionDetails() {
+        return questionDetails;
+    }
+
+    public void setQuestionDetails(List<QuestionDetails> questionDetails) {
+        this.questionDetails = questionDetails;
+    }
+
+    public void AddQuestionDetails(QuestionDetails questionDetails) {
+        this.questionDetails.add(questionDetails);
     }
 
     public void addChoiceGroup(ChoiceGroup choiceGroup) {
@@ -41,14 +70,6 @@ public class GroupedByChoiceChart implements Chart {
         this.choiceGroups = choiceGroups;
     }
 
-    public List<ConferenceQuestionPair> getConferenceQuestionPairs() {
-        return conferenceQuestionPairs;
-    }
-
-    public void setConferenceQuestionPairs(List<ConferenceQuestionPair> conferenceQuestionPairs) {
-        this.conferenceQuestionPairs = conferenceQuestionPairs;
-    }
-
     public ChartOptions getChartOptions() {
         return chartOptions;
     }
@@ -62,11 +83,18 @@ public class GroupedByChoiceChart implements Chart {
         this.chartOptions = chartOptions;
     }
 
-    
-    
+    public QuestionOptions getQuestionOptions() {
+        return questionOptions;
+    }
+
+    public void setQuestionOptions(QuestionOptions questionOptions) {
+        this.questionOptions = questionOptions;
+    }
+
     @Override
     public List<ChartData> createChartData(ChartDataBuilder chartDataBuilder) {
         return Arrays.asList(chartDataBuilder.createChartDataFromGroupedByChoiceChart(this));
+
     }
 
 }

@@ -19,12 +19,23 @@ public interface AnswerService extends Service<Answer> {
 
     Integer countByTwoChoice_id(Long first, Long second);
 
-    Integer countByTwoOther_id(Long first, Long second);
+    Integer countByTwoRow_id(Long first, Long second);
+
+    Integer countByChoice_idAndRow_id(Long first, Long second);
+
+    Integer countByRow_idAndChoice_id(Long first, Long second);
+
+    Integer countUniqueAnswersByQuestionMetaInformationId(long id);
+
+    Integer countById(Long id, boolean UseRow_idInstedOfChoice_id);
+
+    Integer countByTwoId(Long first, Long second, boolean UseRow_idInstedOfChoice_idForFirst, boolean UseRow_idInstedOfChoice_idForSecond);
 
     Integer countByChoice_idAndOther_id(Long first, Long second);
 
-    Integer countByOther_idAndChoice_id(Long first, Long second);
-    
-    Integer countUniqueAnswersByQuestionMetaInformationId(long id);
+    Integer countByRow_idAndOther_id(Long first, Long second);
 
+    Integer countByIdAndOther_id(Long first, Long second, boolean UseRow_idInstedOfChoice_id);
+
+    Integer countByQuestion_idAndChoice_id(Long first, Long second, boolean UseRow_idInstedOfChoice_id);
 }

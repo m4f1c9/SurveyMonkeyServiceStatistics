@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 import org.jugru.monkeyService.model.AnswerMetaInformation;
 import org.jugru.monkeyService.model.Choice;
+import org.jugru.monkeyService.model.ChoiceOrRow;
 import org.jugru.monkeyService.model.QuestionMetaInformation;
 import org.jugru.monkeyService.model.Row;
 import org.jugru.monkeyService.model.Survey;
@@ -15,6 +16,8 @@ public interface QuestionMetaInformationService extends Service<QuestionMetaInfo
     List<Choice> getChoicesByQuestionMetaInformationId(Long id);
 
     List<Row> getRowsByQuestionMetaInformationId(Long id);
+
+    List<? extends ChoiceOrRow> getChoiceOrRowsByQuestionMetaInformationId(Long id, boolean UseRow_idInstedOfChoice_id);
 
     List<QuestionMetaInformation> getQuestionMetaInformationsBySurveyId(Long id);
 

@@ -9,12 +9,13 @@ import org.jugru.monkeyStatistics.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+@Transactional
 @Service
 public class AnswerServiceImpl implements AnswerService {
 
     @Autowired
     QuestionService questionService;
-    
+
     @Autowired
     private AnswerRepository answerRepository;
 
@@ -84,8 +85,45 @@ public class AnswerServiceImpl implements AnswerService {
     }
 
     @Override
-    public Integer countByTwoOther_id(Long first, Long second) {
-        return answerRepository.countByTwoOther_id(first, second);
+    public Integer countByTwoRow_id(Long first, Long second) {
+        return answerRepository.countByTwoRow_id(first, second);
+    }
+
+    @Override
+    public Integer countByChoice_idAndRow_id(Long first, Long second) {
+        return answerRepository.countByChoice_idAndRow_id(first, second);
+    }
+
+    @Override
+    public Integer countByRow_idAndChoice_id(Long first, Long second) {
+        return answerRepository.countByRow_idAndChoice_id(first, second);
+    }
+
+    @Override
+    public Integer countUniqueAnswersByQuestionMetaInformationId(long id) {
+        return questionService.countByQuestionMetaInformationId(id);
+    }
+
+    @Override
+    public Integer countById(Long id, boolean UseRow_idInstedOfChoice_id) {
+        if (UseRow_idInstedOfChoice_id) {
+            return countByRow_id(id);
+        } else {
+            return countByChoice_id(id);
+        }
+    }
+
+    @Override
+    public Integer countByTwoId(Long first, Long second, boolean UseRow_idInstedOfChoice_idForFirst, boolean UseRow_idInstedOfChoice_idForSecond) {
+        if (UseRow_idInstedOfChoice_idForFirst & UseRow_idInstedOfChoice_idForSecond) {
+            return countByTwoRow_id(first, second);
+        } else if (UseRow_idInstedOfChoice_idForFirst) {
+            return countByRow_idAndChoice_id(first, second);
+        } else if (UseRow_idInstedOfChoice_idForSecond) {
+            return countByChoice_idAndRow_id(first, second);
+        } else {
+            return countByTwoChoice_id(first, second);
+        }
     }
 
     @Override
@@ -94,14 +132,26 @@ public class AnswerServiceImpl implements AnswerService {
     }
 
     @Override
-    public Integer countByOther_idAndChoice_id(Long first, Long second) {
-        return answerRepository.countByOther_idAndChoice_id(first, second);
+    public Integer countByRow_idAndOther_id(Long first, Long second) {
+        return answerRepository.countByRow_idAndOther_id(first, second);
     }
 
     @Override
-    public Integer countUniqueAnswersByQuestionMetaInformationId(long id) {
-        return questionService.countByQuestionMetaInformationId(id);
+    public Integer countByIdAndOther_id(Long first, Long second, boolean UseRow_idInstedOfChoice_id) {
+        if (UseRow_idInstedOfChoice_id) {
+            return countByRow_idAndOther_id(first, second);
+        } else {
+            return countByChoice_idAndOther_id(first, second);
+        }
     }
 
-    
+    @Override
+    public Integer countByQuestion_idAndChoice_id(Long first, Long second, boolean UseRow_idInstedOfChoice_id) {
+        if (UseRow_idInstedOfChoice_id) {
+            return answerRepository.countByQuestion_idAndRow_id(first, second);
+        } else {
+            return answerRepository.countByQuestion_idAndChoice_id(first, second);
+        }
+    }
+
 }

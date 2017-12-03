@@ -22,7 +22,7 @@ public class Role {
         return TOOLTIP_ROLE;
     }
     
-    public static Role getAnnotationTextRole() {
+    public static Role getAnnotationRole() {
         return ANNOTATION_TEXT_ROLE;
     }
 

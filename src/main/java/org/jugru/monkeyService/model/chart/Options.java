@@ -1,4 +1,4 @@
-package org.jugru.monkeyService.model.view;
+package org.jugru.monkeyService.model.chart;
 
 import java.util.Arrays;
 import java.util.LinkedList;

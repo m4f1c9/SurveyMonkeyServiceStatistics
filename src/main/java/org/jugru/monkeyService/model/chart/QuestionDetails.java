@@ -7,8 +7,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import org.jugru.monkeyService.model.chart.QuestionOptions;
 @Entity
-public class SingleQuestionChart {
+public class QuestionDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,21 +17,19 @@ public class SingleQuestionChart {
     @Column
     private String name;
     @Column
-    private Long questionMetaInfId;
+    private long questionId;
     @OneToOne
     private QuestionOptions questionOptions;
 
-    public SingleQuestionChart() {
-    }
-
-    
-    
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public QuestionDetails() {
     }
 
     public QuestionOptions getQuestionOptions() {
@@ -41,6 +40,19 @@ public class SingleQuestionChart {
         this.questionOptions = questionOptions;
     }
 
+    public QuestionDetails(String name, long questionId) {
+        this.name = name;
+        this.questionId = questionId;
+    }
+
+    public long getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(long questionId) {
+        this.questionId = questionId;
+    }
+
     public String getName() {
         return name;
     }
@@ -49,18 +61,10 @@ public class SingleQuestionChart {
         this.name = name;
     }
 
-    public Long getQuestionMetaInfId() {
-        return questionMetaInfId;
-    }
-
-    public void setQuestionMetaInfId(Long questionMetaInfId) {
-        this.questionMetaInfId = questionMetaInfId;
-    }
-
-    public SingleQuestionChart(String name, Long questionMetaInfId) {
+    public QuestionDetails(String name, long questionId, QuestionOptions questionOptions) {
         this.name = name;
-        this.questionMetaInfId = questionMetaInfId;
-
+        this.questionId = questionId;
+        this.questionOptions = questionOptions;
     }
 
 }

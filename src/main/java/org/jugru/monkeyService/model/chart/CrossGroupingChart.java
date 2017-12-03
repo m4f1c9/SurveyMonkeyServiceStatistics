@@ -3,53 +3,71 @@ package org.jugru.monkeyService.model.chart;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.jugru.monkeyService.model.view.ChartData;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import org.jugru.monkeyStatistics.util.ChartDataBuilder;
 
-public class CrossGroupingChart implements Chart {
+@Entity
+public class CrossGroupingChart extends Chart {
 
+    
+    @Column
     private String chartName;
-
-    private Long firstQuestionMetaInfId;
-    private Long secondQuestionMetaInfId;
-    private Long surveyID;
-    private boolean useRow_idInstedOfChoice_idForFirstQuestion;
-    private boolean useRow_idInstedOfChoice_idForSecondQuestion;
-    private boolean hideLastChoiceInFirst;
-    private boolean hideLastChoiceInSecond;
-
+    @Column
+    private Long firstQuestionMetaInformationId;
+    @Column
+    private Long secondQuestionMetaInformationId;
+    @OneToOne
+    private QuestionOptions firstQuestionOptions;
+    @OneToOne
+    private QuestionOptions secondQuestionOptions;
+    @Column
+    private boolean hideLastChoiceInFirstQuestion;
+    @Column
+    private boolean hideLastChoiceInSecondQuestion;
+    @OneToOne
     private ChartOptions chartOptions;
 
-    public boolean isHideLastChoiceInFirst() {
-        return hideLastChoiceInFirst;
+    public CrossGroupingChart() {
     }
 
-    public void setHideLastChoiceInFirst(boolean hideLastChoiceInFirst) {
-        this.hideLastChoiceInFirst = hideLastChoiceInFirst;
+    
+    public QuestionOptions getFirstQuestionOptions() {
+        return firstQuestionOptions;
     }
 
-    public boolean isHideLastChoiceInSecond() {
-        return hideLastChoiceInSecond;
+    public void setFirstQuestionOptions(QuestionOptions firstQuestionOptions) {
+        this.firstQuestionOptions = firstQuestionOptions;
     }
 
-    public void setHideLastChoiceInSecond(boolean hideLastChoiceInSecond) {
-        this.hideLastChoiceInSecond = hideLastChoiceInSecond;
+    public QuestionOptions getSecondQuestionOptions() {
+        return secondQuestionOptions;
     }
 
-    public boolean isUseRow_idInstedOfChoice_idForFirstQuestion() {
-        return useRow_idInstedOfChoice_idForFirstQuestion;
+    public void setSecondQuestionOptions(QuestionOptions secondQuestionOptions) {
+        this.secondQuestionOptions = secondQuestionOptions;
     }
 
-    public void setUseRow_idInstedOfChoice_idForFirstQuestion(boolean useRow_idInstedOfChoice_idForFirstQuestion) {
-        this.useRow_idInstedOfChoice_idForFirstQuestion = useRow_idInstedOfChoice_idForFirstQuestion;
+    public boolean isHideLastChoiceInFirstQuestion() {
+        return hideLastChoiceInFirstQuestion;
     }
 
-    public boolean isUseRow_idInstedOfChoice_idForSecondQuestion() {
-        return useRow_idInstedOfChoice_idForSecondQuestion;
+    public void setHideLastChoiceInFirstQuestion(boolean hideLastChoiceInFirstQuestion) {
+        this.hideLastChoiceInFirstQuestion = hideLastChoiceInFirstQuestion;
     }
 
-    public void setUseRow_idInstedOfChoice_idForSecondQuestion(boolean useRow_idInstedOfChoice_idForSecondQuestion) {
-        this.useRow_idInstedOfChoice_idForSecondQuestion = useRow_idInstedOfChoice_idForSecondQuestion;
+    public boolean isHideLastChoiceInSecondQuestion() {
+        return hideLastChoiceInSecondQuestion;
+    }
+
+    public void setHideLastChoiceInSecondQuestion(boolean hideLastChoiceInSecondQuestion) {
+        this.hideLastChoiceInSecondQuestion = hideLastChoiceInSecondQuestion;
     }
 
     public String getChartName() {
@@ -60,28 +78,20 @@ public class CrossGroupingChart implements Chart {
         this.chartName = chartName;
     }
 
-    public Long getFirstQuestionMetaInfId() {
-        return firstQuestionMetaInfId;
+    public Long getFirstQuestionMetaInformationId() {
+        return firstQuestionMetaInformationId;
     }
 
-    public void setFirstQuestionMetaInfId(Long firstQuestionMetaInfId) {
-        this.firstQuestionMetaInfId = firstQuestionMetaInfId;
+    public void setFirstQuestionMetaInformationId(Long firstQuestionMetaInformationId) {
+        this.firstQuestionMetaInformationId = firstQuestionMetaInformationId;
     }
 
-    public Long getSecondQuestionMetaInfId() {
-        return secondQuestionMetaInfId;
+    public Long getSecondQuestionMetaInformationId() {
+        return secondQuestionMetaInformationId;
     }
 
-    public void setSecondQuestionMetaInfId(Long secondQuestionMetaInfId) {
-        this.secondQuestionMetaInfId = secondQuestionMetaInfId;
-    }
-
-    public Long getSurveyID() {
-        return surveyID;
-    }
-
-    public void setSurveyID(Long surveyID) {
-        this.surveyID = surveyID;
+    public void setSecondQuestionMetaInformationId(Long secondQuestionMetaInformationId) {
+        this.secondQuestionMetaInformationId = secondQuestionMetaInformationId;
     }
 
     public ChartOptions getChartOptions() {
@@ -92,11 +102,10 @@ public class CrossGroupingChart implements Chart {
         this.chartOptions = chartOptions;
     }
 
-    public CrossGroupingChart(String chartName, Long surveyID, Long firstQuestionMetaInfId, Long secondQuestionMetaInfId, ChartOptions chartOptions) {
+    public CrossGroupingChart(String chartName, Long firstQuestionMetaInformationId, Long secondQuestionMetaInformationId, ChartOptions chartOptions) {
         this.chartName = chartName;
-        this.firstQuestionMetaInfId = firstQuestionMetaInfId;
-        this.secondQuestionMetaInfId = secondQuestionMetaInfId;
-        this.surveyID = surveyID;
+        this.firstQuestionMetaInformationId = firstQuestionMetaInformationId;
+        this.secondQuestionMetaInformationId = secondQuestionMetaInformationId;
         this.chartOptions = chartOptions;
     }
 

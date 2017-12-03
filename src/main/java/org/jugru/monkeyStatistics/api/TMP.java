@@ -13,7 +13,8 @@ import org.jugru.monkeyService.model.Survey;
 import org.jugru.monkeyService.model.SurveyPage;
 import org.jugru.monkeyService.model.chart.ChartOptions;
 import org.jugru.monkeyService.model.chart.CrossGroupingChart;
-import org.jugru.monkeyService.model.view.ChartData;
+import org.jugru.monkeyService.model.chart.QuestionOptions;
+import org.jugru.monkeyService.model.chart.ChartData;
 import org.jugru.monkeyStatistics.service.QuestionMetaInformationService;
 import org.jugru.monkeyStatistics.service.SurveyService;
 import org.jugru.monkeyStatistics.tempData.Conferences;
@@ -33,13 +34,11 @@ public class TMP {
     @Autowired
     ChartDataBuilder chartDataBuilder;
 
-
     @RequestMapping("/test")
     public List<ChartData> test() {
         return chartDataBuilder.createChartDataFromChartsPreset(Conferences.test());
     }
 
-  
     @Transactional  //TODO !!!!!!!!!111111oneone
     @RequestMapping("/surveys")
     public Set<StringLongPair> surveys() {
@@ -51,7 +50,6 @@ public class TMP {
         return set;
     }
 
-   
     @RequestMapping("/questions")
     public List<StringLongPair> questions(@RequestParam(value = "id") long id) {
         List<StringLongPair> list2 = new ArrayList<>();
@@ -76,11 +74,20 @@ public class TMP {
 
     @RequestMapping("/сrossGroupingChart")
     public ChartData сrossGroupingChart(@RequestParam(value = "surveyId") long surveyId, @RequestParam(value = "fQuestionId") long fQuestionId, @RequestParam(value = "sQuestionId") long sQuestionId) {
-        ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT, true, true);
-        CrossGroupingChart cgc = new CrossGroupingChart("", surveyId, fQuestionId, sQuestionId, chartOptions);
+        ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.FULL, ChartOptions.Annotation.SHORT);
+        CrossGroupingChart cgc = new CrossGroupingChart("", fQuestionId, sQuestionId, chartOptions);
+        cgc.setFirstQuestionOptions(new QuestionOptions(true, true, false));
+        cgc.setSecondQuestionOptions(new QuestionOptions(true, true, false));
         return chartDataBuilder.createChartDataFromCrossGroupingChart(cgc);
     }
 
+    
+     @RequestMapping("/jtest")
+    public ChartOptions jtest() {
+       
+        return new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.FULL);
+    }
+    
     private class StringLongPair implements Comparable<StringLongPair> {
 
         public StringLongPair(Long Id, String Title) {
