@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Страница редактирования</title>
+        <meta charset="UTF-8">
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="/MonkeyStatistics/scripts/application.js"></script>
+        <script type="text/javascript">
+            $(document).ready(editpage);
+        </script>
+        <style>
+            .edit-area { 
+                border-style: solid; /* Стиль линии вокруг параграфа */
+                padding: 5px; /* Поля вокруг текста */
+            }
+        </style> 
+    </head>
+    <body>
+        <div class="presets">
+            <h3>Пресеты</h3>
+            <select class="presets-select" id="presets-select"></select>
+        </div>
+        <div class="surveys">
+            <h3>Опросы</h3>
+            <select class="surveys-select"></select>
+        </div>
+        <div class="main-buttons">
+            <h3>Кнопки</h3>
+            <button type="button" disabled>Добавить пресет</button>
+            <button class="preset-edit" type="button">Редактировать пресет</button>
+            <button type="button" disabled>Удалить пресет</button>
+        </div>
+        <div class="work-area">
+
+        </div>
+
+    </body>
+</html>

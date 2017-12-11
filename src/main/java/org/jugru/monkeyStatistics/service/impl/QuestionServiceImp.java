@@ -1,13 +1,15 @@
 package org.jugru.monkeyStatistics.service.impl;
 
 import java.util.List;
+import javax.transaction.Transactional;
 import org.jugru.monkeyService.model.Answer;
 import org.jugru.monkeyService.model.Question;
 import org.jugru.monkeyStatistics.repository.QuestionRepository;
 import org.jugru.monkeyStatistics.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-
+@Transactional
 @Service
 public class QuestionServiceImp implements QuestionService {
 
@@ -31,13 +33,15 @@ public class QuestionServiceImp implements QuestionService {
         questionRepository.delete(t);
     }
 
+    @Cacheable(cacheNames = "default")
     @Override
     public List<Question> getAll() {
         return questionRepository.findAll();
     }
 
+   // @Cacheable(cacheNames = "default")
     @Override
-    public Integer countByQuestionMetaInformationId(long id) {
+    public int countByQuestionMetaInformationId(Long id) {
         return questionRepository.countById(id);
     }
 

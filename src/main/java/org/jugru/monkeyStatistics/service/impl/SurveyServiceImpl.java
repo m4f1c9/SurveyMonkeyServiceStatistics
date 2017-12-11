@@ -10,51 +10,53 @@ import org.jugru.monkeyService.model.SurveyPage;
 import org.jugru.monkeyStatistics.repository.SurveyRepository;
 import org.jugru.monkeyStatistics.service.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-
+@Transactional
 @Service
 public class SurveyServiceImpl implements SurveyService {
 
     @Autowired
     private SurveyRepository surveyRepository;
 
-    @Transactional
+    
     @Override
     public Survey save(Survey survey) {
         return surveyRepository.saveAndFlush(survey);
     }
 
-    @Transactional
+  //  @Cacheable(cacheNames = "default")
     @Override
     public Survey get(long id) {
         return surveyRepository.findOne(id);
     }
 
-    @Transactional
+    
     @Override
     public void delete(Survey survey) {
         surveyRepository.delete(survey);
     }
 
-    @Transactional
+  //  @Cacheable(cacheNames = "default")
     @Override
     public List<Survey> getAll() {
         return surveyRepository.findAll();
     }
 
-    @Transactional
+   // @Cacheable(cacheNames = "default")
     @Override
-    public int countResponsesBySurveyId(long id) {
+    public int countResponsesBySurveyId(Long id) {
         return surveyRepository.findOne(id).getResponses().size(); //TODO написать запрос на count  
 
     }
 
-    @Transactional
+   // @Cacheable(cacheNames = "default")
     @Override
     public List<SurveyPage> getSurveyPagesFromSurvey(Long id) {
         return get(id).getPages();
     }
 
+  //  @Cacheable(cacheNames = "default")
     @Override
     public Long findSurveyIdByQuestionMetaInformationId(Long id) {
         return surveyRepository.findSurveyIdByQuestionMetaInformationId(id);

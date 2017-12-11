@@ -15,24 +15,41 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.jugru.monkeyStatistics.service.SurveyService;
 import org.jugru.monkeyStatistics.util.ChartDataBuilder;
 @Entity
 public class GroupedByChoiceChart extends Chart {
 
-    @Column
-    private String name;
+  
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ChoiceGroup> choiceGroups = new ArrayList<>();
+    
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QuestionDetails> questionDetails = new ArrayList<>();
-    @OneToOne
+    
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private ChartOptions chartOptions;
-    @OneToOne
+    
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private QuestionOptions questionOptions;
+    
+    @Transient
+    Class clazz = this.getClass();
+
+    public Class getClazz() {
+        return clazz;
+    }
+
+    public void setClazz(Class clazz) {
+        this.clazz = clazz;
+    }
+    
+    
 
     public GroupedByChoiceChart() {
     }
@@ -54,13 +71,7 @@ public class GroupedByChoiceChart extends Chart {
         choiceGroups.add(choiceGroup);
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+  
 
     public List<ChoiceGroup> getChoiceGroups() {
         return choiceGroups;
@@ -79,7 +90,7 @@ public class GroupedByChoiceChart extends Chart {
     }
 
     public GroupedByChoiceChart(String name, ChartOptions chartOptions) {
-        this.name = name;
+        super.setChartName(name);
         this.chartOptions = chartOptions;
     }
 
@@ -97,4 +108,12 @@ public class GroupedByChoiceChart extends Chart {
 
     }
 
+    @Override
+    public void prepareForSending(SurveyService surveyService) {
+       questionDetails.forEach((t) -> {
+           t.setSurveyId(surveyService.findSurveyIdByQuestionMetaInformationId(t.getQuestionId()));
+       });
+    }
+
+    
 }

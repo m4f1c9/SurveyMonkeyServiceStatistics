@@ -1,5 +1,6 @@
 package org.jugru.monkeyService.model.chart;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -7,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 import org.jugru.monkeyService.model.chart.QuestionOptions;
 @Entity
 public class QuestionDetails {
@@ -18,9 +20,22 @@ public class QuestionDetails {
     private String name;
     @Column
     private long questionId;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private QuestionOptions questionOptions;
 
+    
+    @Transient
+    private Long surveyId;
+
+    public Long getSurveyId() {
+        return surveyId;
+    }
+
+    public void setSurveyId(Long surveyId) {
+        this.surveyId = surveyId;
+    }
+    
+    
     public Long getId() {
         return id;
     }

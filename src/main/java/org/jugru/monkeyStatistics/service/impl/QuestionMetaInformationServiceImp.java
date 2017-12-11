@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.jugru.monkeyStatistics.repository.QuestionMetaInformationRepository;
 import org.jugru.monkeyStatistics.service.QuestionMetaInformationService;
 import org.jugru.monkeyStatistics.service.SurveyService;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Transactional
@@ -27,31 +28,29 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
     @Autowired
     private SurveyService surveyService;
 
-    @Transactional
     @Override
     public QuestionMetaInformation save(QuestionMetaInformation t) {
         return questionMetaInformationRepository.save(t);
     }
 
-    @Transactional
+    @Cacheable(cacheNames = "default")
     @Override
     public QuestionMetaInformation get(long id) {
         return questionMetaInformationRepository.findOne(id);
     }
 
-    @Transactional
     @Override
     public void delete(QuestionMetaInformation t) {
         questionMetaInformationRepository.delete(t);
     }
 
-    @Transactional
+    @Cacheable(cacheNames = "default")
     @Override
     public List<QuestionMetaInformation> getAll() {
         return questionMetaInformationRepository.findAll();
     }
 
-    @Transactional
+    // @Cacheable(cacheNames = "default")
     @Override
     public Long getOther_idByQuestionMetaInformationId(Long id) {
 
@@ -62,16 +61,17 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
                 map(Other::getId).orElse(null);
     }
 
-    @Transactional
+   // @Cacheable(cacheNames = "default")
     @Override
     public List<Choice> getChoicesByQuestionMetaInformationId(Long id) {
+
         List<Choice> l = get(id).getAnswers().getChoices();
         l.size(); //TODO
         return l;
 
     }
 
-    @Transactional
+    @Cacheable(cacheNames = "default")
     @Override
     public List<Row> getRowsByQuestionMetaInformationId(Long id) {
 
@@ -81,8 +81,7 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
 
     }
 
-    
-    @Override
+    @Cacheable(cacheNames = "default")
     public List<? extends ChoiceOrRow> getChoiceOrRowsByQuestionMetaInformationId(Long id, boolean UseRow_idInstedOfChoice_id) {
         if (UseRow_idInstedOfChoice_id) {
             return getRowsByQuestionMetaInformationId(id);
@@ -91,7 +90,7 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
         }
     }
 
-    @Transactional
+    @Cacheable(cacheNames = "default")
     @Override
     public List<QuestionMetaInformation> getQuestionMetaInformationsBySurveyId(Long id) {
         List<QuestionMetaInformation> list = new ArrayList<>();
@@ -103,22 +102,22 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
         return list;
     }
 
-    @Override
+    @Cacheable(cacheNames = "default")
     public Integer countChoicesByQuestionMetaInformationId(Long id) {
         return get(id).getAnswers().getChoices().size();
     }
 
-    @Override
+    @Cacheable(cacheNames = "default")
     public Integer countRowsByQuestionMetaInformationId(Long id) {
         return get(id).getAnswers().getRows().size();
     }
 
-    @Override
+    @Cacheable(cacheNames = "default")
     public Long findQuestionMetaInformationIdByChoiceId(Long id) {
         return questionMetaInformationRepository.findQuestionMetaInformationIdByChoiceId(id);
     }
 
-    @Override
+    @Cacheable(cacheNames = "default")
     public Long findQuestionMetaInformationIdByRowId(Long id) {
         return questionMetaInformationRepository.findQuestionMetaInformationIdByRowId(id);
     }

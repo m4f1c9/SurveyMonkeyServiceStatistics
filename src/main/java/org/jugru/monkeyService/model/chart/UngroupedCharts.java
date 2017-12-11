@@ -13,20 +13,21 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.jugru.monkeyStatistics.service.SurveyService;
 import org.jugru.monkeyStatistics.util.ChartDataBuilder;
 import org.springframework.context.ApplicationContextAware;
 
 @Entity
 public class UngroupedCharts extends Chart {
 
-    @Column
-    private String chartName;
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SingleQuestionChart> charts = new ArrayList<>();
-    @OneToOne
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private ChartOptions chartOptions;
 
     public ChartOptions getChartOptions() {
@@ -37,12 +38,15 @@ public class UngroupedCharts extends Chart {
         this.chartOptions = chartOptions;
     }
 
-    public String getChartName() {
-        return chartName;
+    @Transient
+    Class clazz = this.getClass();
+
+    public Class getClazz() {
+        return clazz;
     }
 
-    public void setChartName(String chartName) {
-        this.chartName = chartName;
+    public void setClazz(Class clazz) {
+        this.clazz = clazz;
     }
 
     public List<SingleQuestionChart> getCharts() {
@@ -54,7 +58,7 @@ public class UngroupedCharts extends Chart {
     }
 
     public UngroupedCharts(String chartName, List<SingleQuestionChart> charts, ChartOptions chartOptions) {
-        this.chartName = chartName;
+        super.setChartName(chartName);
         this.charts = charts;
         this.chartOptions = chartOptions;
     }
@@ -67,4 +71,12 @@ public class UngroupedCharts extends Chart {
         return chartDataBuilder.createChartDataFromUngroupedCharts(this);
     }
 
+    @Override
+    public void prepareForSending(SurveyService surveyService) {
+       charts.forEach((t) -> {
+           t.setSurveyId(surveyService.findSurveyIdByQuestionMetaInformationId(t.getQuestionMetaInfId()));
+       });
+    }
+
+    
 }

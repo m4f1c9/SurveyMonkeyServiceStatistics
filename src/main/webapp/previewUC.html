@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="/MonkeyStatistics/scripts/application.js"></script>
+        <script type="text/javascript">
+            google.charts.load('current', {'packages': ['corechart']});
+            $(document).ready(showSurveys);
+        </script>
+
+
+    </head>
+    <body>
+        <form>
+            <select class="surveys" onchange="onSurveyChoice()"></select>
+        </form>
+        <form>
+            <select class="question1 question"></select>
+            <input type="checkbox" class="lastQuestion1"  value="Убрать последний вопрос?">
+            <label>Убрать последний вопрос?</label>
+            <input type="checkbox" class="custom1"  value="Добавить свой вариант ответа?" >
+            <label>Добавить свой вариант ответа?</label>
+            <input type="checkbox" class="noAnswer1"  value="Добавить неответивших?" >
+            <label>Добавить неответивших?</label>
+        </form>
+        <button class="send" onclick="onUCButtonClick()">Кнопка</button>
+        <div id="chart"> </div>
+
+    </body>
+</html>

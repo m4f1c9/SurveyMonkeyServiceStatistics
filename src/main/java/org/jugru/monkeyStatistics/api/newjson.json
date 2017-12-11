@@ -1,0 +1,60 @@
+{
+    "id": null,
+    "name": "Ваша позиция в компании?",
+    "choiceGroups": [{
+            "id": null,
+            "text": "Junior Developer",
+            "choicesId": [10239887091, 10789207613, 874803001]
+        }, {
+            "id": null,
+            "text": "Middle Developer",
+            "choicesId": [10239887092, 10789207614, 874803002]
+        }, {
+            "id": null,
+            "text": "Senior Developer",
+            "choicesId": [10239887093, 10789207615, 874803003]
+        }],
+    "questionDetails": [{
+            "id": null,
+            "name": "HolyJS 2016 Piter",
+            "questionId": 966831639,
+            "questionOptions": {
+                "id": null,
+                "withCustomChoice": true,
+                "withNoChoice": true,
+                "useRow_idInstedOfChoice_id": false
+            }
+        }, {
+            "id": null,
+            "name": "HolyJS 2016 Moscow",
+            "questionId": 1045020001,
+            "questionOptions": {
+                "id": null,
+                "withCustomChoice": true,
+                "withNoChoice": true,
+                "useRow_idInstedOfChoice_id": false
+            }
+        }, {
+            "id": null,
+            "name": "HolyJS 2017 Piter",
+            "questionId": 118678197,
+            "questionOptions": {
+                "id": null,
+                "withCustomChoice": true,
+                "withNoChoice": true,
+                "useRow_idInstedOfChoice_id": false
+            }
+        }],
+    "chartOptions": {
+        "id": null,
+        "tooltip": "FULL",
+        "annotation": "SHORT",
+        "useGradient": false
+    },
+    "questionOptions": {
+        "id": null,
+        "withCustomChoice": true,
+        "withNoChoice": true,
+        "useRow_idInstedOfChoice_id": false
+    }
+}

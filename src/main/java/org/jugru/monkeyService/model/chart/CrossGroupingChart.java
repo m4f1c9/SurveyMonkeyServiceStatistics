@@ -3,6 +3,7 @@ package org.jugru.monkeyService.model.chart;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Embedded;
@@ -11,33 +12,52 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
+import org.jugru.monkeyStatistics.service.SurveyService;
 import org.jugru.monkeyStatistics.util.ChartDataBuilder;
 
 @Entity
 public class CrossGroupingChart extends Chart {
 
-    
-    @Column
-    private String chartName;
     @Column
     private Long firstQuestionMetaInformationId;
     @Column
     private Long secondQuestionMetaInformationId;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private QuestionOptions firstQuestionOptions;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private QuestionOptions secondQuestionOptions;
     @Column
     private boolean hideLastChoiceInFirstQuestion;
     @Column
     private boolean hideLastChoiceInSecondQuestion;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private ChartOptions chartOptions;
+
+    @Transient
+    private Long surveyId;
+    @Transient
+    private Class clazz = this.getClass();
+
+    public Class getClazz() {
+        return clazz;
+    }
+
+    public void setClazz(Class clazz) {
+        this.clazz = clazz;
+    }
+
+    public Long getSurveyId() {
+        return surveyId;
+    }
+
+    public void setSurveyId(Long surveyId) {
+        this.surveyId = surveyId;
+    }
 
     public CrossGroupingChart() {
     }
 
-    
     public QuestionOptions getFirstQuestionOptions() {
         return firstQuestionOptions;
     }
@@ -70,14 +90,6 @@ public class CrossGroupingChart extends Chart {
         this.hideLastChoiceInSecondQuestion = hideLastChoiceInSecondQuestion;
     }
 
-    public String getChartName() {
-        return chartName;
-    }
-
-    public void setChartName(String chartName) {
-        this.chartName = chartName;
-    }
-
     public Long getFirstQuestionMetaInformationId() {
         return firstQuestionMetaInformationId;
     }
@@ -103,7 +115,7 @@ public class CrossGroupingChart extends Chart {
     }
 
     public CrossGroupingChart(String chartName, Long firstQuestionMetaInformationId, Long secondQuestionMetaInformationId, ChartOptions chartOptions) {
-        this.chartName = chartName;
+        super.setChartName(chartName);
         this.firstQuestionMetaInformationId = firstQuestionMetaInformationId;
         this.secondQuestionMetaInformationId = secondQuestionMetaInformationId;
         this.chartOptions = chartOptions;
@@ -112,6 +124,11 @@ public class CrossGroupingChart extends Chart {
     @Override
     public List<ChartData> createChartData(ChartDataBuilder chartDataBuilder) {
         return Arrays.asList(chartDataBuilder.createChartDataFromCrossGroupingChart(this));
+    }
+
+    @Override
+    public void prepareForSending(SurveyService surveyService) {
+        this.surveyId = surveyService.findSurveyIdByQuestionMetaInformationId(firstQuestionMetaInformationId);
     }
 
 }

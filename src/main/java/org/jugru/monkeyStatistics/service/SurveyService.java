@@ -11,7 +11,7 @@ public interface SurveyService extends Service<Survey> {
      */
     Long findSurveyIdByQuestionMetaInformationId(Long id);
 
-    int countResponsesBySurveyId(long id);
+    int countResponsesBySurveyId(Long id);
 
     List<SurveyPage> getSurveyPagesFromSurvey(Long id);
 }

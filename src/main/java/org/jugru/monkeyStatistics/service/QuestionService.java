@@ -9,7 +9,7 @@ public interface QuestionService extends Service<Question>{
      * Считает каличестве уникальных ответов
      * 
      */
-    Integer countByQuestionMetaInformationId(long id);
+    int countByQuestionMetaInformationId(Long id);
     
     
 }

@@ -11,17 +11,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 @Entity
 public class ChoiceGroup {
 
-    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
     private String text;
     @ElementCollection
-    private List<Long> ID = new ArrayList<>();
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Long> choicesId = new ArrayList<>();
 
     public ChoiceGroup() {
     }
@@ -34,10 +37,8 @@ public class ChoiceGroup {
         this.id = id;
     }
 
-    
-    
-    public void addID(Long id) {
-        ID.add(id);
+    public void addChoiceId(Long id) {
+        choicesId.add(id);
     }
 
     public String getText() {
@@ -48,12 +49,12 @@ public class ChoiceGroup {
         this.text = text;
     }
 
-    public List<Long> getID() {
-        return ID;
+    public List<Long> getChoicesId() {
+        return choicesId;
     }
 
-    public void setID(List<Long> ID) {
-        this.ID = ID;
+    public void setChoicesId(List<Long> ID) {
+        this.choicesId = ID;
     }
 
 }

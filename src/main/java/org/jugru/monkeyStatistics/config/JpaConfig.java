@@ -1,9 +1,15 @@
 package org.jugru.monkeyStatistics.config;
 
+import java.util.Arrays;
 import java.util.Properties;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 import org.hibernate.jpa.HibernatePersistenceProvider;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.concurrent.ConcurrentMapCache;
+import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
+import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +29,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan("org.jugru")
 @PropertySource("classpath:META-INF\\app.properties")
 @EnableJpaRepositories("org.jugru.monkeyStatistics.repository")
+@EnableCaching
 public class JpaConfig {
 
     private static final String PROP_DATABASE_DRIVER = "db.driver";
@@ -70,8 +77,6 @@ public class JpaConfig {
         return transactionManager;
     }
 
-
-
     private Properties getHibernateProperties() {
         Properties properties = new Properties();
         properties.put(PROP_HIBERNATE_DIALECT, env.getRequiredProperty(PROP_HIBERNATE_DIALECT));
@@ -80,4 +85,11 @@ public class JpaConfig {
 
         return properties;
     }
+
+    @Bean
+    public CacheManager cacheManager() {
+        // configure and return an implementation of Spring's CacheManager SPI
+        return new ConcurrentMapCacheManager("default");
+    }
+
 }

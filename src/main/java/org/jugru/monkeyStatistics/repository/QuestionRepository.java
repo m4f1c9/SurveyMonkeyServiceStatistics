@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     @Query("Select count(question) from Question question where question.id = ?1")
-    Integer countById(long other_id);
+    int countById(long other_id);
 
   
   

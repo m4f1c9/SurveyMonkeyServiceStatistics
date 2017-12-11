@@ -82,7 +82,8 @@ public class ChartDataBuilder {
         List row = new LinkedList();
         row.add(singleChart.getName());
 
-        int conferenceAnswers = surveyService.countResponsesBySurveyId(surveyService.findSurveyIdByQuestionMetaInformationId(questionMetaInfId));
+        Long surveyId = surveyService.findSurveyIdByQuestionMetaInformationId(questionMetaInfId);
+        int conferenceAnswers = surveyService.countResponsesBySurveyId(surveyId);
 
         List<? extends ChoiceOrRow> choices
                 = questionMetaInformationService.getChoiceOrRowsByQuestionMetaInformationId(questionMetaInfId,
@@ -134,7 +135,8 @@ public class ChartDataBuilder {
                 getChoiceOrRowsByQuestionMetaInformationId(secondQuestionMetaInfId,
                         сrossGroupingChart.getSecondQuestionOptions().isUseRow_idInstedOfChoice_id());
 
-        int conferenceAnswers = surveyService.countResponsesBySurveyId(surveyService.findSurveyIdByQuestionMetaInformationId(firstQuestionMetaInfId));
+        Long surveyId = surveyService.findSurveyIdByQuestionMetaInformationId(firstQuestionMetaInfId);
+        int conferenceAnswers = surveyService.countResponsesBySurveyId(surveyId);
 
         for (int firstChoicesCount = 0; firstChoicesCount < (firstChoices.size() - (сrossGroupingChart.isHideLastChoiceInFirstQuestion() ? 1 : 0)); firstChoicesCount++) { // -1!!
             List row = new LinkedList();
@@ -197,14 +199,15 @@ public class ChartDataBuilder {
             ChoiceGroup choiceGroup = groupedByChoiceChart.getChoiceGroups().get(choiceCount);
             List row = new LinkedList();
             row.add(choiceGroup.getText());
-            for (int conferenceCount = 0; conferenceCount < choiceGroup.getID().size(); conferenceCount++) {  // обходим конкретные ответы 
-                Long choice_id = choiceGroup.getID().get(conferenceCount);
+            for (int conferenceCount = 0; conferenceCount < choiceGroup.getChoicesId().size(); conferenceCount++) {  // обходим конкретные ответы 
+                Long choice_id = choiceGroup.getChoicesId().get(conferenceCount);
                 if (Objects.nonNull(choice_id)) {
                     QuestionDetails questionDetails = groupedByChoiceChart.getQuestionDetails().get(conferenceCount);
                     String conferencesName = questionDetails.getName();
                     Long question_id = questionDetails.getQuestionId();
-                    int conferenceAnswers = surveyService.countResponsesBySurveyId(surveyService.findSurveyIdByQuestionMetaInformationId(question_id));
-                    int thisAnswers = answerService.countById(choiceGroup.getID().get(conferenceCount), questionDetails.getQuestionOptions().isUseRow_idInstedOfChoice_id());
+                    Long surveyId = surveyService.findSurveyIdByQuestionMetaInformationId(question_id);
+                    int conferenceAnswers = surveyService.countResponsesBySurveyId(surveyId);
+                    int thisAnswers = answerService.countById(choiceGroup.getChoicesId().get(conferenceCount), questionDetails.getQuestionOptions().isUseRow_idInstedOfChoice_id());
                     double percent = countPercentAndFormat(thisAnswers, conferenceAnswers);
                     row.add(percent);
                     addMetaDataToRow(thisAnswers, conferenceAnswers, percent, groupedByChoiceChart.getChartOptions(), conferencesName, row);
@@ -225,7 +228,8 @@ public class ChartDataBuilder {
                 Long other_id = questionMetaInformationService.getOther_idByQuestionMetaInformationId(question_id);
                 if (Objects.nonNull(other_id)) {
                     String conferencesName = questionDetails.getName();
-                    int conferenceAnswers = surveyService.countResponsesBySurveyId(surveyService.findSurveyIdByQuestionMetaInformationId(question_id));
+                    Long surveyId = surveyService.findSurveyIdByQuestionMetaInformationId(question_id);
+                    int conferenceAnswers = surveyService.countResponsesBySurveyId(surveyId);
                     int thisAnswers = answerService.countByOther_id(other_id);
                     double percent = countPercentAndFormat(thisAnswers, conferenceAnswers);
                     row.add(percent);
@@ -246,8 +250,8 @@ public class ChartDataBuilder {
                 Long question_id = questionDetails.getQuestionId();
 
                 String conferencesName = questionDetails.getName();
-
-                int conferenceAnswers = surveyService.countResponsesBySurveyId(surveyService.findSurveyIdByQuestionMetaInformationId(question_id));
+                Long surveyId = surveyService.findSurveyIdByQuestionMetaInformationId(question_id);
+                int conferenceAnswers = surveyService.countResponsesBySurveyId(surveyId);
                 int thisAnswers = questionService.countByQuestionMetaInformationId(question_id);
                 thisAnswers = conferenceAnswers - thisAnswers;
 
@@ -373,7 +377,9 @@ public class ChartDataBuilder {
     private Options createDefaultOptions(SingleQuestionChart singleChart, ChartOptions chartOptions, String title) {
         int choicesCount;
         if (!singleChart.getQuestionOptions().isUseRow_idInstedOfChoice_id()) {
-            choicesCount = questionMetaInformationService.getChoicesByQuestionMetaInformationId(singleChart.getQuestionMetaInfId()).size();
+            Long questionMetaInfId = singleChart.getQuestionMetaInfId();
+            List<Choice> choices = questionMetaInformationService.getChoicesByQuestionMetaInformationId(questionMetaInfId);
+            choicesCount = choices.size();
         } else {
             choicesCount = questionMetaInformationService.getRowsByQuestionMetaInformationId(singleChart.getQuestionMetaInfId()).size();
         }
@@ -416,7 +422,7 @@ public class ChartDataBuilder {
         int height = answers * questions * 45 + 50; // 200 на заголовок
         Options options = new Options(height,
                 "horizontal",
-                groupedByChoiceChart.getName()); //TODO подумать про высоту
+                groupedByChoiceChart.getChartName()); //TODO подумать про высоту
         return options;
     }
 

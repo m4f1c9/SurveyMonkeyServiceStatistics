@@ -15,6 +15,11 @@ import org.jugru.monkeyService.model.chart.ChartOptions;
 import org.jugru.monkeyService.model.chart.CrossGroupingChart;
 import org.jugru.monkeyService.model.chart.QuestionOptions;
 import org.jugru.monkeyService.model.chart.ChartData;
+import org.jugru.monkeyService.model.chart.ChoiceGroup;
+import org.jugru.monkeyService.model.chart.GroupedByChoiceChart;
+import org.jugru.monkeyService.model.chart.QuestionDetails;
+import org.jugru.monkeyService.model.chart.SingleQuestionChart;
+import org.jugru.monkeyService.model.chart.UngroupedCharts;
 import org.jugru.monkeyStatistics.service.QuestionMetaInformationService;
 import org.jugru.monkeyStatistics.service.SurveyService;
 import org.jugru.monkeyStatistics.tempData.Conferences;
@@ -36,7 +41,7 @@ public class TMP {
 
     @RequestMapping("/test")
     public List<ChartData> test() {
-        return chartDataBuilder.createChartDataFromChartsPreset(Conferences.test());
+        return chartDataBuilder.createChartDataFromChartsPreset(Conferences.test1());
     }
 
     @Transactional  //TODO !!!!!!!!!111111oneone
@@ -81,13 +86,61 @@ public class TMP {
         return chartDataBuilder.createChartDataFromCrossGroupingChart(cgc);
     }
 
-    
-     @RequestMapping("/jtest")
+    @RequestMapping("/jtest")
     public ChartOptions jtest() {
-       
+
         return new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.FULL);
     }
-    
+
+    @RequestMapping("/cgc11")
+    public GroupedByChoiceChart cgc11() {
+
+        ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.FULL, ChartOptions.Annotation.SHORT);
+        QuestionOptions o = new QuestionOptions(true, true, false);
+        GroupedByChoiceChart chart = new GroupedByChoiceChart("Ваша позиция в компании?", chartOptions);
+        chart.setQuestionOptions(o);
+
+        chart.AddQuestionDetails(new QuestionDetails("HolyJS 2016 Piter", 966831639L, new QuestionOptions(true, true, false)));
+        chart.AddQuestionDetails(new QuestionDetails("HolyJS 2016 Moscow", 1045020001L, new QuestionOptions(true, true, false)));
+        chart.AddQuestionDetails(new QuestionDetails("HolyJS 2017 Piter", 118678197L, new QuestionOptions(true, true, false)));
+
+        ChoiceGroup answer1 = new ChoiceGroup();
+        answer1.setText("Junior Developer");
+        answer1.setChoicesId(new LinkedList<Long>() {
+            {
+                add(10239887091L);
+                add(10789207613L);
+                add(874803001L);
+            }
+        });
+
+        ChoiceGroup answer2 = new ChoiceGroup();
+        answer2.setText("Middle Developer");
+        answer2.setChoicesId(new LinkedList<Long>() {
+            {
+                add(10239887092L);
+                add(10789207614L);
+                add(874803002L);
+            }
+        });
+
+        ChoiceGroup answer3 = new ChoiceGroup();
+        answer3.setText("Senior Developer");
+        answer3.setChoicesId(new LinkedList<Long>() {
+            {
+                add(10239887093L);
+                add(10789207615L);
+                add(874803003L);
+            }
+        });
+
+        chart.addChoiceGroup(answer1);
+        chart.addChoiceGroup(answer2);
+        chart.addChoiceGroup(answer3);
+
+        return chart;
+    }
+
     private class StringLongPair implements Comparable<StringLongPair> {
 
         public StringLongPair(Long Id, String Title) {
