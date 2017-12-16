@@ -2,22 +2,19 @@ package org.jugru.monkeyStatistics.api;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-import org.jugru.monkeyService.model.Choice;
-import org.jugru.monkeyService.model.QuestionMetaInformation;
-import org.jugru.monkeyService.model.Survey;
-import org.jugru.monkeyService.model.chart.Chart;
-import org.jugru.monkeyService.model.chart.ChartData;
-import org.jugru.monkeyService.model.chart.ChartsPreset;
-import org.jugru.monkeyService.model.chart.CrossGroupingChart;
-import org.jugru.monkeyService.model.chart.UngroupedCharts;
-import org.jugru.monkeyStatistics.repository.ChartsPresetRepository;
+
+import org.jugru.monkeyStatistics.model.Choice;
+import org.jugru.monkeyStatistics.model.QuestionMetaInformation;
+import org.jugru.monkeyStatistics.model.Survey;
+import org.jugru.monkeyStatistics.model.chart.Chart;
+import org.jugru.monkeyStatistics.model.chart.ChartData;
+import org.jugru.monkeyStatistics.model.chart.ChartsPreset;
+import org.jugru.monkeyStatistics.model.chart.CrossGroupingChart;
+import org.jugru.monkeyStatistics.model.chart.UngroupedCharts;
 import org.jugru.monkeyStatistics.service.ChartService;
 import org.jugru.monkeyStatistics.service.ChartsPresetService;
 import org.jugru.monkeyStatistics.service.QuestionMetaInformationService;
 import org.jugru.monkeyStatistics.service.SurveyService;
-import org.jugru.monkeyStatistics.tempData.Conferences;
 import org.jugru.monkeyStatistics.util.ChartDataBuilder;
 import org.jugru.monkeyStatistics.util.IdNamePair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +40,13 @@ public class API {
 
     @Autowired
     SurveyService surveyService;
+
+
+    @RequestMapping("/api/saveChart")
+    public Chart saveChart(@RequestBody Chart chart) {
+        return chartService.save(chart);
+    }
+
 
     // TODO
     @RequestMapping("/api/presets")
@@ -133,6 +137,11 @@ public class API {
     @RequestMapping("/api/preview/UC")
     public List<ChartData> drawUC(@RequestBody UngroupedCharts uc) {
         return chartDataBuilder.createChartDataFromUngroupedCharts(uc);
+    }
+
+    @RequestMapping("/api/preview")
+    public List<ChartData> preview(@RequestBody Chart chart) {
+        return chart.createChartData(chartDataBuilder);
     }
 
 }

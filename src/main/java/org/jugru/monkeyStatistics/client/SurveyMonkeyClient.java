@@ -5,12 +5,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-import org.jugru.monkeyService.model.Response;
-import org.jugru.monkeyService.model.Survey;
-import org.jugru.monkeyService.model.util.Collector;
-import org.jugru.monkeyService.model.util.CollectorWrapper;
-import org.jugru.monkeyService.model.util.ListOfResponses;
-import org.jugru.monkeyService.model.util.ListOfSurveys;
+import org.jugru.monkeyStatistics.model.Response;
+import org.jugru.monkeyStatistics.model.Survey;
+import org.jugru.monkeyStatistics.model.util.Collector;
+import org.jugru.monkeyStatistics.model.util.CollectorWrapper;
+import org.jugru.monkeyStatistics.model.util.ListOfResponses;
+import org.jugru.monkeyStatistics.model.util.ListOfSurveys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

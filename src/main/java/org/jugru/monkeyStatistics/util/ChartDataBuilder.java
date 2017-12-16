@@ -9,28 +9,31 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.jugru.monkeyService.model.Choice;
-import org.jugru.monkeyService.model.ChoiceOrRow;
-import org.jugru.monkeyService.model.Row;
-import org.jugru.monkeyService.model.chart.ChartOptions;
-import org.jugru.monkeyService.model.chart.ChartsPreset;
-import org.jugru.monkeyService.model.chart.CrossGroupingChart;
-import org.jugru.monkeyService.model.chart.GroupedByChoiceChart;
-import org.jugru.monkeyService.model.chart.SingleQuestionChart;
-import org.jugru.monkeyService.model.chart.UngroupedCharts;
-import org.jugru.monkeyService.model.chart.ChartData;
-import org.jugru.monkeyService.model.chart.Options;
-import org.jugru.monkeyService.model.chart.ChoiceGroup;
-import org.jugru.monkeyService.model.chart.QuestionDetails;
+import org.jugru.monkeyStatistics.model.Choice;
+import org.jugru.monkeyStatistics.model.ChoiceOrRow;
+import org.jugru.monkeyStatistics.model.chart.ChartOptions;
+import org.jugru.monkeyStatistics.model.chart.ChartsPreset;
+import org.jugru.monkeyStatistics.model.chart.CrossGroupingChart;
+import org.jugru.monkeyStatistics.model.chart.GroupedByChoiceChart;
+import org.jugru.monkeyStatistics.model.chart.SingleQuestionChart;
+import org.jugru.monkeyStatistics.model.chart.UngroupedCharts;
+import org.jugru.monkeyStatistics.model.chart.ChartData;
+import org.jugru.monkeyStatistics.model.chart.Options;
+import org.jugru.monkeyStatistics.model.chart.ChoiceGroup;
+import org.jugru.monkeyStatistics.model.chart.QuestionDetails;
 import org.jugru.monkeyStatistics.service.AnswerService;
 import org.jugru.monkeyStatistics.service.QuestionMetaInformationService;
 import org.jugru.monkeyStatistics.service.QuestionService;
 import org.jugru.monkeyStatistics.service.SurveyService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ChartDataBuilder {
+
+    Logger logger = LoggerFactory.getLogger(ChartDataBuilder.class);
 
     @Autowired
     AnswerService answerService;
@@ -51,6 +54,7 @@ public class ChartDataBuilder {
     public List<ChartData> createChartDataFromChartsPreset(ChartsPreset chartsPreset) {
         List<ChartData> list = new ArrayList<>();
         chartsPreset.getCharts().forEach((t) -> {
+
             list.addAll(t.createChartData(this));
         });
         return list;
@@ -70,6 +74,7 @@ public class ChartDataBuilder {
     }
 
     private ChartData createChartDataFromSingleChart(SingleQuestionChart singleChart, ChartOptions chartOptions, String title) {
+        logger.debug("{}", singleChart);
         ChartData chartData = new ChartData();
 
         Options options = createDefaultOptions(singleChart, chartOptions, title);

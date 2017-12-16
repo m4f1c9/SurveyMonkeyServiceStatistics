@@ -1,12 +1,12 @@
 package org.jugru.monkeyStatistics.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import javax.transaction.Transactional;
-import org.jugru.monkeyService.model.QuestionMetaInformation;
-import org.jugru.monkeyService.model.Survey;
-import org.jugru.monkeyService.model.SurveyPage;
+
+import org.jugru.monkeyStatistics.model.Response;
+import org.jugru.monkeyStatistics.model.Survey;
+import org.jugru.monkeyStatistics.model.SurveyPage;
 import org.jugru.monkeyStatistics.repository.SurveyRepository;
 import org.jugru.monkeyStatistics.service.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +17,9 @@ import org.springframework.stereotype.Service;
 public class SurveyServiceImpl implements SurveyService {
 
     @Autowired
+    private SurveyService surveyService;
+
+    @Autowired
     private SurveyRepository surveyRepository;
 
     
@@ -25,7 +28,7 @@ public class SurveyServiceImpl implements SurveyService {
         return surveyRepository.saveAndFlush(survey);
     }
 
-  //  @Cacheable(cacheNames = "default")
+   @Cacheable(cacheNames = "default")
     @Override
     public Survey get(long id) {
         return surveyRepository.findOne(id);
@@ -37,23 +40,25 @@ public class SurveyServiceImpl implements SurveyService {
         surveyRepository.delete(survey);
     }
 
-  //  @Cacheable(cacheNames = "default")
+   @Cacheable(cacheNames = "default")
     @Override
     public List<Survey> getAll() {
         return surveyRepository.findAll();
     }
 
-   // @Cacheable(cacheNames = "default")
+ //  @Cacheable(cacheNames = "default")
     @Override
     public int countResponsesBySurveyId(Long id) {
-        return surveyRepository.findOne(id).getResponses().size(); //TODO написать запрос на count  
+
+
+        return surveyRepository.findOne(id).getResponses().size(); //TODO написать запрос на count
 
     }
 
-   // @Cacheable(cacheNames = "default")
+    @Cacheable(cacheNames = "default")
     @Override
     public List<SurveyPage> getSurveyPagesFromSurvey(Long id) {
-        return get(id).getPages();
+        return surveyService.get(id).getPages();
     }
 
   //  @Cacheable(cacheNames = "default")

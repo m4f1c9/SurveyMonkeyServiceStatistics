@@ -1,13 +1,11 @@
 package org.jugru.monkeyStatistics.service;
 
 import java.util.List;
-import java.util.Set;
-import org.jugru.monkeyService.model.AnswerMetaInformation;
-import org.jugru.monkeyService.model.Choice;
-import org.jugru.monkeyService.model.ChoiceOrRow;
-import org.jugru.monkeyService.model.QuestionMetaInformation;
-import org.jugru.monkeyService.model.Row;
-import org.jugru.monkeyService.model.Survey;
+
+import org.jugru.monkeyStatistics.model.Choice;
+import org.jugru.monkeyStatistics.model.ChoiceOrRow;
+import org.jugru.monkeyStatistics.model.QuestionMetaInformation;
+import org.jugru.monkeyStatistics.model.Row;
 
 public interface QuestionMetaInformationService extends Service<QuestionMetaInformation> {
 

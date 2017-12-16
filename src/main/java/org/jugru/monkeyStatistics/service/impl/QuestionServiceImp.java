@@ -2,8 +2,8 @@ package org.jugru.monkeyStatistics.service.impl;
 
 import java.util.List;
 import javax.transaction.Transactional;
-import org.jugru.monkeyService.model.Answer;
-import org.jugru.monkeyService.model.Question;
+
+import org.jugru.monkeyStatistics.model.Question;
 import org.jugru.monkeyStatistics.repository.QuestionRepository;
 import org.jugru.monkeyStatistics.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;

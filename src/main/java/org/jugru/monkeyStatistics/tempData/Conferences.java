@@ -3,22 +3,22 @@ package org.jugru.monkeyStatistics.tempData;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import org.jugru.monkeyService.model.chart.ChartOptions;
-import org.jugru.monkeyService.model.chart.ChartsPreset;
-import org.jugru.monkeyService.model.chart.CrossGroupingChart;
-import org.jugru.monkeyService.model.chart.GroupedByChoiceChart;
-import org.jugru.monkeyService.model.chart.QuestionOptions;
-import org.jugru.monkeyService.model.chart.SingleQuestionChart;
-import org.jugru.monkeyService.model.chart.UngroupedCharts;
-import org.jugru.monkeyService.model.chart.QuestionDetails;
-import org.jugru.monkeyService.model.chart.ChoiceGroup;
+import org.jugru.monkeyStatistics.model.chart.ChartOptions;
+import org.jugru.monkeyStatistics.model.chart.ChartsPreset;
+import org.jugru.monkeyStatistics.model.chart.CrossGroupingChart;
+import org.jugru.monkeyStatistics.model.chart.GroupedByChoiceChart;
+import org.jugru.monkeyStatistics.model.chart.QuestionOptions;
+import org.jugru.monkeyStatistics.model.chart.SingleQuestionChart;
+import org.jugru.monkeyStatistics.model.chart.UngroupedCharts;
+import org.jugru.monkeyStatistics.model.chart.QuestionDetails;
+import org.jugru.monkeyStatistics.model.chart.ChoiceGroup;
 
 public class Conferences {
 
     public static ChartsPreset test1() {
 
         ChartsPreset preset = new ChartsPreset("1111!!!!!");
-        preset.setId(1L);
+     //   preset.setId(1L);
         {
             UngroupedCharts ungroupedCharts = new UngroupedCharts();
             ungroupedCharts.setChartName("Ваша позиция в компании?");
@@ -41,7 +41,6 @@ public class Conferences {
             charts.add(cqc);
 
             ungroupedCharts.setCharts(charts);
-            ungroupedCharts.setId(2l);
             preset.AddChart(ungroupedCharts);
 
         }
@@ -122,7 +121,7 @@ public class Conferences {
     public static ChartsPreset test2() {
 
         ChartsPreset preset = new ChartsPreset("1111!!!!!");
-        preset.setId(2L);
+      //  preset.setId(2L);
         {
             UngroupedCharts ungroupedCharts = new UngroupedCharts();
             ungroupedCharts.setChartName("Ваша позиция в компании?");
@@ -137,7 +136,6 @@ public class Conferences {
             charts.add(cqc);
 
             ungroupedCharts.setCharts(charts);
-            ungroupedCharts.setId(1l);
             preset.AddChart(ungroupedCharts);
 
         }

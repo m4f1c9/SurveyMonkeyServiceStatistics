@@ -1,8 +1,8 @@
 package org.jugru.monkeyStatistics.service;
 
 import java.util.List;
-import org.jugru.monkeyService.model.Survey;
-import org.jugru.monkeyService.model.SurveyPage;
+import org.jugru.monkeyStatistics.model.Survey;
+import org.jugru.monkeyStatistics.model.SurveyPage;
 
 public interface SurveyService extends Service<Survey> {
 

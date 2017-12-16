@@ -1,8 +1,7 @@
 package org.jugru.monkeyStatistics.web;
 
 import java.util.List;
-import org.jugru.monkeyService.model.Answer;
-import org.jugru.monkeyService.model.Survey;
+import org.jugru.monkeyStatistics.model.Answer;
 import org.jugru.monkeyStatistics.client.SurveyMonkeyClient;
 import org.jugru.monkeyStatistics.service.AnswerService;
 import org.jugru.monkeyStatistics.service.SurveyService;

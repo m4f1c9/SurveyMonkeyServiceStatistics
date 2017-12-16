@@ -1,7 +1,7 @@
 package org.jugru.monkeyStatistics.repository;
 
 import java.util.List;
-import org.jugru.monkeyService.model.Answer;
+import org.jugru.monkeyStatistics.model.Answer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

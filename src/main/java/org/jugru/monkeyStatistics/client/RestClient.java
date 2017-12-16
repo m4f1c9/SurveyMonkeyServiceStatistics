@@ -1,14 +1,10 @@
 package org.jugru.monkeyStatistics.client;
 
-import java.util.HashSet;
-import java.util.Set;
-import org.jugru.monkeyService.model.Survey;
-import org.jugru.monkeyService.model.Survey;
-import org.jugru.monkeyService.model.util.CollectorWrapper;
-import org.jugru.monkeyService.model.util.Collector;
-import org.jugru.monkeyService.model.util.ListOfResponses;
-import org.jugru.monkeyService.model.util.ListOfSurveys;
-import org.springframework.context.annotation.Bean;
+import org.jugru.monkeyStatistics.model.Survey;
+import org.jugru.monkeyStatistics.model.util.CollectorWrapper;
+import org.jugru.monkeyStatistics.model.util.Collector;
+import org.jugru.monkeyStatistics.model.util.ListOfResponses;
+import org.jugru.monkeyStatistics.model.util.ListOfSurveys;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;

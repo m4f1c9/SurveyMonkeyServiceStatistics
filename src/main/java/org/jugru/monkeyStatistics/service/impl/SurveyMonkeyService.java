@@ -3,7 +3,7 @@ package org.jugru.monkeyStatistics.service.impl;
 import java.util.List;
 import java.util.Objects;
 import javax.transaction.Transactional;
-import org.jugru.monkeyService.model.Survey;
+import org.jugru.monkeyStatistics.model.Survey;
 import org.jugru.monkeyStatistics.client.SurveyMonkeyClient;
 import org.jugru.monkeyStatistics.service.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,15 +40,19 @@ public class SurveyMonkeyService {
                 filter((t) -> {
                     return !Objects.equals(t.getStatus(), "closed");
                 }).
-                limit(5).
+                limit(2).
                 peek((survey) -> {
                     survey.addNewResponses(surveyMonkeyClient.getAllResponsesBySurveyId(survey.getId()));
                 }).
                 peek((survey) -> {
                  //   survey.setStatus(surveyMonkeyClient.getSurveyStatus(survey));
-                     survey.setStatus("closed");
+                     survey.setStatus("closed"); //TODO настроить обновление ответов(убрать дублирование)
                 }).
-                forEach(surveyService::save);
+               // forEach(surveyService::save);
+                       forEach(survey -> {
+                   surveyService.save(survey);
+                   System.gc();
+               });
     }
 
 }

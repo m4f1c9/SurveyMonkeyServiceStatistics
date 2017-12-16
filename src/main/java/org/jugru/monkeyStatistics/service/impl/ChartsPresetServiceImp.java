@@ -3,16 +3,20 @@ package org.jugru.monkeyStatistics.service.impl;
 import java.util.LinkedList;
 import java.util.List;
 import javax.transaction.Transactional;
-import org.jugru.monkeyService.model.chart.ChartsPreset;
+import org.jugru.monkeyStatistics.model.chart.ChartsPreset;
 import org.jugru.monkeyStatistics.repository.ChartsPresetRepository;
 import org.jugru.monkeyStatistics.service.ChartsPresetService;
 import org.jugru.monkeyStatistics.util.IdNamePair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Transactional
 @Service
 public class ChartsPresetServiceImp implements ChartsPresetService {
+
+    Logger logger = LoggerFactory.getLogger(ChartsPresetService.class);
 
     @Autowired
     ChartsPresetRepository chartsPresetRepository;

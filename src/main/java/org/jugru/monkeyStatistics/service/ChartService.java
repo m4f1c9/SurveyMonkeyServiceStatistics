@@ -1,6 +1,6 @@
 package org.jugru.monkeyStatistics.service;
 
-import org.jugru.monkeyService.model.chart.Chart;
+import org.jugru.monkeyStatistics.model.chart.Chart;
 
 /**
  *

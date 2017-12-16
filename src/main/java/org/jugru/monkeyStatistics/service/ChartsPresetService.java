@@ -1,7 +1,7 @@
 package org.jugru.monkeyStatistics.service;
 
 import java.util.List;
-import org.jugru.monkeyService.model.chart.ChartsPreset;
+import org.jugru.monkeyStatistics.model.chart.ChartsPreset;
 import org.jugru.monkeyStatistics.util.IdNamePair;
 
 /**

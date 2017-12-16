@@ -1,10 +1,7 @@
 package org.jugru.monkeyStatistics.web;
 
-import javax.transaction.Transactional;
-import org.jugru.monkeyService.model.Survey;
+import org.jugru.monkeyStatistics.model.Survey;
 import org.jugru.monkeyStatistics.client.SurveyMonkeyClient;
-import org.jugru.monkeyStatistics.client.RestClient;
-import org.jugru.monkeyStatistics.repository.SurveyRepository;
 import org.jugru.monkeyStatistics.service.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

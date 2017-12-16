@@ -3,15 +3,14 @@ package org.jugru.monkeyStatistics.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import javax.transaction.Transactional;
-import org.jugru.monkeyService.model.AnswerMetaInformation;
-import org.jugru.monkeyService.model.Choice;
-import org.jugru.monkeyService.model.ChoiceOrRow;
-import org.jugru.monkeyService.model.Other;
-import org.jugru.monkeyService.model.QuestionMetaInformation;
-import org.jugru.monkeyService.model.Row;
-import org.jugru.monkeyService.model.Survey;
+import org.jugru.monkeyStatistics.model.AnswerMetaInformation;
+import org.jugru.monkeyStatistics.model.Choice;
+import org.jugru.monkeyStatistics.model.ChoiceOrRow;
+import org.jugru.monkeyStatistics.model.Other;
+import org.jugru.monkeyStatistics.model.QuestionMetaInformation;
+import org.jugru.monkeyStatistics.model.Row;
+import org.jugru.monkeyStatistics.model.Survey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.jugru.monkeyStatistics.repository.QuestionMetaInformationRepository;
 import org.jugru.monkeyStatistics.service.QuestionMetaInformationService;
@@ -22,6 +21,9 @@ import org.springframework.stereotype.Service;
 @Transactional
 @Service
 public class QuestionMetaInformationServiceImp implements QuestionMetaInformationService {
+
+    @Autowired
+    private QuestionMetaInformationService questionMetaInformationService;
 
     @Autowired
     private QuestionMetaInformationRepository questionMetaInformationRepository;
@@ -61,11 +63,11 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
                 map(Other::getId).orElse(null);
     }
 
-   // @Cacheable(cacheNames = "default")
+    //@Cacheable(cacheNames = "default")
     @Override
     public List<Choice> getChoicesByQuestionMetaInformationId(Long id) {
 
-        List<Choice> l = get(id).getAnswers().getChoices();
+        List<Choice> l = questionMetaInformationService.get(id).getAnswers().getChoices();
         l.size(); //TODO
         return l;
 
@@ -75,7 +77,7 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
     @Override
     public List<Row> getRowsByQuestionMetaInformationId(Long id) {
 
-        List<Row> l = get(id).getAnswers().getRows();
+        List<Row> l = questionMetaInformationService.get(id).getAnswers().getRows();
         l.size(); //TODO
         return l;
 
@@ -84,9 +86,9 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
     @Cacheable(cacheNames = "default")
     public List<? extends ChoiceOrRow> getChoiceOrRowsByQuestionMetaInformationId(Long id, boolean UseRow_idInstedOfChoice_id) {
         if (UseRow_idInstedOfChoice_id) {
-            return getRowsByQuestionMetaInformationId(id);
+            return questionMetaInformationService.getRowsByQuestionMetaInformationId(id);
         } else {
-            return getChoicesByQuestionMetaInformationId(id);
+            return questionMetaInformationService.getChoicesByQuestionMetaInformationId(id);
         }
     }
 
@@ -104,12 +106,12 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
 
     @Cacheable(cacheNames = "default")
     public Integer countChoicesByQuestionMetaInformationId(Long id) {
-        return get(id).getAnswers().getChoices().size();
+        return questionMetaInformationService.get(id).getAnswers().getChoices().size();
     }
 
     @Cacheable(cacheNames = "default")
     public Integer countRowsByQuestionMetaInformationId(Long id) {
-        return get(id).getAnswers().getRows().size();
+        return questionMetaInformationService.get(id).getAnswers().getRows().size();
     }
 
     @Cacheable(cacheNames = "default")

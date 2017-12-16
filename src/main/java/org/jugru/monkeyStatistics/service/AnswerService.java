@@ -1,7 +1,7 @@
 package org.jugru.monkeyStatistics.service;
 
 import java.util.List;
-import org.jugru.monkeyService.model.Answer;
+import org.jugru.monkeyStatistics.model.Answer;
 
 public interface AnswerService extends Service<Answer> {
 
