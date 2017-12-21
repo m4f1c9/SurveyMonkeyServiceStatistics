@@ -1,6 +1,6 @@
 function saveU() {
     let editArea = $(this).closest('.edit-area');
-   let answer = collectUData(editArea);
+    let answer = collectUData(editArea);
 
 
     $.ajax({
@@ -11,12 +11,10 @@ function saveU() {
         async: false,
         data: JSON.stringify(answer),
         success: function (inputData) {
-            alert('Ок');
             drawChartById(editArea.find('.chart'), answer.id);
         },
 
         error: function (inputData) {
-            alert('Что-то сломалось');
         }
     });
 
@@ -115,7 +113,6 @@ function addUngpoupedQuestions(div, chartsData) {
 }
 
 
-
 function createUEditArea(id, div, chartsData) {
     div.addClass(chartsData.id.toString());
     div.append($(' <input class="chart-id" hidden type="text" value="' + id + '">'));
@@ -128,6 +125,7 @@ function createUEditArea(id, div, chartsData) {
     div.append(createChartCheckboxes(chartsData.chartOptions));
     let buttons = createCommonQuestions();
     buttons.find('.save').on('click', saveU);
+    buttons.append('<button class="add-question">Добавить вопрос</button>')
     div.append(buttons);
 
     let chartDiv = $('<div class="chart"></div>');
@@ -137,12 +135,82 @@ function createUEditArea(id, div, chartsData) {
 
     buttons.append($('<button class="reDrawCG">Перерисовать</button>'))
     buttons.find('.reDrawCG').on('click', reDrawU);
+    buttons.find('.add-question').on('click', addUQuestion);
+}
+
+function getGr() {
+    $(this).closest('.single-question-div').remove();
 }
 
 
 
+function addUQuestion() {
+    let questions = $(this).closest('.edit-area').find('.ungrouped-question');
+    let singleQuestions = $('<div class="single-question-div"></div>');
+    singleQuestions.append($('<h3>' + (questions.children().length + 1) + ' вопрос</h3>'));
 
-function reDrawU(){
+    // Переделать
+    let delChart= $('<button class="delete-gr">Удалить этот вопрос</button>');
+    delChart.on('click', getGr);
+    singleQuestions.append(delChart);
+
+
+    let surveys = $('.surveys-select').clone();
+    surveys.removeClass('surveys-select');
+    surveys.addClass('surveys-select-chart');
+
+    singleQuestions.append($('<h3>Опрос</h3>'));
+    singleQuestions.append(surveys);
+
+    singleQuestions.append($('<h3>Имя конференции</h3>'));
+    singleQuestions.append($(' <input class="single-chart-name" type="text" value="">'));
+
+
+    let question = $('<select class="question"></select>');
+    $.ajax({
+        url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + surveys.find('option:selected').val(),
+        dataType: "json",
+        success: function (questionsData) {
+            for (var i = 0; i < questionsData.length; i++) {
+                var t = questionsData[i];
+                question.append('<option value="' + t.id + '">' + t.name + '</option>');
+            }
+
+        }
+    });
+
+
+
+    surveys.on('change', function () {
+        $.ajax({
+            url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + $(this).find('option:selected').val(),
+            dataType: "json",
+            success: function (questionsData) {
+                question.empty();
+                for (var i = 0; i < questionsData.length; i++) {
+                    var t = questionsData[i];
+                    question.append('<option value="' + t.id + '">' + t.name + '</option>');
+                }
+
+            }
+        });
+    });
+
+    let questionOptions = {};
+    questionOptions.withCustomChoice = false;
+    questionOptions.withNoChoice = false;
+
+    singleQuestions.append($('<h3>Вопрос</h3>'));
+    singleQuestions.append(question);
+    singleQuestions.append(createQuestionsCheckboxes(questionOptions));
+
+    questions.append(singleQuestions);
+
+
+}
+
+
+function reDrawU() {
     let editArea = $(this).closest('.edit-area');
     let data = collectUData(editArea);
     drawChartByData(editArea.find('.chart'), data);

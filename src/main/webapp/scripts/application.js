@@ -3,6 +3,79 @@ function editpage() {
     showPresets();
     showSurveys();
     $('.preset-edit').on('click', editPreset);
+    $('.preset-add').on('click', createPreset);
+    $('.preset-delete').on('click', deletePreset);
+    $('.add-chart').on('click', addChart);
+}
+
+
+function addChart() {
+    let type = $(this).closest('.main-buttons').find('.new-chart option:selected').val();
+    let id = $(this).closest('body').find('.presets').find('.presets-select').find('option:selected').val();
+    let workArea = $(this).closest('body').find('.work-area');
+    $.ajax({
+        url: "/MonkeyStatistics/api/create/chart",
+        data: "type=" + type + "&id=" + id,
+        method: "POST",
+        success: function (data) {
+            let newDiv = $('<div class=edit-area></div>');
+            workArea.append(newDiv);
+            createEditArea(data.id, newDiv);
+
+        }
+    });
+}
+
+
+function deletePreset() {
+
+
+    let id = $(this).closest('body').find('.presets').find('.presets-select').find('option:selected').val();
+    let presets = $(this).closest('body').find('.presets').find('.presets-select');
+    let workArea = $(this).closest('body').find('.work-area');
+    $.ajax({
+        url: "/MonkeyStatistics/api/delete/preset?id=" + id,
+
+        method: "POST",
+        success: function (surveysData) {
+            presets.find('option[value=' + id + ']').remove();
+            workArea.empty();
+        }
+    });
+
+}
+
+function createPreset() {
+    let text = $(this).closest('.main-buttons').find('.preset-name').val();
+    let presets = $(this).closest('body').find('.presets').find('.presets-select');
+    $.ajax({
+        url: "/MonkeyStatistics/api/create/preset",
+        data: "name=" + text,
+        method: "POST",
+        success: function (surveysData) {
+
+            presets.append('<option value="' + surveysData.id + '">' + surveysData.name + '</option>');
+            presets.find('option[value=' + surveysData.id + ']').attr('selected', 'selected');
+
+            let presetId = surveysData.id;
+            $.ajax({
+                url: "/MonkeyStatistics/api/charts?id=" + presetId,
+                dataType: "json",
+                success: function (chartsData) {
+                    let workArea = $('.work-area');
+                    workArea.empty();
+                    for (var i = 0; i < chartsData.length; i++) {
+                        let newDiv = $('<div class=edit-area></div>');
+                        workArea.append(newDiv);
+                        createEditArea(chartsData[i].id, newDiv);
+                    }
+                }
+            });
+        }
+    });
+
+
+
 }
 
 function showPresets() {
@@ -52,7 +125,7 @@ function editPreset() {
 }
 
 
-function drawChart(div, id ) {
+function drawChart(div, id) {
     $.ajax({
         url: "/MonkeyStatistics/api/draw/chart?id=" + id,
         success: function (chartData) {
@@ -87,8 +160,6 @@ function createEditArea(id, div) {
 }
 
 
-
-
 function createQuestionsCheckboxes(questionOptions) {
     let div = $('<div class="question-checkboxes"></div>');
     let cb1 = $(' <input type="checkbox" class="custom-choice">Включить свой выбор<Br> ');
@@ -107,7 +178,7 @@ function createQuestionsCheckboxes(questionOptions) {
 
 function createChartCheckboxes(chartOptions) {
     let div = $('<div class="chart-checkboxes"></div>');
-    let cb1 = $(' <input type="checkbox" class="tooltip">Полные тултипы<Br> ');
+    let cb1 = $(' <input type="checkbox" class="tooltip" checked>Полные тултипы<Br> ');
     let cb2 = $(' <input type="checkbox" class="annotation">Полные подписи<Br> ');
     let cb3 = $(' <input type="checkbox" class="gradient">Использовать градиент<Br> ');
     if (chartOptions.tooltip == 'FULL') {
@@ -130,17 +201,32 @@ function createChartCheckboxes(chartOptions) {
 
 function createCommonQuestions() {
     let div = $('<div class="common-question"></div>');
-    let cb1 = $('<button>Удалить</button>');
+    let cb1 = $('<button class="delete-chart">Удалить</button>');
     let cb2 = $('<button class="save">Сохранить</button> ');
     div.append('<h3>Кнопки</h3>');
     div.append(cb1);
     div.append(cb2);
+
+    cb1.on('click', deleteChart);
+
     return div;
 }
 
 
+function deleteChart() {
+    let id = $(this).closest('.edit-area').find('.chart-id').val();
+    let workArea = $(this).closest('.edit-area');
 
+    $.ajax({
+        url: "/MonkeyStatistics/api/delete/chart",
+        data: "id=" + id,
+        method: "POST",
+        success: function (data) {
+            workArea.remove();
 
+        }
+    });
+}
 
 
 function drawChartById(div, id) {
@@ -228,9 +314,6 @@ function show() {
         }
     });
 }
-
-
-
 
 
 /*

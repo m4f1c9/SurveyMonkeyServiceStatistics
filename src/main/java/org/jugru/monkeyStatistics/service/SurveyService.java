@@ -1,6 +1,9 @@
 package org.jugru.monkeyStatistics.service;
 
+import java.util.Collection;
 import java.util.List;
+
+import org.jugru.monkeyStatistics.model.Response;
 import org.jugru.monkeyStatistics.model.Survey;
 import org.jugru.monkeyStatistics.model.SurveyPage;
 
@@ -14,4 +17,6 @@ public interface SurveyService extends Service<Survey> {
     int countResponsesBySurveyId(Long id);
 
     List<SurveyPage> getSurveyPagesFromSurvey(Long id);
+
+    void addNewResponses (Survey s, Collection<Response> c);
 }

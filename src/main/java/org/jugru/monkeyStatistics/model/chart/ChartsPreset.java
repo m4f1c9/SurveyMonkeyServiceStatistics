@@ -48,7 +48,7 @@ public class ChartsPreset {
     }
 
 
-    public void AddChart(Chart chart) {
+    public void addChart(Chart chart) {
         charts.add(chart);
     }
 

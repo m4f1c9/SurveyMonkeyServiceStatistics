@@ -75,5 +75,5 @@ public class Question {
         return "Question{" + "AppId=" + appId + ", id=" + id + '}';
     }
 
-    
+
 }

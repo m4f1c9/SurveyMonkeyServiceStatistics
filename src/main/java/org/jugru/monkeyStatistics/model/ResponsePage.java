@@ -72,6 +72,6 @@ public class ResponsePage {
         return "ResponsePage{" + "appId=" + appId + ", id=" + id + '}';
     }
 
-    
+
 
 }

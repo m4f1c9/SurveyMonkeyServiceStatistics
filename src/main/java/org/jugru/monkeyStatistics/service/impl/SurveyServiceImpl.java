@@ -1,5 +1,6 @@
 package org.jugru.monkeyStatistics.service.impl;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import javax.transaction.Transactional;
@@ -12,7 +13,7 @@ import org.jugru.monkeyStatistics.service.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-@Transactional
+@Transactional()
 @Service
 public class SurveyServiceImpl implements SurveyService {
 
@@ -28,7 +29,7 @@ public class SurveyServiceImpl implements SurveyService {
         return surveyRepository.saveAndFlush(survey);
     }
 
-   @Cacheable(cacheNames = "default")
+   @Cacheable(cacheNames = "default1")
     @Override
     public Survey get(long id) {
         return surveyRepository.findOne(id);
@@ -40,7 +41,7 @@ public class SurveyServiceImpl implements SurveyService {
         surveyRepository.delete(survey);
     }
 
-   @Cacheable(cacheNames = "default")
+   @Cacheable(cacheNames = "default1")
     @Override
     public List<Survey> getAll() {
         return surveyRepository.findAll();
@@ -55,7 +56,7 @@ public class SurveyServiceImpl implements SurveyService {
 
     }
 
-    @Cacheable(cacheNames = "default")
+    @Cacheable(cacheNames = "default1")
     @Override
     public List<SurveyPage> getSurveyPagesFromSurvey(Long id) {
         return surveyService.get(id).getPages();
@@ -67,5 +68,10 @@ public class SurveyServiceImpl implements SurveyService {
         return surveyRepository.findSurveyIdByQuestionMetaInformationId(id);
     }
 
-    
+    @Transactional
+    @Override
+    public void addNewResponses(Survey s, Collection<Response> c) {
+        s.getResponses().size(); //TODO
+        s.addNewResponses(c);
+    }
 }

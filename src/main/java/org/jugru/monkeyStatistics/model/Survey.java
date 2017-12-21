@@ -26,7 +26,7 @@ public class Survey implements Comparable<Survey> {
     @OrderColumn
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     List<SurveyPage> pages = new ArrayList<>();
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Response> responses = new HashSet<>();
 
     // TODO разобратся с  FetchType.LAZY, т.к. мапа пустая то  нужна сессия при добавлении

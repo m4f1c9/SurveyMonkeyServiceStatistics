@@ -1,85 +1,91 @@
-{
-  "type": "GroupedByChoiceChart",
-  "id": 358,
-  "chartName": "Ваша позиция в компании?",
-  "choiceGroups": [
-    {
-      "id": 39,
-      "text": "Senior Developer",
-      "choicesId": [
-        874803003,
-        10789207615,
-        10239887093
+[
+  {
+    "id": null,
+    "data": [
+      [
+        "",
+        "piter",
+        {
+          "role": "annotation"
+        },
+        {
+          "role": "tooltip"
+        },
+        "moskow",
+        {
+          "role": "annotation"
+        },
+        {
+          "role": "tooltip"
+        }
+      ],
+      [
+        "c1",
+        35.62,
+        "114 из 320 (35.62%)",
+        "114 из 320 (35.62%)"
+      ],
+      [
+        "c2",
+        34.06,
+        "109 из 320 (34.06%)",
+        "109 из 320 (34.06%)",
+        30.73,
+        "118 из 384 (30.73%)",
+        "118 из 384 (30.73%)"
+      ],
+      [
+        "c3",
+        7.5,
+        "24 из 320 (7.5%)",
+        "24 из 320 (7.5%)",
+        7.55,
+        "29 из 384 (7.55%)",
+        "29 из 384 (7.55%)"
       ]
-    },
-    {
-      "id": 38,
-      "text": "Middle Developer",
-      "choicesId": [
-        874803002,
-        10789207614,
-        10239887092
-      ]
-    },
-    {
-      "id": 37,
-      "text": "Junior Developer",
-      "choicesId": [
-        874803001,
-        10789207613,
-        10239887091
-      ]
+    ],
+    "options": {
+      "height": 320,
+      "bars": "horizontal",
+      "title": "null",
+      "chartArea": {
+        "width": "70%",
+        "height": "100%",
+        "left": "15%",
+        "top": "50"
+      },
+      "legend": {
+        "textStyle": {
+          "fontSize": 15,
+          "color": "black"
+        }
+      },
+      "colors": null,
+      "annotations": {
+        "alwaysOutside": false,
+        "textStyle": {
+          "fontSize": 17,
+          "color": "black"
+        },
+        "style": "point"
+      },
+      "hAxis": {
+        "textStyle": {
+          "fontSize": 20,
+          "color": "black"
+        }
+      },
+      "vAxis": {
+        "textStyle": {
+          "fontSize": 14,
+          "color": "black"
+        }
+      },
+      "theme": "material",
+      "titleTextStyle": {
+        "fontSize": 20,
+        "color": "black"
+      }
     }
-  ],
-  "questionDetails": [
-    {
-      "id": 39,
-      "name": "HolyJS 2017 Piter",
-      "questionId": 118678197,
-      "questionOptions": {
-        "id": 361,
-        "withCustomChoice": true,
-        "withNoChoice": true,
-        "useRow_idInstedOfChoice_id": false
-      },
-      "surveyId": 117652322
-    },
-    {
-      "id": 38,
-      "name": "HolyJS 2016 Moscow",
-      "questionId": 1045020001,
-      "questionOptions": {
-        "id": 360,
-        "withCustomChoice": true,
-        "withNoChoice": true,
-        "useRow_idInstedOfChoice_id": false
-      },
-      "surveyId": 87269535
-    },
-    {
-      "id": 37,
-      "name": "HolyJS 2016 Piter",
-      "questionId": 966831639,
-      "questionOptions": {
-        "id": 359,
-        "withCustomChoice": true,
-        "withNoChoice": true,
-        "useRow_idInstedOfChoice_id": false
-      },
-      "surveyId": 80191211
-    }
-  ],
-  "chartOptions": {
-    "id": 356,
-    "tooltip": "FULL",
-    "annotation": "SHORT",
-    "useGradient": false
-  },
-  "questionOptions": {
-    "id": 357,
-    "withCustomChoice": true,
-    "withNoChoice": true,
-    "useRow_idInstedOfChoice_id": false
-  },
-  "clazz": "org.jugru.monkeyStatistics.model.chart.GroupedByChoiceChart"
-}
+  }
+]

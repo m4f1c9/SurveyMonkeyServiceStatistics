@@ -9,13 +9,8 @@ import javax.transaction.Transactional;
 import org.jugru.monkeyStatistics.model.QuestionMetaInformation;
 import org.jugru.monkeyStatistics.model.Survey;
 import org.jugru.monkeyStatistics.model.SurveyPage;
-import org.jugru.monkeyStatistics.model.chart.ChartOptions;
-import org.jugru.monkeyStatistics.model.chart.CrossGroupingChart;
-import org.jugru.monkeyStatistics.model.chart.QuestionOptions;
-import org.jugru.monkeyStatistics.model.chart.ChartData;
-import org.jugru.monkeyStatistics.model.chart.ChoiceGroup;
-import org.jugru.monkeyStatistics.model.chart.GroupedByChoiceChart;
-import org.jugru.monkeyStatistics.model.chart.QuestionDetails;
+import org.jugru.monkeyStatistics.model.chart.*;
+import org.jugru.monkeyStatistics.service.ChartService;
 import org.jugru.monkeyStatistics.service.QuestionMetaInformationService;
 import org.jugru.monkeyStatistics.service.SurveyService;
 import org.jugru.monkeyStatistics.tempData.Conferences;
@@ -28,12 +23,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TMP {
 
+
+
     @Autowired
     SurveyService surveyService;
     @Autowired
     QuestionMetaInformationService questionMetaInformationService;
     @Autowired
     ChartDataBuilder chartDataBuilder;
+
+    @Autowired
+    ChartService chartService;
 
     @RequestMapping("/test")
     public List<ChartData> test() {
@@ -89,50 +89,11 @@ public class TMP {
     }
 
     @RequestMapping("/cgc11")
-    public GroupedByChoiceChart cgc11() {
+    public Chart cgc11() {
 
-        ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.FULL, ChartOptions.Annotation.SHORT);
-        QuestionOptions o = new QuestionOptions(true, true, false);
-        GroupedByChoiceChart chart = new GroupedByChoiceChart("Ваша позиция в компании?", chartOptions);
-        chart.setQuestionOptions(o);
 
-        chart.AddQuestionDetails(new QuestionDetails("HolyJS 2016 Piter", 966831639L, new QuestionOptions(true, true, false)));
-        chart.AddQuestionDetails(new QuestionDetails("HolyJS 2016 Moscow", 1045020001L, new QuestionOptions(true, true, false)));
-        chart.AddQuestionDetails(new QuestionDetails("HolyJS 2017 Piter", 118678197L, new QuestionOptions(true, true, false)));
+        Chart chart = chartService.get(56L);
 
-        ChoiceGroup answer1 = new ChoiceGroup();
-        answer1.setText("Junior Developer");
-        answer1.setChoicesId(new LinkedList<Long>() {
-            {
-                add(10239887091L);
-                add(10789207613L);
-                add(874803001L);
-            }
-        });
-
-        ChoiceGroup answer2 = new ChoiceGroup();
-        answer2.setText("Middle Developer");
-        answer2.setChoicesId(new LinkedList<Long>() {
-            {
-                add(10239887092L);
-                add(10789207614L);
-                add(874803002L);
-            }
-        });
-
-        ChoiceGroup answer3 = new ChoiceGroup();
-        answer3.setText("Senior Developer");
-        answer3.setChoicesId(new LinkedList<Long>() {
-            {
-                add(10239887093L);
-                add(10789207615L);
-                add(874803003L);
-            }
-        });
-
-        chart.addChoiceGroup(answer1);
-        chart.addChoiceGroup(answer2);
-        chart.addChoiceGroup(answer3);
 
         return chart;
     }

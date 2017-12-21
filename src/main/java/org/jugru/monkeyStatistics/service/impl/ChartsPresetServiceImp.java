@@ -3,8 +3,10 @@ package org.jugru.monkeyStatistics.service.impl;
 import java.util.LinkedList;
 import java.util.List;
 import javax.transaction.Transactional;
-import org.jugru.monkeyStatistics.model.chart.ChartsPreset;
+
+import org.jugru.monkeyStatistics.model.chart.*;
 import org.jugru.monkeyStatistics.repository.ChartsPresetRepository;
+import org.jugru.monkeyStatistics.service.ChartService;
 import org.jugru.monkeyStatistics.service.ChartsPresetService;
 import org.jugru.monkeyStatistics.util.IdNamePair;
 import org.slf4j.Logger;
@@ -20,6 +22,12 @@ public class ChartsPresetServiceImp implements ChartsPresetService {
 
     @Autowired
     ChartsPresetRepository chartsPresetRepository;
+
+    @Autowired
+    ChartsPresetService chartsPresetService;
+
+    @Autowired
+    ChartService chartService;
 
     @Override
     public ChartsPreset save(ChartsPreset t) {
@@ -50,13 +58,34 @@ public class ChartsPresetServiceImp implements ChartsPresetService {
         return answer;
     }
 
-    @Override
+    @Override //TODO убрать проверку на null
     public List<IdNamePair> getIdNamePairsByPresetId(Long id) {
         List<IdNamePair> answer = new LinkedList<>();
+
         get(id).getCharts().forEach((t) -> {
-            answer.add(new IdNamePair(t.getId(), t.getChartName()));
+            if (t != null) {
+                answer.add(new IdNamePair(t.getId(), t.getChartName()));
+            }
         });
         return answer;
     }
 
+    @Override
+    public Chart createChart(Long id, String type) {
+        Chart chart;
+        if ("GC".equals(type)) {
+            chart = new GroupedByChoiceChart(new QuestionOptions());
+        } else if ("U".equals(type)) {
+            chart = new UngroupedCharts();
+        } else {
+            chart = new CrossGroupingChart(new QuestionOptions(), new QuestionOptions());
+        }
+        chart.setChartOptions(new ChartOptions());
+        chart.setChartName("");
+        chart = chartService.save(chart);
+        ChartsPreset preset = chartsPresetService.get(id);
+        preset.addChart(chart);
+
+        return chart;
+    }
 }

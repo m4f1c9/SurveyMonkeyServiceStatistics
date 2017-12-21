@@ -17,6 +17,7 @@ function createCGEditArea(id, div, chartsData) {
         $.ajax({
             url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + $(this).find('option:selected').val(),
             dataType: "json",
+            async:false, //TODO
             success: function (questionsData) {
                 firstQuestion.empty();
                 secondQuestion.empty();
@@ -47,16 +48,18 @@ function createCGEditArea(id, div, chartsData) {
     buttons.find('.save').on('click', saveCG);
 
     div.append(buttons);
-
+   surveys.change();
     $.ajax({
         url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + chartsData.surveyId,
         dataType: "json",
+        async:false, //TODO
         success: function (questionsData) {
+            firstQuestion.empty();
+            secondQuestion.empty();
             for (var i = 0; i < questionsData.length; i++) {
                 var t = questionsData[i];
                 firstQuestion.append('<option value="' + t.id + '">' + t.name + '</option>');
                 secondQuestion.append('<option value="' + t.id + '">' + t.name + '</option>');
-
             }
             firstQuestion.find('option[value=' + chartsData.firstQuestionMetaInformationId + ']').attr('selected', 'selected');
             secondQuestion.find('option[value=' + chartsData.secondQuestionMetaInformationId + ']').attr('selected', 'selected');
@@ -71,6 +74,7 @@ function createCGEditArea(id, div, chartsData) {
 
     buttons.append($('<button class="reDrawCG">Перерисовать</button>'))
    buttons.find('.reDrawCG').on('click', reDrawCG);
+
 
 }
 
@@ -94,13 +98,11 @@ function saveCG() {
         async: false,
         data: JSON.stringify(answer),
         success: function (inputData) {
-            alert('Ок');
             drawChartById(editArea.find('.chart'), answer.id);
 
         },
 
         error: function (inputData) {
-            alert('Что-то сломалось');
         }
     });
 

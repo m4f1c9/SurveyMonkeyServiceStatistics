@@ -17,54 +17,54 @@ public class Conferences {
 
     public static ChartsPreset test1() {
 
-        ChartsPreset preset = new ChartsPreset("1111!!!!!");
+        ChartsPreset preset = new ChartsPreset("second");
      //   preset.setId(1L);
-        {
-            UngroupedCharts ungroupedCharts = new UngroupedCharts();
-            ungroupedCharts.setChartName("Ваша позиция в компании?");
-            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT);
-
-            ungroupedCharts.setChartOptions(chartOptions);
-
-            List<SingleQuestionChart> charts = new ArrayList<>();
-            SingleQuestionChart cqc;
-            cqc = new SingleQuestionChart("Mobius 2017 Moscow", 203746709L);
-            cqc.setQuestionOptions(new QuestionOptions(true, true, false));
-            charts.add(cqc);
-
-            cqc = new SingleQuestionChart("Mobius 2017", 1076553275L);
-            cqc.setQuestionOptions(new QuestionOptions(true, true, false));
-            charts.add(cqc);
-
-            cqc = new SingleQuestionChart("Mobius 2016", 966220518L);
-            cqc.setQuestionOptions(new QuestionOptions(true, true, false));
-            charts.add(cqc);
-
-            ungroupedCharts.setCharts(charts);
-            preset.AddChart(ungroupedCharts);
-
-        }
-
-        {
-            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT);
-            CrossGroupingChart cgc = new CrossGroupingChart("Слот 10:30 – 11:20.", 203789246L, 203789403L, chartOptions);
-            cgc.setHideLastChoiceInFirstQuestion(true);
-            cgc.setHideLastChoiceInSecondQuestion(true);
-            cgc.setFirstQuestionOptions(new QuestionOptions(true, true, false));
-            cgc.setSecondQuestionOptions(new QuestionOptions(true, true, false));
-            preset.AddChart(cgc);
-
-        }
-        {
-            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT);
-            CrossGroupingChart cgc = new CrossGroupingChart("1212121212", 203746709L, 203746707L, chartOptions);
-            cgc.setHideLastChoiceInFirstQuestion(false);
-            cgc.setHideLastChoiceInSecondQuestion(false);
-            cgc.setFirstQuestionOptions(new QuestionOptions(true, true, false));
-            cgc.setSecondQuestionOptions(new QuestionOptions(true, true, false));
-            preset.AddChart(cgc);
-
-        }
+//        {
+//            UngroupedCharts ungroupedCharts = new UngroupedCharts();
+//            ungroupedCharts.setChartName("Ваша позиция в компании?");
+//            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT);
+//
+//            ungroupedCharts.setChartOptions(chartOptions);
+//
+//            List<SingleQuestionChart> charts = new ArrayList<>();
+//            SingleQuestionChart cqc;
+//            cqc = new SingleQuestionChart("Mobius 2017 Moscow", 203746709L);
+//            cqc.setQuestionOptions(new QuestionOptions(true, true, false));
+//            charts.add(cqc);
+//
+//            cqc = new SingleQuestionChart("Mobius 2017", 1076553275L);
+//            cqc.setQuestionOptions(new QuestionOptions(true, true, false));
+//            charts.add(cqc);
+//
+//            cqc = new SingleQuestionChart("Mobius 2016", 966220518L);
+//            cqc.setQuestionOptions(new QuestionOptions(true, true, false));
+//            charts.add(cqc);
+//
+//            ungroupedCharts.setCharts(charts);
+//            preset.addChart(ungroupedCharts);
+//
+//        }
+//
+//        {
+//            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT);
+//            CrossGroupingChart cgc = new CrossGroupingChart("Слот 10:30 – 11:20.", 203789246L, 203789403L, chartOptions);
+//            cgc.setHideLastChoiceInFirstQuestion(true);
+//            cgc.setHideLastChoiceInSecondQuestion(true);
+//            cgc.setFirstQuestionOptions(new QuestionOptions(true, true, false));
+//            cgc.setSecondQuestionOptions(new QuestionOptions(true, true, false));
+//            preset.addChart(cgc);
+//
+//        }
+//        {
+//            ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.SHORT, ChartOptions.Annotation.SHORT);
+//            CrossGroupingChart cgc = new CrossGroupingChart("1212121212", 203746709L, 203746707L, chartOptions);
+//            cgc.setHideLastChoiceInFirstQuestion(false);
+//            cgc.setHideLastChoiceInSecondQuestion(false);
+//            cgc.setFirstQuestionOptions(new QuestionOptions(true, true, false));
+//            cgc.setSecondQuestionOptions(new QuestionOptions(true, true, false));
+//            preset.addChart(cgc);
+//
+//        }
 
 //
         {
@@ -112,7 +112,7 @@ public class Conferences {
             chart.addChoiceGroup(answer2);
             chart.addChoiceGroup(answer3);
 
-            preset.AddChart(chart);
+            preset.addChart(chart);
         }
         return preset;
 
@@ -120,7 +120,7 @@ public class Conferences {
 
     public static ChartsPreset test2() {
 
-        ChartsPreset preset = new ChartsPreset("1111!!!!!");
+        ChartsPreset preset = new ChartsPreset("first");
       //  preset.setId(2L);
         {
             UngroupedCharts ungroupedCharts = new UngroupedCharts();
@@ -136,7 +136,7 @@ public class Conferences {
             charts.add(cqc);
 
             ungroupedCharts.setCharts(charts);
-            preset.AddChart(ungroupedCharts);
+            preset.addChart(ungroupedCharts);
 
         }
 
@@ -147,7 +147,7 @@ public class Conferences {
             cgc.setHideLastChoiceInSecondQuestion(true);
             cgc.setFirstQuestionOptions(new QuestionOptions(true, true, false));
             cgc.setSecondQuestionOptions(new QuestionOptions(true, true, false));
-            preset.AddChart(cgc);
+            preset.addChart(cgc);
 
         }
         {
@@ -157,7 +157,7 @@ public class Conferences {
             cgc.setHideLastChoiceInSecondQuestion(false);
             cgc.setFirstQuestionOptions(new QuestionOptions(true, true, false));
             cgc.setSecondQuestionOptions(new QuestionOptions(true, true, false));
-            preset.AddChart(cgc);
+            preset.addChart(cgc);
 
         }
 
@@ -179,7 +179,7 @@ public class Conferences {
                 {
                     add(10239887091L);
                     add(10789207613L);
-                    add(874803001L);
+                    add(null);
                 }
             });
 
@@ -199,7 +199,7 @@ public class Conferences {
                 {
                     add(10239887093L);
                     add(10789207615L);
-                    add(874803003L);
+                    add(null);
                 }
             });
 
@@ -207,7 +207,7 @@ public class Conferences {
             chart.addChoiceGroup(answer2);
             chart.addChoiceGroup(answer3);
 
-            preset.AddChart(chart);
+            preset.addChart(chart);
         }
         return preset;
 

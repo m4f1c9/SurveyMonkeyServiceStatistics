@@ -2,15 +2,13 @@ package org.jugru.monkeyStatistics.api;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.jugru.monkeyStatistics.model.Choice;
 import org.jugru.monkeyStatistics.model.QuestionMetaInformation;
 import org.jugru.monkeyStatistics.model.Survey;
-import org.jugru.monkeyStatistics.model.chart.Chart;
-import org.jugru.monkeyStatistics.model.chart.ChartData;
-import org.jugru.monkeyStatistics.model.chart.ChartsPreset;
-import org.jugru.monkeyStatistics.model.chart.CrossGroupingChart;
-import org.jugru.monkeyStatistics.model.chart.UngroupedCharts;
+import org.jugru.monkeyStatistics.model.chart.*;
 import org.jugru.monkeyStatistics.service.ChartService;
 import org.jugru.monkeyStatistics.service.ChartsPresetService;
 import org.jugru.monkeyStatistics.service.QuestionMetaInformationService;
@@ -48,6 +46,33 @@ public class API {
     }
 
 
+    @RequestMapping("/api/create/preset")
+    public ChartsPreset preset(@RequestParam(value = "name") String name) {
+        return chartsPresetService.save(new ChartsPreset(name));
+
+    }
+
+
+    @RequestMapping("/api/create/chart")
+    public Chart createChart(@RequestParam(value = "id") Long id, @RequestParam(value = "type") String type) {
+        return chartsPresetService.createChart(id, type);
+
+
+    }
+
+    @RequestMapping("/api/delete/preset")
+    public void deletePreset(@RequestParam(value = "id") Long id) {
+        chartsPresetService.delete(chartsPresetService.get(id));
+
+    }
+
+    @RequestMapping("/api/delete/chart")
+    public void deleteChart(@RequestParam(value = "id") Long id) {
+        chartService.delete(chartService.get(id));
+
+    }
+
+
     // TODO
     @RequestMapping("/api/presets")
     public List<IdNamePair> presets() {
@@ -60,9 +85,9 @@ public class API {
     }
 
     @RequestMapping("/api/surveys")
-    public List<IdNamePair> surveys() {
+    public Set<IdNamePair> surveys() {
         List<Survey> surveys = surveyService.getAll();
-        List<IdNamePair> pairs = new ArrayList<>();
+        Set<IdNamePair> pairs = new TreeSet<>();
         surveys.forEach((t) -> {
             pairs.add(new IdNamePair(t.getId(), t.getTitle()));
         });
@@ -107,9 +132,7 @@ public class API {
     }
 
     /**
-     *
      * @param id id пресета
-     *
      * @return пары id/имя графиков
      */
     @RequestMapping("/api/charts")

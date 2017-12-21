@@ -20,7 +20,7 @@ public class SaveSurveyController {
 
     @RequestMapping(value = "/save")
     public String save(Model model) {
-               Survey survey;
+              Survey survey;
 //
 //                survey = new Survey();
 //                survey.setId(80191211L);
@@ -29,7 +29,7 @@ public class SaveSurveyController {
 //                survey = new Survey();
 //                survey.setId(87269535L);
 //                surveyMonkeyService.parseAndSaveDetailedSurvey(survey);
-
+//
 //                survey = new Survey();
 //                survey.setId(117652322L);
 //                surveyMonkeyService.parseAndSaveDetailedSurvey(survey);
@@ -82,9 +82,14 @@ public class SaveSurveyController {
 //                survey.setId(88993967L);
 //                surveyMonkeyService.parseAndSaveDetailedSurvey(survey);
 
-           surveyMonkeyService.refreshAnswers();
-       chartsPresetService.save(Conferences.test1());
-       chartsPresetService.save(Conferences.test2());
+//        survey = new Survey();
+//                survey.setId(127258808L);
+//               surveyMonkeyService.parseAndSaveDetailedSurvey(survey);
+
+
+         surveyMonkeyService.refreshAnswers();
+  //   chartsPresetService.save(Conferences.test1());
+   //   chartsPresetService.save(Conferences.test2());
         return "OK";
     }
 }

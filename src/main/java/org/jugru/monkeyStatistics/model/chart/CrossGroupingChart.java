@@ -46,6 +46,11 @@ public class CrossGroupingChart extends Chart {
     public CrossGroupingChart() {
     }
 
+    public CrossGroupingChart(QuestionOptions firstQuestionOptions, QuestionOptions secondQuestionOptions) {
+        this.firstQuestionOptions = firstQuestionOptions;
+        this.secondQuestionOptions = secondQuestionOptions;
+    }
+
     public QuestionOptions getFirstQuestionOptions() {
         return firstQuestionOptions;
     }

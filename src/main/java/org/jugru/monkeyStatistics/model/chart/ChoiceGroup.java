@@ -16,8 +16,8 @@ public class ChoiceGroup {
     @Column
     private String text;
     @OrderColumn
-    @ElementCollection
-    @LazyCollection(LazyCollectionOption.FALSE)
+    @ElementCollection(fetch = FetchType.EAGER)
+   // @LazyCollection(LazyCollectionOption.FALSE)
     private List<Long> choicesId = new ArrayList<>();
 
     public ChoiceGroup() {

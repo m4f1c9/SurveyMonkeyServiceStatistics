@@ -9,6 +9,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.jugru.monkeyStatistics.service.SurveyService;
 import org.jugru.monkeyStatistics.util.ChartDataBuilder;
+
 @Entity
 public class GroupedByChoiceChart extends Chart {
 
@@ -23,17 +24,24 @@ public class GroupedByChoiceChart extends Chart {
     private List<QuestionDetails> questionDetails = new ArrayList<>();
 
     @Embedded
-    private ChartOptions chartOptions;
+    private QuestionOptions questionOptions;
 
 
+    public QuestionOptions getQuestionOptions() {
+        return questionOptions;
+    }
 
-    
-    
+    public void setQuestionOptions(QuestionOptions questionOptions) {
+        this.questionOptions = questionOptions;
+    }
 
     public GroupedByChoiceChart() {
     }
 
-    
+    public GroupedByChoiceChart(QuestionOptions questionOptions) {
+        this.questionOptions = questionOptions;
+    }
+
     public List<QuestionDetails> getQuestionDetails() {
         return questionDetails;
     }
@@ -50,7 +58,6 @@ public class GroupedByChoiceChart extends Chart {
         choiceGroups.add(choiceGroup);
     }
 
-  
 
     public List<ChoiceGroup> getChoiceGroups() {
         return choiceGroups;
@@ -60,19 +67,11 @@ public class GroupedByChoiceChart extends Chart {
         this.choiceGroups = choiceGroups;
     }
 
-    public ChartOptions getChartOptions() {
-        return chartOptions;
-    }
-
-    public void setChartOptions(ChartOptions chartOptions) {
-        this.chartOptions = chartOptions;
-    }
 
     public GroupedByChoiceChart(String name, ChartOptions chartOptions) {
         super.setChartName(name);
-        this.chartOptions = chartOptions;
+        setChartOptions(chartOptions);
     }
-
 
 
     @Override
@@ -83,10 +82,10 @@ public class GroupedByChoiceChart extends Chart {
 
     @Override
     public void prepareForSending(SurveyService surveyService) {
-       questionDetails.forEach((t) -> {
-           t.setSurveyId(surveyService.findSurveyIdByQuestionMetaInformationId(t.getQuestionId()));
-       });
+        questionDetails.forEach((t) -> {
+            t.setSurveyId(surveyService.findSurveyIdByQuestionMetaInformationId(t.getQuestionId()));
+        });
     }
 
-    
+
 }

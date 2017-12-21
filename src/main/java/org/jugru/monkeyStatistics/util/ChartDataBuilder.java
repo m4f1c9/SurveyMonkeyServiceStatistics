@@ -9,6 +9,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.jugru.monkeyStatistics.model.Choice;
 import org.jugru.monkeyStatistics.model.ChoiceOrRow;
 import org.jugru.monkeyStatistics.model.chart.ChartOptions;
@@ -21,14 +22,13 @@ import org.jugru.monkeyStatistics.model.chart.ChartData;
 import org.jugru.monkeyStatistics.model.chart.Options;
 import org.jugru.monkeyStatistics.model.chart.ChoiceGroup;
 import org.jugru.monkeyStatistics.model.chart.QuestionDetails;
-import org.jugru.monkeyStatistics.service.AnswerService;
-import org.jugru.monkeyStatistics.service.QuestionMetaInformationService;
-import org.jugru.monkeyStatistics.service.QuestionService;
-import org.jugru.monkeyStatistics.service.SurveyService;
+import org.jugru.monkeyStatistics.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.persistence.criteria.CriteriaBuilder;
 
 @Component
 public class ChartDataBuilder {
@@ -47,6 +47,7 @@ public class ChartDataBuilder {
     @Autowired
     QuestionService questionService;
 
+
     private final String CUSTOM_CHOICE = "Свой вариант ответа";
     private final String NO_CHOICE = "Нет ответа";
     private static final Pattern REMOVE_TAGS = Pattern.compile("<.+?>");
@@ -63,11 +64,24 @@ public class ChartDataBuilder {
     public List<ChartData> createChartDataFromUngroupedCharts(UngroupedCharts ungroupedCharts) {
         List<ChartData> chartData = new ArrayList<>();
 
-        List<SingleQuestionChart> sharts = ungroupedCharts.getCharts();
-        for (int i = 0; i < sharts.size(); i++) {
-            chartData.add(createChartDataFromSingleChart(sharts.get(i),
+        List<SingleQuestionChart> charts = ungroupedCharts.getCharts();
+        for (int i = 0; i < charts.size(); i++) {
+            chartData.add(createChartDataFromSingleChart(charts.get(i),
                     ungroupedCharts.getChartOptions(),
                     (i == 0) ? ungroupedCharts.getChartName() : ""));  //добавляет заголовок первому графику в группе
+        }
+
+        //выравниваем графики по горизонтальной шкале
+        int max = 0;// меньше 0 процент быть не может
+        for (ChartData d : chartData) {
+            max = Integer.max(max, d.getOptions().gethAxis().getMaxValue());
+        }
+        max++;
+        max = max / 5;
+        max++;
+        max = max * 5;
+        for (ChartData d : chartData) {
+            d.getOptions().gethAxis().setMaxValue(max);
         }
 
         return chartData;
@@ -79,6 +93,7 @@ public class ChartDataBuilder {
 
         Options options = createDefaultOptions(singleChart, chartOptions, title);
         chartData.setOptions(options);
+
 
         List columnsNames = createColumnWithNamesFromSingleChart(singleChart, chartOptions);
         chartData.addData(columnsNames);
@@ -92,12 +107,17 @@ public class ChartDataBuilder {
 
         List<? extends ChoiceOrRow> choices
                 = questionMetaInformationService.getChoiceOrRowsByQuestionMetaInformationId(questionMetaInfId,
-                        singleChart.getQuestionOptions().isUseRow_idInstedOfChoice_id());
+                singleChart.getQuestionOptions().isUseRow_idInstedOfChoice_id());
 
         for (int choiceCount = 0; choiceCount < choices.size(); choiceCount++) {
             ChoiceOrRow choice = choices.get(choiceCount);
             int thisAnswers = answerService.countById(choice.getId(), singleChart.getQuestionOptions().isUseRow_idInstedOfChoice_id());
             double percent = countPercentAndFormat(thisAnswers, conferenceAnswers);
+
+            //ищем максимальное значение для корректировки горизонтаьной шкалы всех графиков
+            Integer max = Integer.max(options.gethAxis().getMaxValue(), (int) Math.round(percent + 0.5)); // + 0.5 для округления всегда вверх
+            options.gethAxis().setMaxValue(max);
+
             row.add(percent);
             addMetaDataToRow(thisAnswers, conferenceAnswers, percent, chartOptions, choice.getText(), row);
         }
@@ -105,6 +125,11 @@ public class ChartDataBuilder {
             Long other_id = questionMetaInformationService.getOther_idByQuestionMetaInformationId(questionMetaInfId);
             int thisAnswers = answerService.countByOther_id(other_id);
             double percent = countPercentAndFormat(thisAnswers, conferenceAnswers);
+
+            //ищем максимальное значение для корректировки горизонтаьной шкалы всех графиков
+            Integer max = Integer.max(options.gethAxis().getMaxValue(), (int) Math.round(percent + 0.5)); // + 0.5 для округления всегда вверх
+            options.gethAxis().setMaxValue(max);
+
             row.add(percent);
             addMetaDataToRow(thisAnswers, conferenceAnswers, percent, chartOptions, CUSTOM_CHOICE, row);
         }
@@ -112,6 +137,11 @@ public class ChartDataBuilder {
             int thisAnswers = questionService.countByQuestionMetaInformationId(questionMetaInfId);
             thisAnswers = conferenceAnswers - thisAnswers;
             double percent = countPercentAndFormat(thisAnswers, conferenceAnswers);
+
+            //ищем максимальное значение для корректировки горизонтаьной шкалы всех графиков
+            Integer max = Integer.max(options.gethAxis().getMaxValue(), (int) Math.round(percent + 0.5)); // + 0.5 для округления всегда вверх
+            options.gethAxis().setMaxValue(max);
+
             row.add(percent);
             addMetaDataToRow(thisAnswers, conferenceAnswers, percent, chartOptions, NO_CHOICE, row);
         }
@@ -337,7 +367,7 @@ public class ChartDataBuilder {
 
         List<? extends ChoiceOrRow> choices
                 = questionMetaInformationService.getChoiceOrRowsByQuestionMetaInformationId(questionMetaInformationId,
-                        singleChart.getQuestionOptions().isUseRow_idInstedOfChoice_id());
+                singleChart.getQuestionOptions().isUseRow_idInstedOfChoice_id());
 
         for (int choiceCount = 0; choiceCount < choices.size(); choiceCount++) {
             addDataToColumnWithNames(choices.get(choiceCount).getText(), chartOptions, columnWithNames);
@@ -380,6 +410,8 @@ public class ChartDataBuilder {
     }
 
     private Options createDefaultOptions(SingleQuestionChart singleChart, ChartOptions chartOptions, String title) {
+
+        // задаем высоту графика
         int choicesCount;
         if (!singleChart.getQuestionOptions().isUseRow_idInstedOfChoice_id()) {
             Long questionMetaInfId = singleChart.getQuestionMetaInfId();
@@ -388,17 +420,26 @@ public class ChartDataBuilder {
         } else {
             choicesCount = questionMetaInformationService.getRowsByQuestionMetaInformationId(singleChart.getQuestionMetaInfId()).size();
         }
-        int height = choicesCount * 50;  //TODO убрать константу
+        //
         if (singleChart.getQuestionOptions().isWithCustomChoice()) {
-            height += 50;
+            choicesCount++;
         }
         if (singleChart.getQuestionOptions().isWithNoChoice()) {
-            height += 50;
+            choicesCount++;
         }
 
-        Options options = new Options(height,
-                "horizontal",
-                title, chartOptions.isUseGradient()); // TODO
+//        int height = choicesCount * Options.BAR_HEIGHT; //  высота 1 горизонтальной линии
+//        height += Options.TITLE_HEIGHT; // высота заголовка
+//        height += Options.HAXIS_HEIGHT; // высота подписей к горизонтальной шкале
+//        height += Options.SPACE_BETWEEN_GROUPS_OF_BARS; // отступы сверку и снизу
+
+//        Options options = Options.createOptionForUngropudChart(height,
+//                title,
+//                chartOptions.isUseGradient()); // TODO
+
+        Options options = Options.create(chartOptions,
+                title,
+                choicesCount); // TODO
         return options;
     }
 
@@ -411,23 +452,23 @@ public class ChartDataBuilder {
 
         Options options = new Options(height,
                 "horizontal",
-                title, true); // TODO
+                title,
+                сrossGroupingChart.getChartOptions().isUseGradient()); // TODO
         return options;
     }
 
     private Options createDefaultOptions(GroupedByChoiceChart groupedByChoiceChart) {
-        int answers = groupedByChoiceChart.getChoiceGroups().size();
+        int choices = groupedByChoiceChart.getChoiceGroups().size();
         if (groupedByChoiceChart.getQuestionOptions().isWithCustomChoice()) {
-            answers++;
+            choices++;
         }
         if (groupedByChoiceChart.getQuestionOptions().isWithNoChoice()) {
-            answers++;
+            choices++;
         }
         int questions = groupedByChoiceChart.getQuestionDetails().size();
-        int height = answers * questions * 45 + 50; // 200 на заголовок
-        Options options = new Options(height,
-                "horizontal",
-                groupedByChoiceChart.getChartName()); //TODO подумать про высоту
+
+
+        Options options = Options.create(groupedByChoiceChart,choices,questions); //TODO подумать про высоту
         return options;
     }
 

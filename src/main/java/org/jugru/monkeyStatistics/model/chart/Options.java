@@ -6,34 +6,89 @@ import java.util.List;
 
 public class Options {
 
+    public final static int TITLE_HEIGHT = 40;
+    public final static int HAXIS_HEIGHT = 20;
+    public final static int SPACE_BETWEEN_GROUPS_OF_BARS = 35;
+        public final static int BAR_HEIGHT = 26;
+
     private Integer height;
-    private String bars;
     private String title;
 
-//    public int fontSize = 25;
-    public ChartArea chartArea = new ChartArea();
+
+    public ChartArea chartArea;
     public Legend legend = new Legend();
-//    public TextStyle titleTextStyle = new TextStyle(30);
-    public List<String> colors;
     public Annotations annotations = new Annotations();
     public HAxis hAxis = new HAxis();
     public VAxis vAxis = new VAxis();
-    public String theme = "material";
     public TextStyle titleTextStyle = new TextStyle(20);
-  //  public String axisTitlesPosition = "in";
+    public Bar bar;
+    public String theme = "material";
 
-    public Options(Integer height, String bars, String title) {
-        this(height, bars, title, false);
+    public List<String> colors;
+
+    public static Options createOptionForUngropudChart(Integer height, String title, boolean withCustomColorsOfLegend) {
+        Options options = new Options(height, title, withCustomColorsOfLegend);
+        options.bar = options.new Bar();
+        options.chartArea = options.new ChartArea();
+        options.chartArea.height = (height - options.chartArea.top) - HAXIS_HEIGHT; // TODO убрать консттанту
+        options.bar.groupWidth = options.chartArea.height - SPACE_BETWEEN_GROUPS_OF_BARS; //отступы сверку и снизу
+        options.hAxis.setMaxValue(0);
+        return options;
     }
 
-    public Options(Integer height, String bars, String title, boolean withCustomColorsOfLegend) {
+    public static Options create(ChartOptions chartOptions, String title,  int choices) {
+        Options options = new Options(title, chartOptions.isUseGradient());
+        options.bar = options.new Bar();
+        options.chartArea = options.new ChartArea();
+        options.bar.groupWidth = BAR_HEIGHT * choices;
+        options.chartArea.height = choices * BAR_HEIGHT + SPACE_BETWEEN_GROUPS_OF_BARS ;
+        options.height = options.chartArea.height +TITLE_HEIGHT + HAXIS_HEIGHT;
+        options.hAxis.setMaxValue(0);
+        return options;
+    }
+
+    public static Options create(GroupedByChoiceChart groupedByChoiceChart, int choices, int questions) {
+        Options options = new Options( groupedByChoiceChart.getChartName(), groupedByChoiceChart.getChartOptions().isUseGradient());
+        options.bar = options.new Bar();
+        options.chartArea = options.new ChartArea();
+        options.bar.groupWidth = BAR_HEIGHT * questions;
+        options.chartArea.height = choices * questions *BAR_HEIGHT + SPACE_BETWEEN_GROUPS_OF_BARS * choices;
+
+        options.height = options.chartArea.height +TITLE_HEIGHT + HAXIS_HEIGHT;
+        return options;
+    }
+
+
+
+
+
+    public Options(Integer height, String title, boolean withCustomColorsOfLegend) {
         this.height = height;
-        this.bars = bars;
         this.title = title;
         if (withCustomColorsOfLegend) {
             this.colors = new LinkedList<>(Arrays.asList("#ffe0cc", "#ffc299", "#ffa366", "#ff8533", "#ff6600", "#cc5200", "#993d00", "#331400"));
         }
 
+    }
+
+    public Options(String title, boolean withCustomColorsOfLegend) {
+        this.title = title;
+        if (withCustomColorsOfLegend) {
+            this.colors = new LinkedList<>(Arrays.asList("#ffe0cc", "#ffc299", "#ffa366", "#ff8533", "#ff6600", "#cc5200", "#993d00", "#331400"));
+        }
+
+    }
+
+    public Options(Integer height, String bars, String title, boolean withCustomColorsOfLegend) {
+        this(height, bars, withCustomColorsOfLegend);
+    }
+
+    public HAxis gethAxis() {
+        return hAxis;
+    }
+
+    public void sethAxis(HAxis hAxis) {
+        this.hAxis = hAxis;
     }
 
     public String getTitle() {
@@ -52,26 +107,14 @@ public class Options {
         this.height = height;
     }
 
-    public String getBars() {
-        return bars;
-    }
 
-    public void setBars(String bars) {
-        this.bars = bars;
-
-    }
 
     public class ChartArea {
 
-//        public String width = "70%";
-//        public String height = "80%";
-//        public String left = "15%";
-//        public String top = "15%";
-        
         public String width = "70%";
-        public String height = "100%";
+        public int height = 0;
         public String left = "15%";
-        public String top = "50";
+        public int top = TITLE_HEIGHT;
 
     }
 
@@ -105,16 +148,39 @@ public class Options {
     public class HAxis {
 
         //  public String textPosition = "none";
-        public TextStyle textStyle = new TextStyle(20);
+        public TextStyle textStyle = new TextStyle(14);
+        public Integer maxValue;
 
+        public TextStyle getTextStyle() {
+            return textStyle;
+        }
+
+        public void setTextStyle(TextStyle textStyle) {
+            this.textStyle = textStyle;
+        }
+
+        public Integer getMaxValue() {
+            return maxValue;
+        }
+
+        public void setMaxValue(Integer maxValue) {
+            this.maxValue = maxValue;
+        }
     }
 
     public class VAxis {
 
-    //  public String viewWindowMode = "maximized";
+        //  public String viewWindowMode = "maximized";
         public TextStyle textStyle = new TextStyle(14);
 
     }
 
-   
+
+    public class Bar {
+
+        //  public String viewWindowMode = "maximized";
+        public int groupWidth;
+
+    }
+
 }

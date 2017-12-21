@@ -4,17 +4,21 @@ import java.util.Arrays;
 import java.util.Properties;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
+
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
+import org.springframework.cache.ehcache.EhCacheCacheManager;
+import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
@@ -86,10 +90,24 @@ public class JpaConfig {
         return properties;
     }
 
+//    @Bean
+//    public CacheManager cacheManager() {
+//        // configure and return an implementation of Spring's CacheManager SPI
+//        return new ConcurrentMapCacheManager("default");
+//    }
+
     @Bean
     public CacheManager cacheManager() {
-        // configure and return an implementation of Spring's CacheManager SPI
-        return new ConcurrentMapCacheManager("default");
+        return new EhCacheCacheManager(ehCacheCacheManager().getObject());
     }
+
+    @Bean
+    public EhCacheManagerFactoryBean ehCacheCacheManager() {
+        EhCacheManagerFactoryBean cmfb = new EhCacheManagerFactoryBean();
+        cmfb.setConfigLocation(new ClassPathResource("ehcache.xml"));
+        cmfb.setShared(true);
+        return cmfb;
+    }
+
 
 }

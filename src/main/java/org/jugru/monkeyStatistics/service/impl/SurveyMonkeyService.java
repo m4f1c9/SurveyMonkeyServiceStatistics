@@ -34,7 +34,7 @@ public class SurveyMonkeyService {
     }
 
     // TODO убрать разобратся с сессией
-    @Transactional
+ //   @Transactional
     public void refreshAnswers() {
         surveyService.getAll().stream().
                 filter((t) -> {
@@ -42,7 +42,8 @@ public class SurveyMonkeyService {
                 }).
                 limit(2).
                 peek((survey) -> {
-                    survey.addNewResponses(surveyMonkeyClient.getAllResponsesBySurveyId(survey.getId()));
+                    surveyService.addNewResponses(survey, surveyMonkeyClient.getAllResponsesBySurveyId(survey.getId()));
+                 //   survey.addNewResponses(surveyMonkeyClient.getAllResponsesBySurveyId(survey.getId()));
                 }).
                 peek((survey) -> {
                  //   survey.setStatus(surveyMonkeyClient.getSurveyStatus(survey));
