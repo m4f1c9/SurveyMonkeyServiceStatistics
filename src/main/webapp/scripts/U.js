@@ -47,7 +47,7 @@ function collectUData(editArea) {
     editArea.find('.ungrouped-question').children('.single-question-div').each(function (index) {
         let t = $(this);
         let data = {};
-        data.name = t.find('.single-chart-name').val();
+
         data.questionMetaInfId = t.children('.question').find('option:selected').val();
 
 
@@ -61,7 +61,7 @@ function collectUData(editArea) {
 
 function addUngpoupedQuestions(div, chartsData) {
     chartsData.charts.forEach(function (item, i, arr) {
-        let singleQuestions = $('<div class="single-question-div"></div>');
+        let singleQuestions = $('<div  class="single-question-div"></div>');
         singleQuestions.append($('<h3>' + (i + 1) + ' вопрос</h3>'));
 
         let surveys = $('.surveys-select').clone();
@@ -71,11 +71,9 @@ function addUngpoupedQuestions(div, chartsData) {
         singleQuestions.append($('<h3>Опрос</h3>'));
         singleQuestions.append(surveys);
 
-        singleQuestions.append($('<h3>Имя конференции</h3>'));
-        singleQuestions.append($(' <input class="single-chart-name" type="text" value="' + item.name + '">'));
 
 
-        let question = $('<select class="question"></select>');
+        let question = $('<select style="width: 500px" class="question"></select>');
         $.ajax({
             url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + item.surveyId,
             dataType: "json",
@@ -101,6 +99,15 @@ function addUngpoupedQuestions(div, chartsData) {
 
                 }
             });
+
+
+        });
+
+        question.on('change', function () {
+            let chartName =  $(this).closest('.edit-area').find('.chart-name').val();
+            if(chartName === '' || chartName == null) {
+                $(this).closest('.edit-area').find('.chart-name').val($(this).find('option:selected').text());
+            }
         });
 
 
@@ -117,7 +124,7 @@ function createUEditArea(id, div, chartsData) {
     div.addClass(chartsData.id.toString());
     div.append($(' <input class="chart-id" hidden type="text" value="' + id + '">'));
     div.append($('<h3>Имя графика</h3>'));
-    div.append($(' <input class="chart-name" type="text" value="' + chartsData.chartName + '">'));
+    div.append($(' <input style="width: 600px" class="chart-name" type="text" value="' + chartsData.chartName + '">'));
     div.append($('<h3>Вопросы</h3>'));
     let questions = $('<div class="ungrouped-question"></div>');
     div.append(questions);
@@ -162,11 +169,8 @@ function addUQuestion() {
     singleQuestions.append($('<h3>Опрос</h3>'));
     singleQuestions.append(surveys);
 
-    singleQuestions.append($('<h3>Имя конференции</h3>'));
-    singleQuestions.append($(' <input class="single-chart-name" type="text" value="">'));
 
-
-    let question = $('<select class="question"></select>');
+    let question = $('<select style="width: 500px" class="question"></select>');
     $.ajax({
         url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + surveys.find('option:selected').val(),
         dataType: "json",
@@ -176,6 +180,13 @@ function addUQuestion() {
                 question.append('<option value="' + t.id + '">' + t.name + '</option>');
             }
 
+        }
+    });
+
+    question.on('change', function () {
+        let chartName =  $(this).closest('.edit-area').find('.chart-name').val();
+        if(chartName === '' || chartName == null) {
+            $(this).closest('.edit-area').find('.chart-name').val($(this).find('option:selected').text());
         }
     });
 

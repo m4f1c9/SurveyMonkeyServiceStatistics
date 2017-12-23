@@ -29,7 +29,7 @@ public class SurveyServiceImpl implements SurveyService {
         return surveyRepository.saveAndFlush(survey);
     }
 
-   @Cacheable(cacheNames = "default1")
+  // @Cacheable(cacheNames = "default1")
     @Override
     public Survey get(long id) {
         return surveyRepository.findOne(id);
@@ -73,5 +73,10 @@ public class SurveyServiceImpl implements SurveyService {
     public void addNewResponses(Survey s, Collection<Response> c) {
         s.getResponses().size(); //TODO
         s.addNewResponses(c);
+    }
+
+    @Override
+    public String getSurveyNameBySurveyId(Long id) {
+        return surveyService.get(id).getTitle();
     }
 }

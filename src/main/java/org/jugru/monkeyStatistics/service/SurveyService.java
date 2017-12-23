@@ -19,4 +19,6 @@ public interface SurveyService extends Service<Survey> {
     List<SurveyPage> getSurveyPagesFromSurvey(Long id);
 
     void addNewResponses (Survey s, Collection<Response> c);
-}
+
+    String getSurveyNameBySurveyId(Long id);
+;}

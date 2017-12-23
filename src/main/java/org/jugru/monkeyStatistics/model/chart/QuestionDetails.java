@@ -12,6 +12,11 @@ public class QuestionDetails {
     private String name;
     @Column
     private long questionId;
+
+    /**
+     * NULL по умолчанию
+     * нужет для отправки на UI
+     */
     @Embedded
     private QuestionOptions questionOptions;
 

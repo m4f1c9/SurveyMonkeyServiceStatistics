@@ -2,10 +2,12 @@ package org.jugru.monkeyStatistics.util;
 
 public class Role {
 
-    private final static String ANNOTATION_TEXT = "annotation";
+    private final static String ANNOTATION = "annotation";
     private final static String TOOLTIP = "tooltip";
+    private final static String ANNOTATION_TEXT = "annotationText";
 
     private final static Role TOOLTIP_ROLE = new Role(TOOLTIP);
+    private final static Role ANNOTATION_ROLE = new Role(ANNOTATION);
     private final static Role ANNOTATION_TEXT_ROLE = new Role(ANNOTATION_TEXT);
 
     private final String role;
@@ -23,6 +25,9 @@ public class Role {
     }
     
     public static Role getAnnotationRole() {
+        return ANNOTATION_ROLE;
+    }
+    public static Role getAnnotationTextRole() {
         return ANNOTATION_TEXT_ROLE;
     }
 

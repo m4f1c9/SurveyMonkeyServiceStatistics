@@ -2,7 +2,7 @@ function createGCEditArea(id, div, chartsData) {
     div.addClass(chartsData.id.toString());
     div.append($(' <input class="chart-id" hidden type="text" value="' + id + '">'));
     div.append($('<h3>Имя графика</h3>'));
-    div.append($(' <input class="chart-name" type="text" value="' + chartsData.chartName + '">'));
+    div.append($(' <input style="width: 600px" class="chart-name" type="text" value="' + chartsData.chartName + '">'));
     div.append($('<h3>Вопросы</h3>'));
     let table = $('<table></table>');
     let tr1 = $('<tr></tr>');
@@ -14,7 +14,7 @@ function createGCEditArea(id, div, chartsData) {
     let quest = [];
     chartsData.questionDetails.forEach(function (item, i, arr) {
         quest[i] = item.questionId;
-        tr1.append($('<td><input class="col-name" type="text" value="' + item.name + '"></td>'));
+
 
         let surveys = $('.surveys-select').clone();
         surveys.removeClass('surveys-select');
@@ -40,7 +40,7 @@ function createGCEditArea(id, div, chartsData) {
             });
         });
 
-        let question = $('<select  style="width: 300px" class="question"></select>'); //TODO remove style
+        let question = $('<select  style="width: 250px" class="question"></select>'); //TODO remove style
         $.ajax({
             url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + item.surveyId,
             dataType: "json",
@@ -73,9 +73,14 @@ function createGCEditArea(id, div, chartsData) {
                 }
             });
 
+            let chartName =  $(this).closest('.edit-area').find('.chart-name').val();
+            if(chartName === '' || chartName == null) {
+                $(this).closest('.edit-area').find('.chart-name').val($(this).find('option:selected').text());
+            }
+
         });
 
-        tr3.append($('<td style="width: 300px"></td>').append(question)); //TODO remove style
+        tr3.append($('<td style="width: 250px"></td>').append(question)); //TODO remove style
 
 
     });
@@ -89,7 +94,7 @@ function createGCEditArea(id, div, chartsData) {
         tr.append($('<td><input class="row-name" type="text" value="' + item.text + '"></td>'));
 
         item.choicesId.forEach(function (ID, i, arr) {
-            let answers = $('<select  style="width: 300px" class="choice"></select>'); //TODO remove style
+            let answers = $('<select  style="width: 250px" class="choice"></select>'); //TODO remove style
             answers.append('<option value="null">' + 'Вариант отсутствует' + '</option>');
             $.ajax({
                 url: "/MonkeyStatistics/api/answers?id=" + quest[i],
@@ -101,6 +106,14 @@ function createGCEditArea(id, div, chartsData) {
                         answers.append('<option value="' + t.id + '">' + t.name + '</option>');
                     }
                     answers.find('option[value=' + ID + ']').attr('selected', 'selected');
+                }
+            });
+
+
+            answers.on('change', function () {
+                let name =  $(this).closest('tr').find('.row-name').val();
+                if(name === '' || name == null) {
+                    $(this).closest('tr').find('.row-name').val($(this).find('option:selected').text());
                 }
             });
 
@@ -146,7 +159,7 @@ function newRow() {
     choices.append($('<td><input class="row-name" type="text" value=""></td>'));
 
     for (let i = 1; i < questions.children().length; i++) {
-        let answers = $('<select  style="width: 300px" class="choice"></select>'); //TODO remove style
+        let answers = $('<select  style="width: 250px" class="choice"></select>'); //TODO remove style
         let td = $('<td></td>');
         answers.append('<option value="null">' + 'Вариант отсутствует' + '</option>');
         choices.append(td);
@@ -165,6 +178,12 @@ function newRow() {
             }
         });
 
+        answers.on('change', function () {
+            let name =  $(this).closest('tr').find('.row-name').val();
+            if(name === '' || name == null) {
+                $(this).closest('tr').find('.row-name').val($(this).find('option:selected').text());
+            }
+        });
 
     }
 
@@ -176,7 +195,7 @@ function newRow() {
 function newColumn() {
 //!!!!!!!
     let table = $(this).closest('.edit-area').find('table:first');
-    table.find('tr:nth-child(1)').append($('<td><input class="col-name" type="text" value=""></td>'));
+
 
     let surveys = $('.surveys-select').clone();
     surveys.removeClass('surveys-select');
@@ -203,7 +222,7 @@ function newColumn() {
     table.find('tr:nth-child(2)').append($('<td></td>').append(surveys));
 
 
-    let question = $('<select  style="width: 300px" class="question"></select>'); //TODO remove style
+    let question = $('<select  style="width: 250px" class="question"></select>'); //TODO remove style
     $.ajax({
         url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + surveys.find('option:selected').val(),
         dataType: "json",
@@ -235,17 +254,31 @@ function newColumn() {
             }
         });
 
+        let chartName =  $(this).closest('.edit-area').find('.chart-name').val();
+        if(chartName === '' || chartName == null) {
+            $(this).closest('.edit-area').find('.chart-name').val($(this).find('option:selected').text());
+        }
+
     });
 
-    table.find('tr:nth-child(3)').append($('<td style="width: 300px"></td>').append(question)); //TODO remove style
+    table.find('tr:nth-child(3)').append($('<td style="width: 250px"></td>').append(question)); //TODO remove style
 
 
-    let answers = $('<td><select  style="width: 300px" class="choice"></select></td>');
+    let answers = $('<td><select  style="width: 250px" class="choice"></select></td>');
     answers.find('select').prepend('<option value="null">' + 'Вариант отсутствует' + '</option>');
+
+    answers.on('change', function () {
+        let name =  $(this).closest('tr').find('.row-name').val();
+        if(name === '' || name == null) {
+            $(this).closest('tr').find('.row-name').val($(this).find('option:selected').text());
+        }
+    });
 
     table.find('.choices').each(function (index, element) {
         $(this).append(answers.clone());
     })
+
+
 
 
 }
@@ -311,15 +344,11 @@ function collectGCData(editArea) {
         answer.chartOptions.annotation = 'SHORT';
     }
 
-    editArea.children('table').find('.col-name').each(function (index, element) {
-        answer.questionDetails[index] = {};
-        answer.questionDetails[index].questionOptions = {};
-        answer.questionDetails[index].name = element.value;
-    });
-
 
     editArea.find('.questions').find('option:selected').each(function (index, element) {
+        answer.questionDetails[index] = {};
         answer.questionDetails[index].questionId = $(this).val();
+
     });
 
     editArea.find('.choices').each(function (rowIndex, element) {

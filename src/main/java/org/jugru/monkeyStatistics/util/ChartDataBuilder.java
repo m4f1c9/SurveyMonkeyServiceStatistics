@@ -28,10 +28,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.criteria.CriteriaBuilder;
-
 @Component
 public class ChartDataBuilder {
+
 
     Logger logger = LoggerFactory.getLogger(ChartDataBuilder.class);
 
@@ -48,6 +47,8 @@ public class ChartDataBuilder {
     QuestionService questionService;
 
 
+    private static int MINIMUM_HAXIS_UNGROUPED = 59; //на самом деле 60(магия)
+    private static int MINIMUM_HAXIS_GROUPED = 59;
     private final String CUSTOM_CHOICE = "Свой вариант ответа";
     private final String NO_CHOICE = "Нет ответа";
     private static final Pattern REMOVE_TAGS = Pattern.compile("<.+?>");
@@ -76,10 +77,9 @@ public class ChartDataBuilder {
         for (ChartData d : chartData) {
             max = Integer.max(max, d.getOptions().gethAxis().getMaxValue());
         }
-        max++;
-        max = max / 5;
-        max++;
-        max = max * 5;
+
+
+        if(max< MINIMUM_HAXIS_UNGROUPED) max = MINIMUM_HAXIS_UNGROUPED;
         for (ChartData d : chartData) {
             d.getOptions().gethAxis().setMaxValue(max);
         }
@@ -100,9 +100,11 @@ public class ChartDataBuilder {
 
         Long questionMetaInfId = singleChart.getQuestionMetaInfId();
         List row = new LinkedList();
-        row.add(singleChart.getName());
-
         Long surveyId = surveyService.findSurveyIdByQuestionMetaInformationId(questionMetaInfId);
+        String surveyName = surveyService.getSurveyNameBySurveyId(surveyId);
+        row.add(surveyName);
+
+
         int conferenceAnswers = surveyService.countResponsesBySurveyId(surveyId);
 
         List<? extends ChoiceOrRow> choices
@@ -233,19 +235,28 @@ public class ChartDataBuilder {
         for (int choiceCount = 0; choiceCount < groupedByChoiceChart.getChoiceGroups().size(); choiceCount++) {  // отходим ChoiceGroupList
             ChoiceGroup choiceGroup = groupedByChoiceChart.getChoiceGroups().get(choiceCount);
             List row = new LinkedList();
+
+
+
+
+
             row.add(choiceGroup.getText());
             for (int conferenceCount = 0; conferenceCount < choiceGroup.getChoicesId().size(); conferenceCount++) {  // обходим конкретные ответы 
                 Long choice_id = choiceGroup.getChoicesId().get(conferenceCount);
                 if (Objects.nonNull(choice_id)) {
+
                     QuestionDetails questionDetails = groupedByChoiceChart.getQuestionDetails().get(conferenceCount);
-                    String conferencesName = questionDetails.getName();
-                    Long question_id = questionDetails.getQuestionId();
-                    Long surveyId = surveyService.findSurveyIdByQuestionMetaInformationId(question_id);
+
+                    Long questionId = questionDetails.getQuestionId();
+                    Long surveyId = surveyService.findSurveyIdByQuestionMetaInformationId(questionId);
+                    String surveyName = surveyService.getSurveyNameBySurveyId(surveyId);
+
                     int conferenceAnswers = surveyService.countResponsesBySurveyId(surveyId);
-                    int thisAnswers = answerService.countById(choiceGroup.getChoicesId().get(conferenceCount), questionDetails.getQuestionOptions().isUseRow_idInstedOfChoice_id());
+
+                    int thisAnswers = answerService.countById(choiceGroup.getChoicesId().get(conferenceCount),false); //TODO!!
                     double percent = countPercentAndFormat(thisAnswers, conferenceAnswers);
                     row.add(percent);
-                    addMetaDataToRow(thisAnswers, conferenceAnswers, percent, groupedByChoiceChart.getChartOptions(), conferencesName, row);
+                    addMetaDataToRow(thisAnswers, conferenceAnswers, percent, groupedByChoiceChart.getChartOptions(), surveyName, row);
                 } else {
                     addNoDataToRow(groupedByChoiceChart.getChartOptions(), row);
                 }
@@ -304,32 +315,41 @@ public class ChartDataBuilder {
             chartData.addData(row);
         }
 
+        chartData.getOptions().gethAxis().setMaxValue(MINIMUM_HAXIS_GROUPED);
+
         return chartData;
 
     }
 
     private void addNoDataToRow(ChartOptions chartOptions, List row) {
         row.add(0); //TODO
+        if (chartOptions.getAnnotation() != ChartOptions.Annotation.NO) {
+            row.add("");
+            row.add("");
+        }
         if (chartOptions.getTooltip() != ChartOptions.Tooltip.NO) {
             row.add("");
         }
-        if (chartOptions.getAnnotation() != ChartOptions.Annotation.NO) {
-            row.add("");
-        }
+
     }
 
     private void addMetaDataToRow(int thisAnswers, int conferenceAnswers, double percent, ChartOptions chartOptions, String text, List row) { //TODO имя
-        if ((thisAnswers > 0) && (chartOptions.getAnnotation() == ChartOptions.Annotation.SHORT)) {
+        if (/*(thisAnswers > 0) && */(chartOptions.getAnnotation() == ChartOptions.Annotation.SHORT)) {
             row.add(createTooltipOrAnnotation(thisAnswers, conferenceAnswers, percent));
-        } else if ((thisAnswers > 0) && (chartOptions.getAnnotation() == ChartOptions.Annotation.FULL)) {
+
+        } else if (/*(thisAnswers > 0) && */(chartOptions.getAnnotation() == ChartOptions.Annotation.FULL)) {
             row.add(createTooltipOrAnnotation(text, thisAnswers, conferenceAnswers, percent));
-        } else if (chartOptions.getAnnotation() != ChartOptions.Annotation.NO) {
+
+        } else if (chartOptions.getAnnotation() != ChartOptions.Annotation.NO) { //TODO наверно не достижимо
             row.add(null);
+
         }
 
         if (chartOptions.getTooltip() == ChartOptions.Tooltip.SHORT) {
             row.add(createTooltipOrAnnotation(thisAnswers, conferenceAnswers, percent));
+            row.add(createTooltipOrAnnotation(thisAnswers, conferenceAnswers, percent));
         } else if (chartOptions.getTooltip() == ChartOptions.Tooltip.FULL) {
+            row.add(createTooltipOrAnnotation(text, thisAnswers, conferenceAnswers, percent));
             row.add(createTooltipOrAnnotation(text, thisAnswers, conferenceAnswers, percent));
         }
 
@@ -389,8 +409,12 @@ public class ChartDataBuilder {
         List<QuestionDetails> questionDetails = groupedByChoiceChart.getQuestionDetails();
         columnWithNames.add("");    //не нужен, но не может быть null, поэтому ""
 
-        for (int confirenceCount = 0; confirenceCount < questionDetails.size(); confirenceCount++) {
-            addDataToColumnWithNames(questionDetails.get(confirenceCount).getName(),
+        for (int conferenceCount = 0; conferenceCount < questionDetails.size(); conferenceCount++) {
+            Long questionId = questionDetails.get(conferenceCount).getQuestionId();
+           Long surveyId = surveyService.findSurveyIdByQuestionMetaInformationId(questionId);
+           String surveyName = surveyService.getSurveyNameBySurveyId(surveyId);
+
+            addDataToColumnWithNames(surveyName,
                     chartOptions,
                     columnWithNames);
         }
@@ -403,6 +427,7 @@ public class ChartDataBuilder {
 
         if (chartOptions.getAnnotation() != ChartOptions.Annotation.NO) {
             columnWithNames.add(Role.getAnnotationRole());
+            columnWithNames.add(Role.getAnnotationTextRole());
         }
         if (chartOptions.getTooltip() != ChartOptions.Tooltip.NO) {
             columnWithNames.add(Role.getTooltipRole());
@@ -427,15 +452,6 @@ public class ChartDataBuilder {
         if (singleChart.getQuestionOptions().isWithNoChoice()) {
             choicesCount++;
         }
-
-//        int height = choicesCount * Options.BAR_HEIGHT; //  высота 1 горизонтальной линии
-//        height += Options.TITLE_HEIGHT; // высота заголовка
-//        height += Options.HAXIS_HEIGHT; // высота подписей к горизонтальной шкале
-//        height += Options.SPACE_BETWEEN_GROUPS_OF_BARS; // отступы сверку и снизу
-
-//        Options options = Options.createOptionForUngropudChart(height,
-//                title,
-//                chartOptions.isUseGradient()); // TODO
 
         Options options = Options.create(chartOptions,
                 title,
