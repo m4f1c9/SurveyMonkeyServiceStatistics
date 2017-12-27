@@ -27,6 +27,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.sqlite.SQLiteDataSource;
 
 @Configuration
 @EnableTransactionManagement
@@ -51,14 +52,9 @@ public class JpaConfig {
 
     @Bean
     public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-
-        dataSource.setDriverClassName(env.getRequiredProperty(PROP_DATABASE_DRIVER));
-        dataSource.setUrl(env.getRequiredProperty(PROP_DATABASE_URL));
-        dataSource.setUsername(env.getRequiredProperty(PROP_DATABASE_USERNAME));
-        dataSource.setPassword(env.getRequiredProperty(PROP_DATABASE_PASSWORD));
-
-        return dataSource;
+        SQLiteDataSource ds = new SQLiteDataSource();
+        ds.setUrl("jdbc:sqlite:C:/surveys.db");
+        return ds;
     }
 
     @Bean
@@ -83,18 +79,13 @@ public class JpaConfig {
 
     private Properties getHibernateProperties() {
         Properties properties = new Properties();
-        properties.put(PROP_HIBERNATE_DIALECT, env.getRequiredProperty(PROP_HIBERNATE_DIALECT));
+        properties.put(PROP_HIBERNATE_DIALECT, "com.enigmabridge.hibernate.dialect.SQLiteDialect");
         properties.put(PROP_HIBERNATE_SHOW_SQL, env.getRequiredProperty(PROP_HIBERNATE_SHOW_SQL));
         properties.put(PROP_HIBERNATE_SCHEMA_GENERATION, env.getRequiredProperty(PROP_HIBERNATE_SCHEMA_GENERATION));
 
         return properties;
     }
 
-//    @Bean
-//    public CacheManager cacheManager() {
-//        // configure and return an implementation of Spring's CacheManager SPI
-//        return new ConcurrentMapCacheManager("default");
-//    }
 
     @Bean
     public CacheManager cacheManager() {
