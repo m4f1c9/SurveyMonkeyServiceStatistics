@@ -86,8 +86,20 @@ public class SaveSurveyController {
 //                survey.setId(127258808L);
 //               surveyMonkeyService.parseAndSaveDetailedSurvey(survey);
 
+   //     survey = new Survey();
+//        survey.setId(127250821L);
+//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey);
+//
+//        survey = new Survey();
+//        survey.setId(117662554L);
+//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey);
+//
+//        survey = new Survey();
+//        survey.setId(87269706L);
+//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey);
 
-         surveyMonkeyService.refreshAnswers();
+
+   //      surveyMonkeyService.refreshAnswers();
   //   chartsPresetService.save(Conferences.test1());
    //   chartsPresetService.save(Conferences.test2());
         return "OK";

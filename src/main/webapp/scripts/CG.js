@@ -4,8 +4,8 @@ function createCGEditArea(id, div, chartsData) {
     let firstQuestionDiv = $('<div class="first-question-div"></div>');
     let secondQuestionDiv = $('<div class="second-question-div"></div>');
 
-    let firstQuestion = $('<select class="first-question-select"></select>');
-    let secondQuestion = $('<select class="second-question-select"></select>');
+    let firstQuestion = $('<select style="width: 500px" class="first-question-select"></select>');
+    let secondQuestion = $('<select style="width: 500px" class="second-question-select"></select>');
 
 
     let surveys = $('.surveys-select').clone();
@@ -29,18 +29,37 @@ function createCGEditArea(id, div, chartsData) {
 
             }
         });
+
+        let chartName =  $(this).closest('.edit-area').find('.chart-name').val();
+        if(chartName === '' || chartName == null) {
+            $(this).closest('.edit-area').find('.chart-name').val($(this).find('option:selected').text());
+        }
     });
 
     div.append($('<h3>Имя графика</h3>'));
-    div.append($(' <input class="chart-name" type="text" value="' + chartsData.chartName + '">'));
+    div.append($(' <input style="width: 600px" class="chart-name" type="text" value="' + chartsData.chartName + '">'));
     div.append($('<h3>Опрос</h3>'));
     div.append(surveys);
     div.append(firstQuestionDiv);
     firstQuestionDiv.append($('<h3>Первый вопрос</h3>'));
+    let firstQuestionName = $('<input style="width: 600px" class="first-question-name" type="text" value="">');
+    if( chartsData.firstQuestionName != null )firstQuestionName.val(chartsData.firstQuestionName);
+    firstQuestionDiv.append($('<h3>Имя вопроса</h3>'));
+    firstQuestionDiv.append(firstQuestionName);
+    firstQuestionDiv.append($('<h3>Выбор вопроса</h3>'));
     firstQuestionDiv.append(firstQuestion);
     firstQuestionDiv.append(createQuestionsCheckboxes(chartsData.firstQuestionOptions));
+
+    firstQuestionDiv.find('.custom-choice').attr("disabled", true);
+    firstQuestionDiv.find('.no-choice').attr("disabled", true);
+
     div.append(secondQuestionDiv);
     secondQuestionDiv.append($('<h3>Второй вопрос</h3>'));
+    let secondQuestionName = $('<input style="width: 600px" class="second-question-name" type="text" value="">');
+    if( chartsData.secondQuestionName != null )secondQuestionName.val(chartsData.secondQuestionName);
+    secondQuestionDiv.append($('<h3>Имя вопроса</h3>'));
+    secondQuestionDiv.append(secondQuestionName);
+    secondQuestionDiv.append($('<h3>Выбор вопроса</h3>'));
     secondQuestionDiv.append(secondQuestion);
     secondQuestionDiv.append(createQuestionsCheckboxes(chartsData.secondQuestionOptions));
     div.append(createChartCheckboxes(chartsData.chartOptions));
@@ -48,9 +67,18 @@ function createCGEditArea(id, div, chartsData) {
     buttons.find('.save').on('click', saveCG);
 
     div.append(buttons);
-   surveys.change();
+
+
+
+
+
+ // surveys.change();
+
+
+
+
     $.ajax({
-        url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + chartsData.surveyId,
+        url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + surveys.find('option:selected').val(),
         dataType: "json",
         async:false, //TODO
         success: function (questionsData) {
@@ -75,6 +103,19 @@ function createCGEditArea(id, div, chartsData) {
     buttons.append($('<button class="reDrawCG">Перерисовать</button>'))
    buttons.find('.reDrawCG').on('click', reDrawCG);
 
+
+    firstQuestion.on('change', function () {
+        let name =  $(this).closest('div').find('input').val();
+        if(name === '' || name == null) {
+            $(this).closest('div').find('input').val($(this).find('option:selected').text());
+        }
+    });
+    secondQuestion.on('change', function () {
+        let name =  $(this).closest('div').find('input').val();
+        if(name === '' || name == null) {
+            $(this).closest('div').find('input').val($(this).find('option:selected').text());
+        }
+    });
 
 }
 
@@ -118,6 +159,8 @@ function collectCGData(editArea) {
     let answer = {};
     answer.id = editArea.find('.chart-id').val();
     answer.chartName = editArea.find('.chart-name').val();
+    answer.firstQuestionName = editArea.find('.first-question-name').val();
+    answer.secondQuestionName = editArea.find('.second-question-name').val();
     answer.firstQuestionMetaInformationId = editArea.find('.first-question-select').find('option:selected').val();
     answer.secondQuestionMetaInformationId = editArea.find('.second-question-select').find('option:selected').val();
     answer.hideLastChoiceInFirstQuestion = false; //TODO

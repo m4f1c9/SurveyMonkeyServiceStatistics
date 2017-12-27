@@ -18,6 +18,12 @@ public class ChartOptions {
     @Column
     private boolean useGradient;
 
+    public ChartOptions(ChartOptions chartOptions) {
+        this.tooltip = chartOptions.tooltip;
+        this.annotation = chartOptions.annotation;
+        this.useGradient = false;
+    }
+
     public ChartOptions() {
     }
 

@@ -8,6 +8,7 @@ import org.jugru.monkeyStatistics.service.SurveyService;
 import org.jugru.monkeyStatistics.util.ChartDataBuilder;
 
 @Entity
+@Table
 public class CrossGroupingChart extends Chart {
 
     @Column
@@ -27,13 +28,30 @@ public class CrossGroupingChart extends Chart {
     private boolean hideLastChoiceInFirstQuestion;
     @Column
     private boolean hideLastChoiceInSecondQuestion;
-
+    @Column
+    private String firstQuestionName;
+    @Column
+    private String secondQuestionName;
 
     @Transient
     private Long surveyId;
 
 
+    public String getFirstQuestionName() {
+        return firstQuestionName;
+    }
 
+    public void setFirstQuestionName(String firstQuestionName) {
+        this.firstQuestionName = firstQuestionName;
+    }
+
+    public String getSecondQuestionName() {
+        return secondQuestionName;
+    }
+
+    public void setSecondQuestionName(String secondQuestionName) {
+        this.secondQuestionName = secondQuestionName;
+    }
 
     public Long getSurveyId() {
         return surveyId;
@@ -110,7 +128,7 @@ public class CrossGroupingChart extends Chart {
 
     @Override
     public List<ChartData> createChartData(ChartDataBuilder chartDataBuilder) {
-        return Arrays.asList(chartDataBuilder.createChartDataFromCrossGroupingChart(this));
+        return chartDataBuilder.createFullChartDataFromCrossGroupingChart(this);
     }
 
     @Override

@@ -47,8 +47,8 @@ public class ChartDataBuilder {
     QuestionService questionService;
 
 
-    private static int MINIMUM_HAXIS_UNGROUPED = 59; //на самом деле 60(магия)
-    private static int MINIMUM_HAXIS_GROUPED = 59;
+    private static int MINIMUM_HAXIS_UNGROUPED = 79; // На самом деле 100 (магия)
+    private static int MINIMUM_HAXIS_GROUPED = 79; // также
     private final String CUSTOM_CHOICE = "Свой вариант ответа";
     private final String NO_CHOICE = "Нет ответа";
     private static final Pattern REMOVE_TAGS = Pattern.compile("<.+?>");
@@ -151,6 +151,26 @@ public class ChartDataBuilder {
         return chartData;
     }
 
+
+    private ChartData createChartDataFromSingleChart(CrossGroupingChart сrossGroupingChart){
+        SingleQuestionChart chart = new SingleQuestionChart();
+        chart.setQuestionMetaInfId(сrossGroupingChart.getFirstQuestionMetaInformationId());
+        chart.setQuestionOptions(сrossGroupingChart.getFirstQuestionOptions());
+        ChartData data = createChartDataFromSingleChart(chart, new ChartOptions(сrossGroupingChart.getChartOptions()), сrossGroupingChart.getFirstQuestionName() +" / " + сrossGroupingChart.getChartName());
+        data.getOptions().gethAxis().setMaxValue(MINIMUM_HAXIS_UNGROUPED);
+        return data;
+
+    }
+    public List<ChartData> createFullChartDataFromCrossGroupingChart(CrossGroupingChart сrossGroupingChart){
+
+
+        List<ChartData> chartData = new ArrayList<>();
+
+        chartData.add(createChartDataFromSingleChart(сrossGroupingChart));
+        chartData.add(createChartDataFromCrossGroupingChart(сrossGroupingChart));
+        return chartData;
+    }
+
     public ChartData createChartDataFromCrossGroupingChart(CrossGroupingChart сrossGroupingChart) {
         ChartOptions chartOptions = сrossGroupingChart.getChartOptions();
         ChartData chartData = new ChartData();
@@ -177,7 +197,7 @@ public class ChartDataBuilder {
 
         for (int firstChoicesCount = 0; firstChoicesCount < (firstChoices.size() - (сrossGroupingChart.isHideLastChoiceInFirstQuestion() ? 1 : 0)); firstChoicesCount++) { // -1!!
             List row = new LinkedList();
-            row.add(firstChoices.get(firstChoicesCount).getText());
+            row.add(removeTags(firstChoices.get(firstChoicesCount).getText()));
 
             Long firstChoiceID = firstChoices.get(firstChoicesCount).getId();
             int firstChoiceCount = answerService.countById(firstChoiceID, сrossGroupingChart.getSecondQuestionOptions().isUseRow_idInstedOfChoice_id());
@@ -279,7 +299,7 @@ public class ChartDataBuilder {
                     int thisAnswers = answerService.countByOther_id(other_id);
                     double percent = countPercentAndFormat(thisAnswers, conferenceAnswers);
                     row.add(percent);
-                    addMetaDataToRow(thisAnswers, conferenceAnswers, percent, groupedByChoiceChart.getChartOptions(), conferencesName, row);
+                    addMetaDataToRow(thisAnswers, conferenceAnswers, percent, groupedByChoiceChart.getChartOptions(), CUSTOM_CHOICE, row);
                 } else {
                     addNoDataToRow(groupedByChoiceChart.getChartOptions(), row);
                 }
@@ -305,7 +325,7 @@ public class ChartDataBuilder {
 
                 if (percent > 0.0) {
                     row.add(percent);
-                    addMetaDataToRow(thisAnswers, conferenceAnswers, percent, groupedByChoiceChart.getChartOptions(), conferencesName, row);
+                    addMetaDataToRow(thisAnswers, conferenceAnswers, percent, groupedByChoiceChart.getChartOptions(), NO_CHOICE, row);
                 } else {
                     addNoDataToRow(groupedByChoiceChart.getChartOptions(), row);
                 }
@@ -423,7 +443,7 @@ public class ChartDataBuilder {
     }
 
     private void addDataToColumnWithNames(String text, ChartOptions chartOptions, List columnWithNames) {
-        columnWithNames.add(text);
+        columnWithNames.add(removeTags(text));
 
         if (chartOptions.getAnnotation() != ChartOptions.Annotation.NO) {
             columnWithNames.add(Role.getAnnotationRole());
@@ -462,14 +482,31 @@ public class ChartDataBuilder {
     private Options createDefaultOptions(CrossGroupingChart сrossGroupingChart) {
         int firstChoicesCount = questionMetaInformationService.getChoicesByQuestionMetaInformationId(сrossGroupingChart.getFirstQuestionMetaInformationId()).size();
         int secondChoicesCount = questionMetaInformationService.getChoicesByQuestionMetaInformationId(сrossGroupingChart.getSecondQuestionMetaInformationId()).size();
-        int height = (firstChoicesCount) * (secondChoicesCount) * 55;  //TODO добавить обработку отказа от последних ответов
 
-        String title = сrossGroupingChart.getChartName();
+        if (сrossGroupingChart.getFirstQuestionOptions().isWithCustomChoice()) {
+            firstChoicesCount++;
+        }
+        if (сrossGroupingChart.getFirstQuestionOptions().isWithNoChoice()) {
+            firstChoicesCount++;
+        }
 
-        Options options = new Options(height,
-                "horizontal",
-                title,
-                сrossGroupingChart.getChartOptions().isUseGradient()); // TODO
+        if (сrossGroupingChart.getSecondQuestionOptions().isWithCustomChoice()) {
+            secondChoicesCount++;
+        }
+        if (сrossGroupingChart.getSecondQuestionOptions().isWithNoChoice()) {
+            secondChoicesCount++;
+        }
+
+        if (сrossGroupingChart.isHideLastChoiceInFirstQuestion()) {
+            firstChoicesCount--;
+        }
+
+        if (сrossGroupingChart.isHideLastChoiceInSecondQuestion()) {
+            secondChoicesCount--;
+        }
+
+
+        Options options = Options.create(сrossGroupingChart,firstChoicesCount,secondChoicesCount);
         return options;
     }
 

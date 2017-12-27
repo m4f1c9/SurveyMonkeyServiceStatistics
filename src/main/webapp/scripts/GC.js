@@ -35,7 +35,14 @@ function createGCEditArea(id, div, chartsData) {
                         var t = questionsData[i];
                         questions.append('<option value="' + t.id + '">' + t.name + '</option>');
                     }
+
+                    let chartName =  questions.closest('.edit-area').find('.chart-name').val();
                     questions.change();
+                    if(chartName === '' || chartName == null) {
+                        questions.closest('.edit-area').find('.chart-name').val(chartName);
+                    }
+
+
                 }
             });
         });
@@ -164,6 +171,15 @@ function newRow() {
         answers.append('<option value="null">' + 'Вариант отсутствует' + '</option>');
         choices.append(td);
 
+        answers.on('change', function () {
+            let name =  $(this).closest('tr').find('.row-name').val();
+
+            if(name === '' || name == null) {
+                $(this).closest('tr').find('.row-name').val($(this).find('option:selected').text());
+            }
+        });
+
+
         $.ajax({
             url: "/MonkeyStatistics/api/answers?id=" + questions.find('td:eq(' + i + ')').find('option:selected').val(),
             dataType: "json",
@@ -178,12 +194,7 @@ function newRow() {
             }
         });
 
-        answers.on('change', function () {
-            let name =  $(this).closest('tr').find('.row-name').val();
-            if(name === '' || name == null) {
-                $(this).closest('tr').find('.row-name').val($(this).find('option:selected').text());
-            }
-        });
+
 
     }
 
@@ -214,7 +225,14 @@ function newColumn() {
                     var t = questionsData[i];
                     questions.append('<option value="' + t.id + '">' + t.name + '</option>');
                 }
+
+
+
+                let chartName =  questions.closest('.edit-area').find('.chart-name').val();
                 questions.change();
+                if(chartName === '' || chartName == null) {
+                    questions.closest('.edit-area').find('.chart-name').val(chartName);
+                }
             }
         });
     });
@@ -267,6 +285,7 @@ function newColumn() {
     let answers = $('<td><select  style="width: 250px" class="choice"></select></td>');
     answers.find('select').prepend('<option value="null">' + 'Вариант отсутствует' + '</option>');
 
+    // наверно не работает после clone удали и проверь
     answers.on('change', function () {
         let name =  $(this).closest('tr').find('.row-name').val();
         if(name === '' || name == null) {
@@ -275,7 +294,14 @@ function newColumn() {
     });
 
     table.find('.choices').each(function (index, element) {
-        $(this).append(answers.clone());
+        let a = answers.clone();
+        a.on('change', function () {
+            let name =  $(this).closest('tr').find('.row-name').val();
+            if(name === '' || name == null) {
+                $(this).closest('tr').find('.row-name').val($(this).find('option:selected').text());
+            }
+        });
+        $(this).append(a);
     })
 
 

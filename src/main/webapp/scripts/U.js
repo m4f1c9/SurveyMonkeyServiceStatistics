@@ -115,6 +115,7 @@ function addUngpoupedQuestions(div, chartsData) {
         singleQuestions.append(question);
         singleQuestions.append(createQuestionsCheckboxes(item.questionOptions));
 
+
         div.append(singleQuestions);
     });
 }

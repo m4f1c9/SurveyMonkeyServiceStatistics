@@ -19,6 +19,7 @@ import org.jugru.monkeyStatistics.util.ChartDataBuilder;
 
 })
 @Entity
+@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
 public abstract class Chart {
 
     @Id

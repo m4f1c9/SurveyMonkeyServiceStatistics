@@ -11,6 +11,7 @@ import org.jugru.monkeyStatistics.service.SurveyService;
 import org.jugru.monkeyStatistics.util.ChartDataBuilder;
 
 @Entity
+@Table
 public class GroupedByChoiceChart extends Chart {
 
     @OrderColumn

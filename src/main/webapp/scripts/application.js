@@ -42,6 +42,7 @@ function deletePreset() {
             workArea.empty();
         }
     });
+    $('.add-chart').attr("disabled", true);
 
 }
 
@@ -73,6 +74,7 @@ function createPreset() {
             });
         }
     });
+    $('.add-chart').attr("disabled", false);
 
 
 
@@ -122,6 +124,7 @@ function editPreset() {
             }
         }
     });
+    $('.add-chart').attr("disabled", false);
 }
 
 
@@ -148,6 +151,7 @@ function createEditArea(id, div) {
         url: "/MonkeyStatistics/api/chart?id=" + id,
         dataType: "json",
         success: function (chartsData) {
+            div.empty();
             if (chartsData.type === "CrossGroupingChart") {
                 createCGEditArea(id, div, chartsData);
             } else if (chartsData.type === "UngroupedCharts") {
@@ -203,26 +207,34 @@ function createCommonQuestions() {
     let div = $('<div class="common-question"></div>');
     let cb1 = $('<button class="delete-chart">Удалить</button>');
     let cb2 = $('<button class="save">Сохранить</button> ');
+    let cb3 = $('<button class="cancel">Отменить изменения</button> ');
     div.append('<h3>Кнопки</h3>');
     div.append(cb1);
     div.append(cb2);
+    div.append(cb3);
 
     cb1.on('click', deleteChart);
-
+    cb3.on('click', cancelChartChanges);
     return div;
 }
 
+function cancelChartChanges() {
+    let id = $(this).closest('.edit-area').find('.chart-id').val();
+    let editArea = $(this).closest('.edit-area');
+
+    createEditArea(id,editArea);
+}
 
 function deleteChart() {
     let id = $(this).closest('.edit-area').find('.chart-id').val();
-    let workArea = $(this).closest('.edit-area');
+    let editArea = $(this).closest('.edit-area');
 
     $.ajax({
         url: "/MonkeyStatistics/api/delete/chart",
         data: "id=" + id,
         method: "POST",
         success: function (data) {
-            workArea.remove();
+            editArea.remove();
 
         }
     });
@@ -315,205 +327,3 @@ function show() {
     });
 }
 
-
-/*
-
-function showSurveys() {
-$.ajax({
-url: "/MonkeyStatistics/surveys",
-dataType: "json",
-async: false,
-success: function (surveysData) {
-var surveys = $('.surveys');
-surveys = surveys.get(0);
-for (var i = 0; i < surveysData.length; i++) {
-var t = surveysData[i];
-surveys.options[i] = new Option(t.Title, t.Id);
-}
-}
-});
-}
-
-function onSurveyChoice() {
-let surveys = $('.surveys');
-surveys = surveys.get(0);
-$.ajax({
-url: "/MonkeyStatistics/questions?id=" + surveys.options[surveys.selectedIndex].value,
-dataType: "json",
-async: false,
-success: function (data) {
-questions = $('.question');
-questions.empty();
-for (var i = 0; i < data.length; i++) {
-let t = data[i];
-questions.append('<option value="' + t.Id + '">' + t.Title + '</option>');
-
-}
-}
-}).responseText;
-}
-
-function onCGCButtonClick() {
-let q1 = $('.question1 option:selected').val();
-let q2 = $('.question2 option:selected').val();
-
-data = {
-"firstQuestionOptions": {
-"useRow_idInstedOfChoice_id": false
-},
-"secondQuestionOptions": {
-"useRow_idInstedOfChoice_id": false
-},
-"chartOptions": {
-"tooltip": "FULL",
-"annotation": "SHORT",
-"useGradient": false
-}
-};
-
-data.firstQuestionMetaInformationId = q1;
-data.secondQuestionMetaInformationId = q2;
-data.chartName = $('.question2 option:selected').text();
-data.hideLastChoiceInFirstQuestion = $(".lastQuestion1").is(':checked');
-data.hideLastChoiceInSecondQuestion = $(".lastQuestion2").is(':checked');
-data.firstQuestionOptions.withCustomChoice = $(".custom1").is(':checked');
-data.firstQuestionOptions.withNoChoice = $(".noAnswer1").is(':checked');
-data.secondQuestionOptions.withCustomChoice = $(".custom2").is(':checked');
-data.secondQuestionOptions.withNoChoice = $(".noAnswer2").is(':checked');
-
-$.ajax({
-type: "POST",
-contentType: 'application/json',
-url: "/MonkeyStatistics/api/draw/CGC",
-dataType: "json",
-async: false,
-data: JSON.stringify(data),
-success: function (inputData) {
-let div = document.getElementById('chart');
-div.innerHTML = '';
-var data = google.visualization.arrayToDataTable(inputData.data)
-var options = inputData.options;
-var chart = new google.visualization.BarChart(div);
-chart.draw(data, options);
-}
-});
-}
-
-
-var GlobalData = {
-"id": null,
-"chartName": "",
-"charts": [],
-"chartOptions": {
-"id": null,
-"tooltip": "SHORT",
-"annotation": "SHORT",
-"useGradient": false
-}
-};
-
-function onUCButtonClick() {
-
-let q1 = $('.question1 option:selected').val();
-
-GlobalData.chartName = $('.question1 option:selected').text();
-let chart = {};
-chart.questionMetaInfId = q1;
-chart.name = $('.surveys option:selected').text();
-chart.questionOptions = {};
-chart.questionOptions.withCustomChoice = $(".custom1").is(':checked');
-chart.questionOptions.withNoChoice = $(".noAnswer1").is(':checked');
-
-
-GlobalData.charts.push(chart);
-
-
-
-$.ajax({
-type: "POST",
-contentType: 'application/json',
-url: "/MonkeyStatistics/api/draw/UC",
-dataType: "json",
-async: false,
-data: JSON.stringify(GlobalData),
-success: function (inputData) {
-let div = document.getElementById('chart');
-div.innerHTML = '';
-
-inputData.forEach(function (item, i, arr) {
-var newDiv = document.createElement('div');
-div.appendChild(newDiv);
-var data = google.visualization.arrayToDataTable(item.data)
-var options = item.options;
-var chart = new google.visualization.BarChart(newDiv);
-chart.draw(data, options);
-});
-
-
-
-}
-});
-}
-
-function edit() {
-google.charts.load('current', {'packages': ['corechart']});
-showPresets2();
-$('#presets').on('change', null, onPresetsSelect);
-$(document).ready(showSurveys);
-}
-
-function showPresets2() {
-$.ajax({
-url: "/MonkeyStatistics/api/presets",
-success: function (presetsData) {
-let presets = document.getElementById('presets');
-for (var i = 0; i < presetsData.length; i++) {
-let t = presetsData[i];
-presets.options[i] = new Option(t.description, t.id);
-}
-}
-});
-
-
-}
-
-function onPresetsSelect() {
-$.ajax({
-url: "/MonkeyStatistics/api/charts?id=" + $("#presets :selected").val(),
-success: function (chartsData) {
-questions = $('#question');
-questions.empty();
-for (var i = 0; i < chartsData.length; i++) {
-
-let t = chartsData[i];
-questions.append('<option value="' + t.id + '">' + t.description + '</option>');
-
-}
-}
-});
-}
-
-function editquestion() {
-
-}
-
-
-function drawChartById() {
-$.ajax({
-url: "/MonkeyStatistics/api/draw/chart?id=" + $("#question :selected").val(),
-success: function (chartData) {
-$('#chart').empty()
-chartData.forEach(function (item, i, arr) {
-let newDiv = $('<div></div>');
-$('#chart').append(newDiv);
-var data = google.visualization.arrayToDataTable(item.data)
-var options = item.options;
-var chart = new google.visualization.BarChart(newDiv.get(0));
-chart.draw(data, options);
-});
-
-}
-});
-}
-
-*/

@@ -10,6 +10,7 @@ import org.jugru.monkeyStatistics.service.SurveyService;
 import org.jugru.monkeyStatistics.util.ChartDataBuilder;
 
 @Entity
+@Table
 public class UngroupedCharts extends Chart {
 
     @OrderColumn

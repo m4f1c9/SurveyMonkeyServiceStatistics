@@ -15,6 +15,7 @@ public class Options {
     private String title;
 
 
+
     public ChartArea chartArea;
     public Legend legend = new Legend();
     public Annotations annotations = new Annotations();
@@ -36,6 +37,9 @@ public class Options {
         return options;
     }
 
+    /**
+     *для несгруппированного графика
+     */
     public static Options create(ChartOptions chartOptions, String title,  int choices) {
         Options options = new Options(title, chartOptions.isUseGradient());
         options.bar = options.new Bar();
@@ -46,6 +50,7 @@ public class Options {
         options.hAxis.setMaxValue(0);
         return options;
     }
+
 
     public static Options create(GroupedByChoiceChart groupedByChoiceChart, int choices, int questions) {
         Options options = new Options( groupedByChoiceChart.getChartName(), groupedByChoiceChart.getChartOptions().isUseGradient());
@@ -58,7 +63,17 @@ public class Options {
         return options;
     }
 
+    public static Options create(CrossGroupingChart сrossGroupingChart, int firstChoices, int secondChoices) {
+        Options options = new Options( сrossGroupingChart.getSecondQuestionName(), сrossGroupingChart.getChartOptions().isUseGradient());
 
+        options.bar = options.new Bar();
+        options.chartArea = options.new ChartArea();
+        options.bar.groupWidth = BAR_HEIGHT * secondChoices;
+        options.chartArea.height = firstChoices * secondChoices *BAR_HEIGHT + SPACE_BETWEEN_GROUPS_OF_BARS * firstChoices;
+
+        options.height = options.chartArea.height +TITLE_HEIGHT + HAXIS_HEIGHT;
+        return options;
+    }
 
 
 
