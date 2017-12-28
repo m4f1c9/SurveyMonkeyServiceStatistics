@@ -5,6 +5,7 @@ import java.util.Properties;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 
+import org.h2.jdbcx.JdbcDataSource;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -27,7 +28,8 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.sqlite.SQLiteDataSource;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 
 @Configuration
 @EnableTransactionManagement
@@ -52,8 +54,9 @@ public class JpaConfig {
 
     @Bean
     public DataSource dataSource() {
-        SQLiteDataSource ds = new SQLiteDataSource();
-        ds.setUrl("jdbc:sqlite:C:/surveys.db");
+        JdbcDataSource ds = new JdbcDataSource();
+        ds.setURL("jdbc:h2:file:" + env.getRequiredProperty(PROP_DATABASE_URL));
+
         return ds;
     }
 
@@ -79,7 +82,7 @@ public class JpaConfig {
 
     private Properties getHibernateProperties() {
         Properties properties = new Properties();
-        properties.put(PROP_HIBERNATE_DIALECT, "com.enigmabridge.hibernate.dialect.SQLiteDialect");
+        properties.put(PROP_HIBERNATE_DIALECT, "org.hibernate.dialect.H2Dialect");
         properties.put(PROP_HIBERNATE_SHOW_SQL, env.getRequiredProperty(PROP_HIBERNATE_SHOW_SQL));
         properties.put(PROP_HIBERNATE_SCHEMA_GENERATION, env.getRequiredProperty(PROP_HIBERNATE_SCHEMA_GENERATION));
 
