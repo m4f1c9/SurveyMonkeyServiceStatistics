@@ -9,6 +9,7 @@ import org.jugru.monkeyStatistics.service.ChartService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -23,18 +24,13 @@ public class ChartServiceImpl implements ChartService {
 
     @Override
     public Chart save(Chart t) {
-        logger.debug("{}",  t);
         return chartRepository.save(t);
     }
 
-
+    @Cacheable(cacheNames = "chart")
     @Override
     public Chart get(long id) {
         Chart chart = chartRepository.findOne(id);
-        logger.debug("{}", chart);
-
-
-
         // Hibernate удаляет последние null из @ElementCollection
         // тут я их восстанавливаю
         if(chart instanceof GroupedByChoiceChart){
@@ -51,6 +47,7 @@ public class ChartServiceImpl implements ChartService {
         return chart;
     }
 
+    @CacheEvict(value = "chart", allEntries = true)
     @Override
     public void delete(Chart t) {
        chartRepository.delete(t);

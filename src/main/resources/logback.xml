@@ -7,10 +7,15 @@
         </layout>
     </appender>
 
+    <logger name="org.hibernate.SQL" additivity="false" >
+        <level value="debug" />
+        <appender-ref ref="STDOUT" />
+    </logger>
 
 
 
-    <root level="debug">
+
+    <root level="warn">
         <appender-ref ref="STDOUT" />
     </root>
 </configuration>

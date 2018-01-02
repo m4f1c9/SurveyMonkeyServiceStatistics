@@ -29,7 +29,7 @@ public class SurveyServiceImpl implements SurveyService {
         return surveyRepository.saveAndFlush(survey);
     }
 
-  // @Cacheable(cacheNames = "default1")
+    @Cacheable(cacheNames = "survey",  key="{ #root.methodName, #id}")
     @Override
     public Survey get(long id) {
         return surveyRepository.findOne(id);
@@ -41,28 +41,25 @@ public class SurveyServiceImpl implements SurveyService {
         surveyRepository.delete(survey);
     }
 
-   @Cacheable(cacheNames = "default1")
+    @Cacheable(cacheNames = "listOfSurveys")
     @Override
     public List<Survey> getAll() {
         return surveyRepository.findAll();
     }
 
- //  @Cacheable(cacheNames = "default")
+    @Cacheable(cacheNames = "countById",  key="{#root.methodName, #id}")
     @Override
     public int countResponsesBySurveyId(Long id) {
-
-
         return surveyRepository.findOne(id).getResponses().size(); //TODO написать запрос на count
-
     }
 
-    @Cacheable(cacheNames = "default1")
+    @Cacheable(cacheNames = "listOfSurveyPage",  key="{ #root.methodName, #id}")
     @Override
     public List<SurveyPage> getSurveyPagesFromSurvey(Long id) {
         return surveyService.get(id).getPages();
     }
 
-  //  @Cacheable(cacheNames = "default")
+    @Cacheable(cacheNames = "getIdById",  key="{ #root.methodName, #id}")
     @Override
     public Long findSurveyIdByQuestionMetaInformationId(Long id) {
         return surveyRepository.findSurveyIdByQuestionMetaInformationId(id);
@@ -75,6 +72,7 @@ public class SurveyServiceImpl implements SurveyService {
         s.addNewResponses(c);
     }
 
+    @Cacheable(cacheNames = "stringsById",  key="{ #root.methodName, #id}")
     @Override
     public String getSurveyNameBySurveyId(Long id) {
         return surveyService.get(id).getTitle();

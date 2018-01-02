@@ -28,7 +28,7 @@ public class AnswerServiceImpl implements AnswerService {
         return answerRepository.save(answer);
     }
 
-    @Cacheable(cacheNames = "default1")
+
     @Override
     public Answer get(long id) {
         return answerRepository.findOne(id);
@@ -39,79 +39,79 @@ public class AnswerServiceImpl implements AnswerService {
         answerRepository.delete(entity);
     }
 
-    @Cacheable(cacheNames = "default1")
+    @Cacheable(cacheNames = "listOfAnswers", key="{ #root.methodName}")
     @Override
     public List<Answer> getAll() {
         return answerRepository.findAll();
     }
 
-    @Cacheable(cacheNames = "default1")
+    @Cacheable(cacheNames = "listOfAnswers", key="{ #root.methodName, #id}")
     @Override
     public List<Answer> getByOther_id(long id) {
         return answerRepository.findAnswerByOther_id(id);
     }
 
-    @Cacheable(cacheNames = "default1")
+    @Cacheable(cacheNames = "listOfAnswers", key="{ #root.methodName, #choice_id}")
     @Override
     public List<Answer> getByChoice_id(long choice_id) {
         return answerRepository.findAnswerByChoice_id(choice_id);
     }
 
-    @Cacheable(cacheNames = "default1")
+    @Cacheable(cacheNames = "listOfAnswers", key="{ #root.methodName, #row_id}")
     @Override
     public List<Answer> getByRow_id(long row_id) {
         return answerRepository.findAnswerByRow_id(row_id);
     }
 
-    @Cacheable(cacheNames = "default1")
+    @Cacheable(cacheNames = "countById",  key="{ #root.methodName, #choice_id}")
     @Override
     public Integer countByChoice_id(long choice_id) {
         return answerRepository.countByChoice_id(choice_id);
     }
 
-    @Cacheable(cacheNames = "default1")
+    @Cacheable(cacheNames = "countById",  key="{ #root.methodName, #other_id}")
     @Override
     public Integer countByOther_id(Long other_id) {
         return answerRepository.countByOther_id(other_id);
     }
 
-    @Cacheable(cacheNames = "default1")
+    @Cacheable(cacheNames = "countById",  key="{ #root.methodName, #row_id}")
     @Override
     public Integer countByRow_id(long row_id) {
         return answerRepository.countByRow_id(row_id);
     }
 
-    @Cacheable(cacheNames = "default1")
+    @Cacheable(cacheNames = "countById",  key="{ #root.methodName, #first, #second}")
     @Override
     public Integer countByTwoChoice_id(Long first, Long second) {
         return answerRepository.countByTwoChoice_id(first, second);
     }
 
-    @Cacheable(cacheNames = "default1")
+    @Cacheable(cacheNames = "countById",  key="{ #root.methodName, #first, #second}")
     @Override
     public Integer countByTwoRow_id(Long first, Long second) {
         return answerRepository.countByTwoRow_id(first, second);
     }
 
-    @Cacheable(cacheNames = "default1")
+    @Cacheable(cacheNames = "countById",  key="{ #root.methodName, #first, #second}")
     @Override
     public Integer countByChoice_idAndRow_id(Long first, Long second) {
         return answerRepository.countByChoice_idAndRow_id(first, second);
     }
 
-    @Cacheable(cacheNames = "default1")
+    @Cacheable(cacheNames = "countById",  key="{ #root.methodName, #first, #second}")
     @Override
     public Integer countByRow_idAndChoice_id(Long first, Long second) {
         return answerRepository.countByRow_idAndChoice_id(first, second);
     }
 
-    @Cacheable(cacheNames = "default1")
+    @Cacheable(cacheNames = "countById",  key="{ #root.methodName, #id}")
     @Override
     public Integer countUniqueAnswersByQuestionMetaInformationId(long id) {
         return questionService.countByQuestionMetaInformationId(id);
     }
 
-    @Cacheable(cacheNames = "default1")
+    @Cacheable(cacheNames = "countById",  key="{ #root.methodName, #id, #UseRow_idInstedOfChoice_id}")
     @Override
     public Integer countById(Long id, boolean UseRow_idInstedOfChoice_id) {
         if (UseRow_idInstedOfChoice_id) {
@@ -121,7 +121,7 @@ public class AnswerServiceImpl implements AnswerService {
         }
     }
 
-    @Cacheable(cacheNames = "default1")
+    @Cacheable(cacheNames = "countById",  key="{ #root.methodName, #first, #second, #UseRow_idInstedOfChoice_idForFirst, #UseRow_idInstedOfChoice_idForSecond}")
     @Override
     public Integer countByTwoId(Long first, Long second, boolean UseRow_idInstedOfChoice_idForFirst, boolean UseRow_idInstedOfChoice_idForSecond) {
         if (UseRow_idInstedOfChoice_idForFirst & UseRow_idInstedOfChoice_idForSecond) {
@@ -135,32 +135,32 @@ public class AnswerServiceImpl implements AnswerService {
         }
     }
 
-    @Cacheable(cacheNames = "default1")
+    @Cacheable(cacheNames = "countById",  key="{ #root.methodName, #first, #second}")
     @Override
     public Integer countByChoice_idAndOther_id(Long first, Long second) {
         return answerRepository.countByChoice_idAndOther_id(first, second);
     }
 
-    @Cacheable(cacheNames = "default1")
+    @Cacheable(cacheNames = "countById",  key="{ #root.methodName, #first, #second}")
     @Override
     public Integer countByRow_idAndOther_id(Long first, Long second) {
         return answerRepository.countByRow_idAndOther_id(first, second);
     }
 
-    @Cacheable(cacheNames = "default1")
+    @Cacheable(cacheNames = "countById",  key="{ #root.methodName, #first, #second, #UseRow_idInsteadOfChoice_id}")
     @Override
-    public Integer countByIdAndOther_id(Long first, Long second, boolean UseRow_idInstedOfChoice_id) {
-        if (UseRow_idInstedOfChoice_id) {
+    public Integer countByIdAndOther_id(Long first, Long second, boolean UseRow_idInsteadOfChoice_id) {
+        if (UseRow_idInsteadOfChoice_id) {
             return answerService.countByRow_idAndOther_id(first, second);
         } else {
             return answerService.countByChoice_idAndOther_id(first, second);
         }
     }
 
-    @Cacheable(cacheNames = "default1")
+    @Cacheable(cacheNames = "countById",  key="{ #root.methodName, #first, #second, #UseRow_idInsteadOfChoice_id}")
     @Override
-    public Integer countByQuestion_idAndChoice_id(Long first, Long second, boolean UseRow_idInstedOfChoice_id) {
-        if (UseRow_idInstedOfChoice_id) {
+    public Integer countByQuestion_idAndChoice_id(Long first, Long second, boolean UseRow_idInsteadOfChoice_id) {
+        if (UseRow_idInsteadOfChoice_id) {
             return answerRepository.countByQuestion_idAndRow_id(first, second);
         } else {
             return answerRepository.countByQuestion_idAndChoice_id(first, second);

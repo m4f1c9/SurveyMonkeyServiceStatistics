@@ -4,28 +4,126 @@
          monitoring="autodetect"
          dynamicConfig="true">
 
-    <diskStore path="java.io.tmpdir" />
 
-    <cache name="default1"
-           maxEntriesLocalHeap="10000"
-           maxEntriesLocalDisk="1000"
+    <cache name="countById"
+           maxEntriesLocalHeap="1000"
            eternal="false"
-           diskSpoolBufferSizeMB="20"
            timeToIdleSeconds="300" timeToLiveSeconds="600"
            memoryStoreEvictionPolicy="LFU"
            transactionalMode="off">
-        <persistence strategy="localTempSwap" />
     </cache>
 
-    <cache name="default2"
-           maxEntriesLocalHeap="10000"
-           maxEntriesLocalDisk="1000"
+    <cache name="getIdById"
+           maxEntriesLocalHeap="1000"
            eternal="false"
-           diskSpoolBufferSizeMB="20"
            timeToIdleSeconds="300" timeToLiveSeconds="600"
            memoryStoreEvictionPolicy="LFU"
            transactionalMode="off">
-        <persistence strategy="localTempSwap" />
     </cache>
 
+
+    <cache name="stringsById"
+           maxEntriesLocalHeap="1000"
+           eternal="false"
+           timeToIdleSeconds="300" timeToLiveSeconds="600"
+           memoryStoreEvictionPolicy="LFU"
+           transactionalMode="off">
+    </cache>
+
+    <cache name="survey"
+           maxEntriesLocalHeap="100"
+           eternal="false"
+           timeToIdleSeconds="300" timeToLiveSeconds="600"
+           memoryStoreEvictionPolicy="LFU"
+           transactionalMode="off">
+    </cache>
+
+
+    <cache name="chart"
+           maxEntriesLocalHeap="100"
+           eternal="false"
+           timeToIdleSeconds="300" timeToLiveSeconds="600"
+           memoryStoreEvictionPolicy="LFU"
+           transactionalMode="off">
+    </cache>
+
+    <cache name="questionMetaInformation"
+           maxEntriesLocalHeap="100"
+           eternal="false"
+           timeToIdleSeconds="300" timeToLiveSeconds="600"
+           memoryStoreEvictionPolicy="LFU"
+           transactionalMode="off">
+    </cache>
+
+    <cache name="listOfQuestionMetaInformation"
+           maxEntriesLocalHeap="100"
+           eternal="false"
+           timeToIdleSeconds="300" timeToLiveSeconds="600"
+           memoryStoreEvictionPolicy="LFU"
+           transactionalMode="off">
+    </cache>
+
+    <cache name="listOfIdNamePair"
+           maxEntriesLocalHeap="100"
+           eternal="false"
+           timeToIdleSeconds="300" timeToLiveSeconds="600"
+           memoryStoreEvictionPolicy="LFU"
+           transactionalMode="off">
+    </cache>
+
+    <cache name="listOfSurveys"
+           maxEntriesLocalHeap="100"
+           eternal="false"
+           timeToIdleSeconds="300" timeToLiveSeconds="600"
+           memoryStoreEvictionPolicy="LFU"
+           transactionalMode="off">
+    </cache>
+
+    <cache name="listOfAnswers"
+           maxEntriesLocalHeap="100"
+           eternal="false"
+           timeToIdleSeconds="300" timeToLiveSeconds="600"
+           memoryStoreEvictionPolicy="LFU"
+           transactionalMode="off">
+    </cache>
+
+    <cache name="listOfChoiceOrRow"
+           maxEntriesLocalHeap="100"
+           eternal="false"
+           timeToIdleSeconds="300" timeToLiveSeconds="600"
+           memoryStoreEvictionPolicy="LFU"
+           transactionalMode="off">
+    </cache>
+
+    <cache name="listOfSurveyPage"
+           maxEntriesLocalHeap="100"
+           eternal="false"
+           timeToIdleSeconds="300" timeToLiveSeconds="600"
+           memoryStoreEvictionPolicy="LFU"
+           transactionalMode="off">
+    </cache>
+
+    <cache name="listOfChartsPreset"
+           maxEntriesLocalHeap="100"
+           eternal="false"
+           timeToIdleSeconds="300" timeToLiveSeconds="600"
+           memoryStoreEvictionPolicy="LFU"
+           transactionalMode="off">
+    </cache>
+
+    <cache name="listOfChoice"
+           maxEntriesLocalHeap="100"
+           eternal="false"
+           timeToIdleSeconds="300" timeToLiveSeconds="600"
+           memoryStoreEvictionPolicy="LFU"
+           transactionalMode="off">
+    </cache>
+
+    <cache name="listOfRow"
+           maxEntriesLocalHeap="100"
+           eternal="false"
+           timeToIdleSeconds="300" timeToLiveSeconds="600"
+           memoryStoreEvictionPolicy="LFU"
+           transactionalMode="off">
+    </cache>
 </ehcache>

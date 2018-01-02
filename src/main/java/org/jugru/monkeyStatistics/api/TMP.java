@@ -1,7 +1,6 @@
 package org.jugru.monkeyStatistics.api;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -56,8 +55,8 @@ public class TMP {
         List<StringLongPair> list2 = new ArrayList<>();
         List<QuestionMetaInformation> list = questionMetaInformationService.getQuestionMetaInformationsBySurveyId(id);
         list.forEach((t) -> {
-            list2.add(new StringLongPair(t.getId(), ChartDataBuilder.removeTags(t.getHedingAsString())));
-            // set.add(new StringLongPair(t.getId(), t.getHedingAsString()));
+            list2.add(new StringLongPair(t.getId(), ChartDataBuilder.removeTags(t.getHeadingAsString())));
+            // set.add(new StringLongPair(t.getId(), t.getHeadingAsString()));
         });
         return list2;
     }

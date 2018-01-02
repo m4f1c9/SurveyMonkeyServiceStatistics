@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
+
 import org.jugru.monkeyStatistics.model.AnswerMetaInformation;
 import org.jugru.monkeyStatistics.model.Choice;
 import org.jugru.monkeyStatistics.model.ChoiceOrRow;
@@ -35,7 +36,7 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
         return questionMetaInformationRepository.save(t);
     }
 
-    @Cacheable(cacheNames = "default1")
+    @Cacheable(cacheNames = "questionMetaInformation")
     @Override
     public QuestionMetaInformation get(long id) {
         return questionMetaInformationRepository.findOne(id);
@@ -46,13 +47,13 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
         questionMetaInformationRepository.delete(t);
     }
 
-    @Cacheable(cacheNames = "default1")
+    @Cacheable(cacheNames = "listOfQuestionMetaInformation", key = "{ #root.methodName}")
     @Override
     public List<QuestionMetaInformation> getAll() {
         return questionMetaInformationRepository.findAll();
     }
 
-    // @Cacheable(cacheNames = "default")
+    @Cacheable(cacheNames = "getIdById", key = "{ #root.methodName, #id}")
     @Override
     public Long getOther_idByQuestionMetaInformationId(Long id) {
 
@@ -63,27 +64,19 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
                 map(Other::getId).orElse(null);
     }
 
- //   @Cacheable(cacheNames = "default2")
+    @Cacheable(cacheNames = "listOfChoice")
     @Override
     public List<Choice> getChoicesByQuestionMetaInformationId(Long id) {
-
-        List<Choice> l = questionMetaInformationService.get(id).getAnswers().getChoices();
-        l.size(); //TODO
-        return l;
-
+        return questionMetaInformationRepository.getChoicesByQuestionMetaInformationId(id);
     }
 
-    @Cacheable(cacheNames = "default1")
+    @Cacheable(cacheNames = "listOfRow")
     @Override
     public List<Row> getRowsByQuestionMetaInformationId(Long id) {
-
-        List<Row> l = questionMetaInformationService.get(id).getAnswers().getRows();
-        l.size(); //TODO
-        return l;
-
+        return questionMetaInformationRepository.getRowsByQuestionMetaInformationId(id);
     }
 
-    @Cacheable(cacheNames = "default1")
+
     public List<? extends ChoiceOrRow> getChoiceOrRowsByQuestionMetaInformationId(Long id, boolean UseRow_idInstedOfChoice_id) {
         if (UseRow_idInstedOfChoice_id) {
             return questionMetaInformationService.getRowsByQuestionMetaInformationId(id);
@@ -92,7 +85,7 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
         }
     }
 
-    @Cacheable(cacheNames = "default1")
+
     @Override
     public List<QuestionMetaInformation> getQuestionMetaInformationsBySurveyId(Long id) {
         List<QuestionMetaInformation> list = new ArrayList<>();
@@ -104,24 +97,33 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
         return list;
     }
 
-    @Cacheable(cacheNames = "default1")
+    @Cacheable(cacheNames = "countById", key = "{ #root.methodName, #id}")
     public Integer countChoicesByQuestionMetaInformationId(Long id) {
         return questionMetaInformationService.get(id).getAnswers().getChoices().size();
     }
 
-    @Cacheable(cacheNames = "default1")
+    @Cacheable(cacheNames = "countById", key = "{ #root.methodName, #id}")
     public Integer countRowsByQuestionMetaInformationId(Long id) {
         return questionMetaInformationService.get(id).getAnswers().getRows().size();
     }
 
-    @Cacheable(cacheNames = "default1")
+    @Cacheable(cacheNames = "getIdById", key = "{ #root.methodName, #id}")
     public Long findQuestionMetaInformationIdByChoiceId(Long id) {
         return questionMetaInformationRepository.findQuestionMetaInformationIdByChoiceId(id);
     }
 
-    @Cacheable(cacheNames = "default1")
+    @Cacheable(cacheNames = "getIdById", key = "{ #root.methodName, #id}")
     public Long findQuestionMetaInformationIdByRowId(Long id) {
         return questionMetaInformationRepository.findQuestionMetaInformationIdByRowId(id);
     }
 
+
+    @Cacheable(cacheNames = "stringsById", key = "{ #root.methodName, #id}")
+    @Override
+    public String getHeadingAsStringFromQuestionMetaInformationId(Long id) {
+        QuestionMetaInformation q = questionMetaInformationService.get(id);
+        StringBuilder sb = new StringBuilder();
+        q.getHeadings().forEach(sb::append);
+        return sb.toString();
+    }
 }

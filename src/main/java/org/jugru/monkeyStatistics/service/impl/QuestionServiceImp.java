@@ -33,13 +33,13 @@ public class QuestionServiceImp implements QuestionService {
         questionRepository.delete(t);
     }
 
-    @Cacheable(cacheNames = "default1")
+
     @Override
     public List<Question> getAll() {
         return questionRepository.findAll();
     }
 
-    @Cacheable(cacheNames = "default2")
+    @Cacheable(cacheNames = "countById",  key="{ #root.methodName, #id}")
     @Override
     public Integer countByQuestionMetaInformationId(Long id) {
         return questionRepository.countById(id);

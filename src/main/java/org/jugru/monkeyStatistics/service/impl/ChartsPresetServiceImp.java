@@ -12,6 +12,7 @@ import org.jugru.monkeyStatistics.util.IdNamePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Transactional
@@ -44,10 +45,12 @@ public class ChartsPresetServiceImp implements ChartsPresetService {
         chartsPresetRepository.delete(t);
     }
 
+    @Cacheable(cacheNames = "listOfChartsPreset")
     @Override
     public List<ChartsPreset> getAll() {
         return chartsPresetRepository.findAll();
     }
+
 
     @Override
     public List<Long> getChartsIdByPresetId(Long id) {
@@ -58,6 +61,7 @@ public class ChartsPresetServiceImp implements ChartsPresetService {
         return answer;
     }
 
+    @Cacheable(cacheNames = "listOfIdNamePair")
     @Override //TODO убрать проверку на null
     public List<IdNamePair> getIdNamePairsByPresetId(Long id) {
         List<IdNamePair> answer = new LinkedList<>();

@@ -32,7 +32,8 @@ public class QuestionMetaInformation {
     @Column
     private Set<Heading> headings = new HashSet<>();
 
-    public String getHedingAsString() {
+    @Deprecated //TODO удалить
+    public String getHeadingAsString() {
         StringBuilder sb = new StringBuilder();
         headings.forEach(sb::append);
         return sb.toString();

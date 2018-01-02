@@ -26,4 +26,6 @@ public interface QuestionMetaInformationService extends Service<QuestionMetaInfo
     Long findQuestionMetaInformationIdByChoiceId(Long id);
 
     Long findQuestionMetaInformationIdByRowId(Long id);
+
+    String getHeadingAsStringFromQuestionMetaInformationId(Long id);
 }

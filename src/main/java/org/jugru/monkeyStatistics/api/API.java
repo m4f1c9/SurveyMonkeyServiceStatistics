@@ -101,8 +101,7 @@ public class API {
         List<IdNamePair> questions = new ArrayList<>();
         List<QuestionMetaInformation> list = questionMetaInformationService.getQuestionMetaInformationsBySurveyId(surveyId);
         list.forEach((t) -> {
-            questions.add(new IdNamePair(t.getId(), ChartDataBuilder.removeTags(t.getHedingAsString())));
-            // set.add(new StringLongPair(t.getId(), t.getHedingAsString()));
+            questions.add(new IdNamePair(t.getId(), ChartDataBuilder.removeTags(t.getHeadingAsString())));
         });
         return questions;
     }
@@ -113,8 +112,10 @@ public class API {
         List<IdNamePair> questions = new ArrayList<>();
         List<QuestionMetaInformation> list = questionMetaInformationService.getQuestionMetaInformationsBySurveyId(id);
         list.forEach((t) -> {
-            questions.add(new IdNamePair(t.getId(), ChartDataBuilder.removeTags(t.getHedingAsString())));
-            // set.add(new StringLongPair(t.getId(), t.getHedingAsString()));
+            questions.add(
+                    new IdNamePair(
+                            t.getId(),
+                            ChartDataBuilder.removeTags(questionMetaInformationService.getHeadingAsStringFromQuestionMetaInformationId(t.getId()))));
         });
         return questions;
     }
@@ -126,7 +127,6 @@ public class API {
         List<Choice> choices = questionMetaInformationService.getChoicesByQuestionMetaInformationId(id);
         choices.forEach((t) -> {
             answers.add(new IdNamePair(t.getId(), ChartDataBuilder.removeTags(t.getText())));
-            // set.add(new StringLongPair(t.getId(), t.getHedingAsString()));
         });
         return answers;
     }
