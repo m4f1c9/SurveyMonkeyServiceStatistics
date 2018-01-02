@@ -64,62 +64,86 @@ function addUngpoupedQuestions(div, chartsData) {
         let singleQuestions = $('<div  class="single-question-div"></div>');
         singleQuestions.append($('<h3>' + (i + 1) + ' вопрос</h3>'));
 
+
+        singleQuestions.append(createDeleteButton());
+
         let surveys = $('.surveys-select').clone();
         surveys.removeClass('surveys-select');
         surveys.addClass('surveys-select-chart');
         surveys.find('option[value=' + item.surveyId + ']').attr('selected', 'selected');
+
         singleQuestions.append($('<h3>Опрос</h3>'));
         singleQuestions.append(surveys);
+        let question = createQuestionsSelect(item);
+        addOnChangeBehaviorToSurveysSelect(surveys, question);
+        addOnChangeBehaviorToQuestionsSelect(question);
+
+        let questionOptions = item.questionOptions
+        singleQuestions.append($('<h3>Вопрос</h3>'));
+        singleQuestions.append(question);
+        singleQuestions.append(createQuestionsCheckboxes(questionOptions));
+        div.append(singleQuestions);
+    });
+}
+function createDeleteButton() {
+    let delChart= $('<button class="delete-gr">Удалить этот вопрос</button>');
+    delChart.on('click', getGr);
+    return delChart;
+}
 
 
+function createQuestionsSelect(item, surveys){
+    let question = $('<select style="width: 500px" class="question"></select>');
+    let id;
+    if(item != undefined) {
+        id = item.surveyId;
+    }
+    else{
+        id = surveys.find('option:selected').val();
+    }
+    $.ajax({
+        url: "/MonkeyStatistics/api/questionsBySurveyId",
+        dataType: "json",
+        data: "id=" + id,
+        method: "POST",
+        success: function (questionsData) {
+            for (var i = 0; i < questionsData.length; i++) {
+                var t = questionsData[i];
+                question.append('<option value="' + t.id + '">' + t.name + '</option>');
+            }
+            if(item != undefined) {
+                question.find('option[value=' + item.questionMetaInfId + ']').attr('selected', 'selected');
+            }
+        }
+    });
+    return question;
+}
 
-        let question = $('<select style="width: 500px" class="question"></select>');
+
+function addOnChangeBehaviorToSurveysSelect(surveys, question) {
+    surveys.on('change', function () {
         $.ajax({
-            url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + item.surveyId,
+            url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + $(this).find('option:selected').val(),
             dataType: "json",
             success: function (questionsData) {
+                question.empty();
                 for (var i = 0; i < questionsData.length; i++) {
                     var t = questionsData[i];
                     question.append('<option value="' + t.id + '">' + t.name + '</option>');
                 }
-                question.find('option[value=' + item.questionMetaInfId + ']').attr('selected', 'selected');
             }
         });
-
-        surveys.on('change', function () {
-            $.ajax({
-                url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + $(this).find('option:selected').val(),
-                dataType: "json",
-                success: function (questionsData) {
-                    question.empty();
-                    for (var i = 0; i < questionsData.length; i++) {
-                        var t = questionsData[i];
-                        question.append('<option value="' + t.id + '">' + t.name + '</option>');
-                    }
-
-                }
-            });
-
-
-        });
-
-        question.on('change', function () {
-            let chartName =  $(this).closest('.edit-area').find('.chart-name').val();
-            if(chartName === '' || chartName == null) {
-                $(this).closest('.edit-area').find('.chart-name').val($(this).find('option:selected').text());
-            }
-        });
-
-
-        singleQuestions.append($('<h3>Вопрос</h3>'));
-        singleQuestions.append(question);
-        singleQuestions.append(createQuestionsCheckboxes(item.questionOptions));
-
-
-        div.append(singleQuestions);
     });
 }
 
+function addOnChangeBehaviorToQuestionsSelect(question){
+    question.on('change', function () {
+        let chartName =  $(this).closest('.edit-area').find('.chart-name').val();
+        if(chartName === '' || chartName == null) {
+            $(this).closest('.edit-area').find('.chart-name').val($(this).find('option:selected').text());
+        }
+    });
+}
 
 function createUEditArea(id, div, chartsData) {
     div.addClass(chartsData.id.toString());
@@ -150,17 +174,19 @@ function getGr() {
     $(this).closest('.single-question-div').remove();
 }
 
-
+function createCustomQuestionOptions() {
+    let questionOptions = {};
+    questionOptions.withCustomChoice = false;
+    questionOptions.withNoChoice = false;
+    return questionOptions;
+}
 
 function addUQuestion() {
     let questions = $(this).closest('.edit-area').find('.ungrouped-question');
     let singleQuestions = $('<div class="single-question-div"></div>');
     singleQuestions.append($('<h3>' + (questions.children().length + 1) + ' вопрос</h3>'));
 
-    // Переделать
-    let delChart= $('<button class="delete-gr">Удалить этот вопрос</button>');
-    delChart.on('click', getGr);
-    singleQuestions.append(delChart);
+    singleQuestions.append(createDeleteButton());
 
 
     let surveys = $('.surveys-select').clone();
@@ -169,53 +195,14 @@ function addUQuestion() {
 
     singleQuestions.append($('<h3>Опрос</h3>'));
     singleQuestions.append(surveys);
+    let question =  createQuestionsSelect(null, surveys);
+    addOnChangeBehaviorToSurveysSelect(surveys, question);
+    addOnChangeBehaviorToQuestionsSelect(question);
 
-
-    let question = $('<select style="width: 500px" class="question"></select>');
-    $.ajax({
-        url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + surveys.find('option:selected').val(),
-        dataType: "json",
-        success: function (questionsData) {
-            for (var i = 0; i < questionsData.length; i++) {
-                var t = questionsData[i];
-                question.append('<option value="' + t.id + '">' + t.name + '</option>');
-            }
-
-        }
-    });
-
-    question.on('change', function () {
-        let chartName =  $(this).closest('.edit-area').find('.chart-name').val();
-        if(chartName === '' || chartName == null) {
-            $(this).closest('.edit-area').find('.chart-name').val($(this).find('option:selected').text());
-        }
-    });
-
-
-
-    surveys.on('change', function () {
-        $.ajax({
-            url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + $(this).find('option:selected').val(),
-            dataType: "json",
-            success: function (questionsData) {
-                question.empty();
-                for (var i = 0; i < questionsData.length; i++) {
-                    var t = questionsData[i];
-                    question.append('<option value="' + t.id + '">' + t.name + '</option>');
-                }
-
-            }
-        });
-    });
-
-    let questionOptions = {};
-    questionOptions.withCustomChoice = false;
-    questionOptions.withNoChoice = false;
-
+    let questionOptions = createCustomQuestionOptions();
     singleQuestions.append($('<h3>Вопрос</h3>'));
     singleQuestions.append(question);
     singleQuestions.append(createQuestionsCheckboxes(questionOptions));
-
     questions.append(singleQuestions);
 
 
