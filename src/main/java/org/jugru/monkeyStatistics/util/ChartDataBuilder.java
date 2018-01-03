@@ -72,24 +72,17 @@ public class ChartDataBuilder {
                     (i == 0) ? ungroupedCharts.getChartName() : ""));  //добавляет заголовок первому графику в группе
         }
 
-        //выравниваем графики по горизонтальной шкале
-        int max = 0;// меньше 0 процент быть не может
-        for (ChartData d : chartData) {
-            max = Integer.max(max, d.getOptions().gethAxis().getMaxValue());
-        }
 
-
-        if(max< MINIMUM_HAXIS_UNGROUPED) max = MINIMUM_HAXIS_UNGROUPED;
         for (ChartData d : chartData) {
-            d.getOptions().gethAxis().setMaxValue(max);
+            d.getOptions().gethAxis().setMaxValue(MINIMUM_HAXIS_UNGROUPED);
         }
 
         return chartData;
     }
 
     private ChartData createChartDataFromSingleChart(SingleQuestionChart singleChart, ChartOptions chartOptions, String title) {
-        logger.debug("{}", singleChart);
         ChartData chartData = new ChartData();
+
 
         Options options = createDefaultOptions(singleChart, chartOptions, title);
         chartData.setOptions(options);
@@ -99,6 +92,7 @@ public class ChartDataBuilder {
         chartData.addData(columnsNames);
 
         Long questionMetaInfId = singleChart.getQuestionMetaInfId();
+        boolean isUseRow_idInsteadOfChoice_id = questionMetaInformationService.isUseRow_idInsteadOfChoice_idByQuestionMetaInformationId(questionMetaInfId);
         List row = new LinkedList();
         Long surveyId = surveyService.findSurveyIdByQuestionMetaInformationId(questionMetaInfId);
         String surveyName = surveyService.getSurveyNameBySurveyId(surveyId);
@@ -109,16 +103,12 @@ public class ChartDataBuilder {
 
         List<? extends ChoiceOrRow> choices
                 = questionMetaInformationService.getChoiceOrRowsByQuestionMetaInformationId(questionMetaInfId,
-                singleChart.getQuestionOptions().isUseRow_idInstedOfChoice_id());
+                isUseRow_idInsteadOfChoice_id);
 
         for (int choiceCount = 0; choiceCount < choices.size(); choiceCount++) {
             ChoiceOrRow choice = choices.get(choiceCount);
-            int thisAnswers = answerService.countById(choice.getId(), singleChart.getQuestionOptions().isUseRow_idInstedOfChoice_id());
+            int thisAnswers = answerService.countById(choice.getId(), isUseRow_idInsteadOfChoice_id);
             double percent = countPercentAndFormat(thisAnswers, conferenceAnswers);
-
-            //ищем максимальное значение для корректировки горизонтаьной шкалы всех графиков
-            Integer max = Integer.max(options.gethAxis().getMaxValue(), (int) Math.round(percent + 0.5)); // + 0.5 для округления всегда вверх
-            options.gethAxis().setMaxValue(max);
 
             row.add(percent);
             addMetaDataToRow(thisAnswers, conferenceAnswers, percent, chartOptions, choice.getText(), row);
@@ -128,10 +118,6 @@ public class ChartDataBuilder {
             int thisAnswers = answerService.countByOther_id(other_id);
             double percent = countPercentAndFormat(thisAnswers, conferenceAnswers);
 
-            //ищем максимальное значение для корректировки горизонтаьной шкалы всех графиков
-            Integer max = Integer.max(options.gethAxis().getMaxValue(), (int) Math.round(percent + 0.5)); // + 0.5 для округления всегда вверх
-            options.gethAxis().setMaxValue(max);
-
             row.add(percent);
             addMetaDataToRow(thisAnswers, conferenceAnswers, percent, chartOptions, CUSTOM_CHOICE, row);
         }
@@ -139,10 +125,6 @@ public class ChartDataBuilder {
             int thisAnswers = questionService.countByQuestionMetaInformationId(questionMetaInfId);
             thisAnswers = conferenceAnswers - thisAnswers;
             double percent = countPercentAndFormat(thisAnswers, conferenceAnswers);
-
-            //ищем максимальное значение для корректировки горизонтаьной шкалы всех графиков
-            Integer max = Integer.max(options.gethAxis().getMaxValue(), (int) Math.round(percent + 0.5)); // + 0.5 для округления всегда вверх
-            options.gethAxis().setMaxValue(max);
 
             row.add(percent);
             addMetaDataToRow(thisAnswers, conferenceAnswers, percent, chartOptions, NO_CHOICE, row);
@@ -184,13 +166,16 @@ public class ChartDataBuilder {
         Long firstQuestionMetaInfId = сrossGroupingChart.getFirstQuestionMetaInformationId();
         Long secondQuestionMetaInfId = сrossGroupingChart.getSecondQuestionMetaInformationId();
 
+        boolean isUseRow_idInsteadOfChoice_idForFirstQuestion = questionMetaInformationService.isUseRow_idInsteadOfChoice_idByQuestionMetaInformationId(firstQuestionMetaInfId);
+        boolean isUseRow_idInsteadOfChoice_idForSecondQuestion = questionMetaInformationService.isUseRow_idInsteadOfChoice_idByQuestionMetaInformationId(secondQuestionMetaInfId);
+
         List<? extends ChoiceOrRow> firstChoices = questionMetaInformationService.
                 getChoiceOrRowsByQuestionMetaInformationId(firstQuestionMetaInfId,
-                        сrossGroupingChart.getFirstQuestionOptions().isUseRow_idInstedOfChoice_id());
+                        isUseRow_idInsteadOfChoice_idForFirstQuestion);
 
         List<? extends ChoiceOrRow> secondChoices = questionMetaInformationService.
                 getChoiceOrRowsByQuestionMetaInformationId(secondQuestionMetaInfId,
-                        сrossGroupingChart.getSecondQuestionOptions().isUseRow_idInstedOfChoice_id());
+                        isUseRow_idInsteadOfChoice_idForSecondQuestion);
 
         Long surveyId = surveyService.findSurveyIdByQuestionMetaInformationId(firstQuestionMetaInfId);
         int conferenceAnswers = surveyService.countResponsesBySurveyId(surveyId);
@@ -200,7 +185,7 @@ public class ChartDataBuilder {
             row.add(removeTags(firstChoices.get(firstChoicesCount).getText()));
 
             Long firstChoiceID = firstChoices.get(firstChoicesCount).getId();
-            int firstChoiceCount = answerService.countById(firstChoiceID, сrossGroupingChart.getSecondQuestionOptions().isUseRow_idInstedOfChoice_id());
+            int firstChoiceCount = answerService.countById(firstChoiceID, isUseRow_idInsteadOfChoice_idForSecondQuestion);
 
             for (int secondChoicesCount = 0; secondChoicesCount < (secondChoices.size() - (сrossGroupingChart.isHideLastChoiceInSecondQuestion() ? 1 : 0)); secondChoicesCount++) { // -1!!
 
@@ -208,8 +193,8 @@ public class ChartDataBuilder {
                 Long secondChoiceID = secondChoices.get(secondChoicesCount).getId();
                 int pairCount = answerService.countByTwoId(firstChoiceID,
                         secondChoiceID,
-                        сrossGroupingChart.getFirstQuestionOptions().isUseRow_idInstedOfChoice_id(),
-                        сrossGroupingChart.getSecondQuestionOptions().isUseRow_idInstedOfChoice_id());
+                        isUseRow_idInsteadOfChoice_idForFirstQuestion,
+                        isUseRow_idInsteadOfChoice_idForSecondQuestion);
                 double percent = countPercentAndFormat(pairCount, conferenceAnswers);
                 row.add(percent);
                 addMetaDataToRow(pairCount, firstChoiceCount, countPercentAndFormat(pairCount, firstChoiceCount), chartOptions, choice.getText(), row);
@@ -219,7 +204,7 @@ public class ChartDataBuilder {
                 Long other_id = questionMetaInformationService.getOther_idByQuestionMetaInformationId(secondQuestionMetaInfId);
                 int pairCount = answerService.countByIdAndOther_id(firstChoiceID,
                         other_id,
-                        сrossGroupingChart.getFirstQuestionOptions().isUseRow_idInstedOfChoice_id());
+                        isUseRow_idInsteadOfChoice_idForFirstQuestion);
                 double percent = countPercentAndFormat(pairCount, conferenceAnswers);
                 row.add(percent);
                 addMetaDataToRow(pairCount, firstChoiceCount, countPercentAndFormat(pairCount, firstChoiceCount), chartOptions, CUSTOM_CHOICE, row);
@@ -230,7 +215,7 @@ public class ChartDataBuilder {
                         countByQuestion_idAndChoice_id(
                                 secondQuestionMetaInfId,
                                 firstChoiceID,
-                                сrossGroupingChart.getFirstQuestionOptions().isUseRow_idInstedOfChoice_id());
+                                isUseRow_idInsteadOfChoice_idForFirstQuestion);
                 pairCount = firstChoiceCount - pairCount;
                 double percent = countPercentAndFormat(pairCount, conferenceAnswers);
                 row.add(percent);
@@ -267,13 +252,18 @@ public class ChartDataBuilder {
 
                     QuestionDetails questionDetails = groupedByChoiceChart.getQuestionDetails().get(conferenceCount);
 
+
+                    Long questionMetaInfId = questionDetails.getQuestionId();
+                    boolean isUseRow_idInsteadOfChoice_idForSecondQuestion = questionMetaInformationService.isUseRow_idInsteadOfChoice_idByQuestionMetaInformationId(questionMetaInfId);
+
+
                     Long questionId = questionDetails.getQuestionId();
                     Long surveyId = surveyService.findSurveyIdByQuestionMetaInformationId(questionId);
                     String surveyName = surveyService.getSurveyNameBySurveyId(surveyId);
 
                     int conferenceAnswers = surveyService.countResponsesBySurveyId(surveyId);
 
-                    int thisAnswers = answerService.countById(choiceGroup.getChoicesId().get(conferenceCount),false); //TODO!!
+                    int thisAnswers = answerService.countById(choiceGroup.getChoicesId().get(conferenceCount),isUseRow_idInsteadOfChoice_idForSecondQuestion);
                     double percent = countPercentAndFormat(thisAnswers, conferenceAnswers);
                     row.add(percent);
                     addMetaDataToRow(thisAnswers, conferenceAnswers, percent, groupedByChoiceChart.getChartOptions(), surveyName, row);
@@ -293,7 +283,6 @@ public class ChartDataBuilder {
                 Long question_id = questionDetails.getQuestionId();
                 Long other_id = questionMetaInformationService.getOther_idByQuestionMetaInformationId(question_id);
                 if (Objects.nonNull(other_id)) {
-                    String conferencesName = questionDetails.getName();
                     Long surveyId = surveyService.findSurveyIdByQuestionMetaInformationId(question_id);
                     int conferenceAnswers = surveyService.countResponsesBySurveyId(surveyId);
                     int thisAnswers = answerService.countByOther_id(other_id);
@@ -315,7 +304,6 @@ public class ChartDataBuilder {
                 QuestionDetails questionDetails = groupedByChoiceChart.getQuestionDetails().get(conferenceCount);
                 Long question_id = questionDetails.getQuestionId();
 
-                String conferencesName = questionDetails.getName();
                 Long surveyId = surveyService.findSurveyIdByQuestionMetaInformationId(question_id);
                 int conferenceAnswers = surveyService.countResponsesBySurveyId(surveyId);
                 int thisAnswers = questionService.countByQuestionMetaInformationId(question_id);
@@ -379,10 +367,12 @@ public class ChartDataBuilder {
         List columnWithNames = new LinkedList<>();
         columnWithNames.add("");    //не нужен, но не может быть null, поэтому ""
         Long secondQuestionMetaInfId = сrossGroupingChart.getSecondQuestionMetaInformationId();
+        boolean isUseRow_idInsteadOfChoice_idForSecondQuestion = questionMetaInformationService.isUseRow_idInsteadOfChoice_idByQuestionMetaInformationId(secondQuestionMetaInfId);
+
 
         List<? extends ChoiceOrRow> choices = questionMetaInformationService.
                 getChoiceOrRowsByQuestionMetaInformationId(secondQuestionMetaInfId,
-                        сrossGroupingChart.getSecondQuestionOptions().isUseRow_idInstedOfChoice_id());
+                        isUseRow_idInsteadOfChoice_idForSecondQuestion);
 
         ChartOptions chartOptions = сrossGroupingChart.getChartOptions();
         for (int choiceCount = 0; choiceCount < choices.size() - (сrossGroupingChart.isHideLastChoiceInSecondQuestion() ? 1 : 0); choiceCount++) {
@@ -403,11 +393,14 @@ public class ChartDataBuilder {
         List columnWithNames = new LinkedList<>();
         columnWithNames.add("");    //не нужен, но не может быть null, поэтому ""
 
+
+
         Long questionMetaInformationId = singleChart.getQuestionMetaInfId();
+        boolean isUseRow_idInsteadOfChoice_id = questionMetaInformationService.isUseRow_idInsteadOfChoice_idByQuestionMetaInformationId(questionMetaInformationId);
 
         List<? extends ChoiceOrRow> choices
                 = questionMetaInformationService.getChoiceOrRowsByQuestionMetaInformationId(questionMetaInformationId,
-                singleChart.getQuestionOptions().isUseRow_idInstedOfChoice_id());
+                isUseRow_idInsteadOfChoice_id);
 
         for (int choiceCount = 0; choiceCount < choices.size(); choiceCount++) {
             addDataToColumnWithNames(choices.get(choiceCount).getText(), chartOptions, columnWithNames);
@@ -455,15 +448,16 @@ public class ChartDataBuilder {
     }
 
     private Options createDefaultOptions(SingleQuestionChart singleChart, ChartOptions chartOptions, String title) {
+        Long questionMetaInfId = singleChart.getQuestionMetaInfId();
+        boolean isUseRow_idInsteadOfChoice_id = questionMetaInformationService.isUseRow_idInsteadOfChoice_idByQuestionMetaInformationId(questionMetaInfId);
 
         // задаем высоту графика
         int choicesCount;
-        if (!singleChart.getQuestionOptions().isUseRow_idInstedOfChoice_id()) {
-            Long questionMetaInfId = singleChart.getQuestionMetaInfId();
+        if (!isUseRow_idInsteadOfChoice_id) {
             List<Choice> choices = questionMetaInformationService.getChoicesByQuestionMetaInformationId(questionMetaInfId);
             choicesCount = choices.size();
         } else {
-            choicesCount = questionMetaInformationService.getRowsByQuestionMetaInformationId(singleChart.getQuestionMetaInfId()).size();
+            choicesCount = questionMetaInformationService.getRowsByQuestionMetaInformationId(questionMetaInfId).size();
         }
         //
         if (singleChart.getQuestionOptions().isWithCustomChoice()) {
@@ -479,39 +473,39 @@ public class ChartDataBuilder {
         return options;
     }
 
-    private Options createDefaultOptions(CrossGroupingChart сrossGroupingChart) {
-        int firstChoicesCount = questionMetaInformationService.getChoicesByQuestionMetaInformationId(сrossGroupingChart.getFirstQuestionMetaInformationId()).size();
-        int secondChoicesCount = questionMetaInformationService.getChoicesByQuestionMetaInformationId(сrossGroupingChart.getSecondQuestionMetaInformationId()).size();
+    private Options createDefaultOptions(CrossGroupingChart crossGroupingChart) {
+        int firstChoicesCount = questionMetaInformationService.getChoicesByQuestionMetaInformationId(crossGroupingChart.getFirstQuestionMetaInformationId()).size(); //TODO добавить выбор между choice и Row
+        int secondChoicesCount = questionMetaInformationService.getChoicesByQuestionMetaInformationId(crossGroupingChart.getSecondQuestionMetaInformationId()).size();
 
-        if (сrossGroupingChart.getFirstQuestionOptions().isWithCustomChoice()) {
+        if (crossGroupingChart.getFirstQuestionOptions().isWithCustomChoice()) {
             firstChoicesCount++;
         }
-        if (сrossGroupingChart.getFirstQuestionOptions().isWithNoChoice()) {
+        if (crossGroupingChart.getFirstQuestionOptions().isWithNoChoice()) {
             firstChoicesCount++;
         }
 
-        if (сrossGroupingChart.getSecondQuestionOptions().isWithCustomChoice()) {
+        if (crossGroupingChart.getSecondQuestionOptions().isWithCustomChoice()) {
             secondChoicesCount++;
         }
-        if (сrossGroupingChart.getSecondQuestionOptions().isWithNoChoice()) {
+        if (crossGroupingChart.getSecondQuestionOptions().isWithNoChoice()) {
             secondChoicesCount++;
         }
 
-        if (сrossGroupingChart.isHideLastChoiceInFirstQuestion()) {
+        if (crossGroupingChart.isHideLastChoiceInFirstQuestion()) {
             firstChoicesCount--;
         }
 
-        if (сrossGroupingChart.isHideLastChoiceInSecondQuestion()) {
+        if (crossGroupingChart.isHideLastChoiceInSecondQuestion()) {
             secondChoicesCount--;
         }
 
 
-        Options options = Options.create(сrossGroupingChart,firstChoicesCount,secondChoicesCount);
+        Options options = Options.create(crossGroupingChart,firstChoicesCount,secondChoicesCount);
         return options;
     }
 
     private Options createDefaultOptions(GroupedByChoiceChart groupedByChoiceChart) {
-        int choices = groupedByChoiceChart.getChoiceGroups().size();
+        int choices = groupedByChoiceChart.getChoiceGroups().size();  //TODO добавить выбор между choice и Row
         if (groupedByChoiceChart.getQuestionOptions().isWithCustomChoice()) {
             choices++;
         }

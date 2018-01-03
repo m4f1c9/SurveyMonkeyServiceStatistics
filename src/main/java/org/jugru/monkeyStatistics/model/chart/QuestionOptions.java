@@ -16,26 +16,13 @@ public class QuestionOptions {
     private boolean withCustomChoice;
     @Column
     private boolean withNoChoice;
-    @Column
-    private boolean useRow_idInstedOfChoice_id;
+
 
     public QuestionOptions() {
     }
 
 
-    public QuestionOptions(boolean withCustomChoice, boolean withNoChoice, boolean useRow_idInstedOfChoice_id) {
-        this.withCustomChoice = withCustomChoice;
-        this.withNoChoice = withNoChoice;
-        this.useRow_idInstedOfChoice_id = useRow_idInstedOfChoice_id;
-    }
 
-    public boolean isUseRow_idInstedOfChoice_id() {
-        return useRow_idInstedOfChoice_id;
-    }
-
-    public void setUseRow_idInstedOfChoice_id(boolean useRow_idInstedOfChoice_id) {
-        this.useRow_idInstedOfChoice_id = useRow_idInstedOfChoice_id;
-    }
 
     public boolean isWithCustomChoice() {
         return withCustomChoice;

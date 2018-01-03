@@ -12,7 +12,6 @@ import org.jugru.monkeyStatistics.model.chart.*;
 import org.jugru.monkeyStatistics.service.ChartService;
 import org.jugru.monkeyStatistics.service.QuestionMetaInformationService;
 import org.jugru.monkeyStatistics.service.SurveyService;
-import org.jugru.monkeyStatistics.tempData.Conferences;
 import org.jugru.monkeyStatistics.util.ChartDataBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,10 +33,7 @@ public class TMP {
     @Autowired
     ChartService chartService;
 
-    @RequestMapping("/test")
-    public List<ChartData> test() {
-        return chartDataBuilder.createChartDataFromChartsPreset(Conferences.test1());
-    }
+
 
     @Transactional  //TODO !!!!!!!!!111111oneone
     @RequestMapping("/surveys")
@@ -72,14 +68,6 @@ public class TMP {
         return set;
     }
 
-    @RequestMapping("/сrossGroupingChart")
-    public ChartData сrossGroupingChart(@RequestParam(value = "surveyId") long surveyId, @RequestParam(value = "fQuestionId") long fQuestionId, @RequestParam(value = "sQuestionId") long sQuestionId) {
-        ChartOptions chartOptions = new ChartOptions(ChartOptions.Tooltip.FULL, ChartOptions.Annotation.SHORT);
-        CrossGroupingChart cgc = new CrossGroupingChart("", fQuestionId, sQuestionId, chartOptions);
-        cgc.setFirstQuestionOptions(new QuestionOptions(true, true, false));
-        cgc.setSecondQuestionOptions(new QuestionOptions(true, true, false));
-        return chartDataBuilder.createChartDataFromCrossGroupingChart(cgc);
-    }
 
     @RequestMapping("/jtest")
     public ChartOptions jtest() {

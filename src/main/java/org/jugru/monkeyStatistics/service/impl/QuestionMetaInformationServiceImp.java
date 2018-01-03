@@ -134,7 +134,7 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
     @Cacheable(cacheNames = "booleanById", key = "{ #root.methodName, #id}")
     @Override
     public boolean isUseRow_idInsteadOfChoice_idByQuestionMetaInformationId(Long id) {
-        return (questionMetaInformationRepository.countAvailableChoicesByQuestionMetaInformationId(id) >=
-                questionMetaInformationRepository.countAvailableRowsByQuestionMetaInformationId(id));
+        return (questionMetaInformationRepository.countAvailableRowsByQuestionMetaInformationId(id) >=
+                questionMetaInformationRepository.countAvailableChoicesByQuestionMetaInformationId(id));
     }
 }
