@@ -53,7 +53,7 @@ public class TMP {
     @RequestMapping("/questions")
     public List<StringLongPair> questions(@RequestParam(value = "id") long id) {
         List<StringLongPair> list2 = new ArrayList<>();
-        List<QuestionMetaInformation> list = questionMetaInformationService.getQuestionMetaInformationsBySurveyId(id);
+        List<QuestionMetaInformation> list = questionMetaInformationService.getQuestionMetaInformationBySurveyId(id);
         list.forEach((t) -> {
             list2.add(new StringLongPair(t.getId(), ChartDataBuilder.removeTags(t.getHeadingAsString())));
             // set.add(new StringLongPair(t.getId(), t.getHeadingAsString()));

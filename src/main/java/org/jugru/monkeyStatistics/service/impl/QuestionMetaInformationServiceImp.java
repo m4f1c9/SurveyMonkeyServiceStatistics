@@ -87,7 +87,7 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
 
 
     @Override
-    public List<QuestionMetaInformation> getQuestionMetaInformationsBySurveyId(Long id) {
+    public List<QuestionMetaInformation> getQuestionMetaInformationBySurveyId(Long id) {
         List<QuestionMetaInformation> list = new ArrayList<>();
         Survey survey = surveyService.get(id);
         survey.getPages().forEach((t) -> {
@@ -125,5 +125,16 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
         StringBuilder sb = new StringBuilder();
         q.getHeadings().forEach(sb::append);
         return sb.toString();
+    }
+
+    /**
+     * Если Choices больше или равно, используем их
+     * в противном случае используем Rows
+     */
+    @Cacheable(cacheNames = "booleanById", key = "{ #root.methodName, #id}")
+    @Override
+    public boolean isUseRow_idInsteadOfChoice_idByQuestionMetaInformationId(Long id) {
+        return (questionMetaInformationRepository.countAvailableChoicesByQuestionMetaInformationId(id) >=
+                questionMetaInformationRepository.countAvailableRowsByQuestionMetaInformationId(id));
     }
 }

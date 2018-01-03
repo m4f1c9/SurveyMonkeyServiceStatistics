@@ -23,5 +23,10 @@ public interface QuestionMetaInformationRepository extends JpaRepository<Questio
     @Query("Select c from QuestionMetaInformation q JOIN q.answers a JOIN a.rows c where q.id = ?1")
     List<Row> getRowsByQuestionMetaInformationId(Long id);
 
+    @Query("Select count(c) from QuestionMetaInformation q JOIN q.answers a JOIN a.choices c where q.id = ?1")
+    Integer countAvailableChoicesByQuestionMetaInformationId(Long id);
+
+    @Query("Select count(c) from QuestionMetaInformation q JOIN q.answers a JOIN a.rows c where q.id = ?1")
+    Integer countAvailableRowsByQuestionMetaInformationId(Long id);
 
 }

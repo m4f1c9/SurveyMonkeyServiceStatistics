@@ -99,7 +99,7 @@ public class API {
 
         Long surveyId = surveyService.findSurveyIdByQuestionMetaInformationId(id);
         List<IdNamePair> questions = new ArrayList<>();
-        List<QuestionMetaInformation> list = questionMetaInformationService.getQuestionMetaInformationsBySurveyId(surveyId);
+        List<QuestionMetaInformation> list = questionMetaInformationService.getQuestionMetaInformationBySurveyId(surveyId);
         list.forEach((t) -> {
             questions.add(new IdNamePair(t.getId(), ChartDataBuilder.removeTags(t.getHeadingAsString())));
         });
@@ -110,7 +110,7 @@ public class API {
     public List<IdNamePair> questionsBySurveyId(@RequestParam(value = "id") Long id) {
 
         List<IdNamePair> questions = new ArrayList<>();
-        List<QuestionMetaInformation> list = questionMetaInformationService.getQuestionMetaInformationsBySurveyId(id);
+        List<QuestionMetaInformation> list = questionMetaInformationService.getQuestionMetaInformationBySurveyId(id);
         list.forEach((t) -> {
             questions.add(
                     new IdNamePair(
