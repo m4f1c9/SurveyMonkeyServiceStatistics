@@ -75,8 +75,8 @@ function addUngpoupedQuestions(div, chartsData) {
         singleQuestions.append($('<h3>Опрос</h3>'));
         singleQuestions.append(surveys);
         let question = createQuestionsSelect(item);
-        addOnChangeBehaviorToSurveysSelect(surveys, question);
-        addOnChangeBehaviorToQuestionsSelect(question);
+        addOnChangeBehaviorToSurveysSelectU(surveys, question);
+        addOnChangeBehaviorToQuestionsSelectU(question);
 
         let questionOptions = item.questionOptions
         singleQuestions.append($('<h3>Вопрос</h3>'));
@@ -120,7 +120,7 @@ function createQuestionsSelect(item, surveys){
 }
 
 
-function addOnChangeBehaviorToSurveysSelect(surveys, question) {
+function addOnChangeBehaviorToSurveysSelectU(surveys, question) {
     surveys.on('change', function () {
         $.ajax({
             url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + $(this).find('option:selected').val(),
@@ -136,7 +136,7 @@ function addOnChangeBehaviorToSurveysSelect(surveys, question) {
     });
 }
 
-function addOnChangeBehaviorToQuestionsSelect(question){
+function addOnChangeBehaviorToQuestionsSelectU(question){
     question.on('change', function () {
         let chartName =  $(this).closest('.edit-area').find('.chart-name').val();
         if(chartName === '' || chartName == null) {
@@ -196,8 +196,8 @@ function addUQuestion() {
     singleQuestions.append($('<h3>Опрос</h3>'));
     singleQuestions.append(surveys);
     let question =  createQuestionsSelect(null, surveys);
-    addOnChangeBehaviorToSurveysSelect(surveys, question);
-    addOnChangeBehaviorToQuestionsSelect(question);
+    addOnChangeBehaviorToSurveysSelectU(surveys, question);
+    addOnChangeBehaviorToQuestionsSelectU(question);
 
     let questionOptions = createCustomQuestionOptions();
     singleQuestions.append($('<h3>Вопрос</h3>'));

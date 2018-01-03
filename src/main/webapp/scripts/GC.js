@@ -22,30 +22,7 @@ function createGCEditArea(id, div, chartsData) {
         surveys.find('option[value=' + item.surveyId + ']').attr('selected', 'selected');
         tr2.append($('<td></td>').append(surveys));
 
-        surveys.on('change', function () {
-
-            let index = $(this).parent().index();
-            let questions = $(this).parent().parent().next().children('td:eq(' + index + ')').find('select');
-            $.ajax({
-                url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + $(this).find('option:selected').val(),
-                dataType: "json",
-                success: function (questionsData) {
-                    questions.empty();
-                    for (var i = 0; i < questionsData.length; i++) {
-                        var t = questionsData[i];
-                        questions.append('<option value="' + t.id + '">' + t.name + '</option>');
-                    }
-
-                    let chartName =  questions.closest('.edit-area').find('.chart-name').val();
-                    questions.change();
-                    if(chartName === '' || chartName == null) {
-                        questions.closest('.edit-area').find('.chart-name').val(chartName);
-                    }
-
-
-                }
-            });
-        });
+        addOnChangeBehaviorToSurveysSelectGC(surveys);
 
         let question = $('<select  style="width: 250px" class="question"></select>'); //TODO remove style
         $.ajax({
@@ -60,32 +37,7 @@ function createGCEditArea(id, div, chartsData) {
             }
         });
 
-        question.on('change', function () {
-            let index = $(this).parent().index();
-            let choices = $(this).closest('table').find('.choices td:nth-child(' + (index + 1) + ')').find('select'); // +1 так как это CSS селектор
-            choices.empty();
-
-            let questionId = $(this).find('option:selected').val();
-
-            $.ajax({
-                url: "/MonkeyStatistics/api/answers?id=" + questionId,
-                dataType: "json",
-                success: function (questionsData) {
-                    choices.empty();
-                    choices.append('<option value="null">' + 'Вариант отсутствует' + '</option>');
-                    for (var i = 0; i < questionsData.length; i++) {
-                        var t = questionsData[i];
-                        choices.append('<option value="' + t.id + '">' + t.name + '</option>');
-                    }
-                }
-            });
-
-            let chartName =  $(this).closest('.edit-area').find('.chart-name').val();
-            if(chartName === '' || chartName == null) {
-                $(this).closest('.edit-area').find('.chart-name').val($(this).find('option:selected').text());
-            }
-
-        });
+        addOnChangeBehaviorToQuestionsSelectGC(question);
 
         tr3.append($('<td style="width: 250px"></td>').append(question)); //TODO remove style
 
@@ -101,7 +53,7 @@ function createGCEditArea(id, div, chartsData) {
         tr.append($('<td><input class="row-name" type="text" value="' + item.text + '"></td>'));
 
         item.choicesId.forEach(function (ID, i, arr) {
-            let answers = $('<select  style="width: 250px" class="choice"></select>'); //TODO remove style
+            let answers = $('<select  style="width: 250px" class="choice"></select>');
             answers.append('<option value="null">' + 'Вариант отсутствует' + '</option>');
             $.ajax({
                 url: "/MonkeyStatistics/api/answers?id=" + quest[i],
@@ -124,7 +76,6 @@ function createGCEditArea(id, div, chartsData) {
                 }
             });
 
-            // tr.append($('<td>' + ID + '</td>'));
             tr.append($('<td></td>').append(answers));
         });
 
@@ -179,11 +130,11 @@ function newRow() {
             }
         });
 
-
+        let questionId = questions.find('td:eq(' + i + ')').find('option:selected').val();
         $.ajax({
-            url: "/MonkeyStatistics/api/answers?id=" + questions.find('td:eq(' + i + ')').find('option:selected').val(),
+            url: "/MonkeyStatistics/api/answers?id=" + questionId,
             dataType: "json",
-            async: false, //TODO иначе не работает разобратся
+            async: false,
             success: function (questionsData) {
 
                 for (var i = 0; i < questionsData.length; i++) {
@@ -203,8 +154,8 @@ function newRow() {
 
 }
 
+
 function newColumn() {
-//!!!!!!!
     let table = $(this).closest('.edit-area').find('table:first');
 
 
@@ -212,30 +163,7 @@ function newColumn() {
     surveys.removeClass('surveys-select');
     surveys.addClass('surveys-select-gbc');
 
-    surveys.on('change', function () {
-        let index = $(this).parent().index();
-        let questions = $(this).parent().parent().next().children('td:eq(' + index + ')').find('select');
-        $.ajax({
-            url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + $(this).find('option:selected').val(),
-            dataType: "json",
-            success: function (questionsData) {
-                questions.empty();
-
-                for (var i = 0; i < questionsData.length; i++) {
-                    var t = questionsData[i];
-                    questions.append('<option value="' + t.id + '">' + t.name + '</option>');
-                }
-
-
-
-                let chartName =  questions.closest('.edit-area').find('.chart-name').val();
-                questions.change();
-                if(chartName === '' || chartName == null) {
-                    questions.closest('.edit-area').find('.chart-name').val(chartName);
-                }
-            }
-        });
-    });
+    addOnChangeBehaviorToSurveysSelectGC(surveys);
 
     table.find('tr:nth-child(2)').append($('<td></td>').append(surveys));
 
@@ -253,6 +181,33 @@ function newColumn() {
     });
 
     surveys.change();
+    addOnChangeBehaviorToQuestionsSelectGC(question);
+
+    table.find('tr:nth-child(3)').append($('<td style="width: 250px"></td>').append(question)); //TODO remove style
+
+
+    let answers = $('<td><select  style="width: 250px" class="choice"></select></td>');
+    answers.find('select').prepend('<option value="null">' + 'Вариант отсутствует' + '</option>');
+
+
+    table.find('.choices').each(function (index, element) {
+        let a = answers.clone();
+        a.on('change', function () {
+            let name =  $(this).closest('tr').find('.row-name').val();
+            if(name === '' || name == null) {
+                $(this).closest('tr').find('.row-name').val($(this).find('option:selected').text());
+            }
+        });
+        $(this).append(a);
+    })
+
+
+
+
+}
+
+
+function addOnChangeBehaviorToQuestionsSelectGC(question){
     question.on('change', function () {
         let index = $(this).parent().index();
         let choices = $(this).closest('table').find('.choices td:nth-child(' + (index + 1) + ')').find('select'); // +1 так как это CSS селектор
@@ -278,35 +233,34 @@ function newColumn() {
         }
 
     });
+}
 
-    table.find('tr:nth-child(3)').append($('<td style="width: 250px"></td>').append(question)); //TODO remove style
+
+function addOnChangeBehaviorToSurveysSelectGC(surveys) {
+    surveys.on('change', function () {
+        let index = $(this).parent().index();
+        let questions = $(this).parent().parent().next().children('td:eq(' + index + ')').find('select');
+        $.ajax({
+            url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + $(this).find('option:selected').val(),
+            dataType: "json",
+            success: function (questionsData) {
+                questions.empty();
+
+                for (var i = 0; i < questionsData.length; i++) {
+                    var t = questionsData[i];
+                    questions.append('<option value="' + t.id + '">' + t.name + '</option>');
+                }
 
 
-    let answers = $('<td><select  style="width: 250px" class="choice"></select></td>');
-    answers.find('select').prepend('<option value="null">' + 'Вариант отсутствует' + '</option>');
 
-    // наверно не работает после clone удали и проверь
-    answers.on('change', function () {
-        let name =  $(this).closest('tr').find('.row-name').val();
-        if(name === '' || name == null) {
-            $(this).closest('tr').find('.row-name').val($(this).find('option:selected').text());
-        }
-    });
-
-    table.find('.choices').each(function (index, element) {
-        let a = answers.clone();
-        a.on('change', function () {
-            let name =  $(this).closest('tr').find('.row-name').val();
-            if(name === '' || name == null) {
-                $(this).closest('tr').find('.row-name').val($(this).find('option:selected').text());
+                let chartName =  questions.closest('.edit-area').find('.chart-name').val();
+                questions.change();
+                if(chartName === '' || chartName == null) {
+                    questions.closest('.edit-area').find('.chart-name').val(chartName);
+                }
             }
         });
-        $(this).append(a);
-    })
-
-
-
-
+    });
 }
 
 

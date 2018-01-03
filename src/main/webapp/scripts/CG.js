@@ -70,13 +70,6 @@ function createCGEditArea(id, div, chartsData) {
 
 
 
-
-
- // surveys.change();
-
-
-
-
     $.ajax({
         url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + surveys.find('option:selected').val(),
         dataType: "json",
