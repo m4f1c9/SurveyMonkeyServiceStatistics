@@ -48,8 +48,14 @@ function createCGEditArea(id, div, chartsData) {
     firstQuestionDiv.append(firstQuestionName);
     firstQuestionDiv.append($('<h3>Выбор вопроса</h3>'));
     firstQuestionDiv.append(firstQuestion);
-    firstQuestionDiv.append(createQuestionsCheckboxes(chartsData.firstQuestionOptions));
 
+    let firstQuestionCheckboxes = createQuestionsCheckboxes(chartsData.firstQuestionOptions);
+    let hideFirstLastChoice = $(' <input type="checkbox" class="hide-last-choice">Спрятать последний ответ<Br> ');
+    if(chartsData.hideLastChoiceInFirstQuestion){
+        hideFirstLastChoice.prop("checked", true);
+    }
+    firstQuestionCheckboxes.append(hideFirstLastChoice);
+    firstQuestionDiv.append(firstQuestionCheckboxes);
     firstQuestionDiv.find('.custom-choice').attr("disabled", true);
     firstQuestionDiv.find('.no-choice').attr("disabled", true);
 
@@ -61,7 +67,14 @@ function createCGEditArea(id, div, chartsData) {
     secondQuestionDiv.append(secondQuestionName);
     secondQuestionDiv.append($('<h3>Выбор вопроса</h3>'));
     secondQuestionDiv.append(secondQuestion);
-    secondQuestionDiv.append(createQuestionsCheckboxes(chartsData.secondQuestionOptions));
+
+    let secondQuestionCheckboxes = createQuestionsCheckboxes(chartsData.secondQuestionOptions);
+    let hideSecondLastChoice = $(' <input type="checkbox" class="hide-last-choice">Спрятать последний ответ<Br> ');
+    if(chartsData.hideLastChoiceInSecondQuestion){
+        hideSecondLastChoice.prop("checked", true);
+    }
+    secondQuestionCheckboxes.append(hideSecondLastChoice);
+    secondQuestionDiv.append(secondQuestionCheckboxes);
     div.append(createChartCheckboxes(chartsData.chartOptions));
     let buttons = createCommonQuestions();
     buttons.find('.save').on('click', saveCG);
@@ -156,8 +169,8 @@ function collectCGData(editArea) {
     answer.secondQuestionName = editArea.find('.second-question-name').val();
     answer.firstQuestionMetaInformationId = editArea.find('.first-question-select').find('option:selected').val();
     answer.secondQuestionMetaInformationId = editArea.find('.second-question-select').find('option:selected').val();
-    answer.hideLastChoiceInFirstQuestion = false; //TODO
-    answer.hideLastChoiceInSecondQuestion = false; //TODO
+    answer.hideLastChoiceInFirstQuestion = editArea.find('.first-question-div').find('.hide-last-choice').is(':checked');
+    answer.hideLastChoiceInSecondQuestion = editArea.find('.second-question-div').find('.hide-last-choice').is(':checked');
     answer.type = "CrossGroupingChart";
 
     answer.firstQuestionOptions = {};
