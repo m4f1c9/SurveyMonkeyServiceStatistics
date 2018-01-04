@@ -146,7 +146,6 @@ function addOnChangeBehaviorToQuestionsSelectU(question){
 }
 
 function createUEditArea(id, div, chartsData) {
-    div.addClass(chartsData.id.toString());
     div.append($(' <input class="chart-id" hidden type="text" value="' + id + '">'));
     div.append($('<h3>Имя графика</h3>'));
     div.append($(' <input style="width: 600px" class="chart-name" type="text" value="' + chartsData.chartName + '">'));

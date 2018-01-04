@@ -83,4 +83,14 @@ public abstract class Chart {
                 ", chartOptions=" + chartOptions +
                 '}';
     }
+
+    @PrePersist
+    public void preInsert() {
+        if(this.chartOptions ==null)
+            this.chartOptions = new ChartOptions();
+        if (this.chartOptions.getTooltip() == null)
+            this.chartOptions.setTooltip(ChartOptions.Tooltip.FULL);
+        if (this.chartOptions.getAnnotation() == null)
+            this.chartOptions.setAnnotation(ChartOptions.Annotation.SHORT);
+    }
 }

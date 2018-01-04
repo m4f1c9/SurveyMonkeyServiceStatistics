@@ -22,6 +22,7 @@ public class ChartServiceImpl implements ChartService {
     @Autowired
     ChartRepository chartRepository;
 
+    @CacheEvict(value = "chart", allEntries = true) // TODO все ли?
     @Override
     public Chart save(Chart t) {
         return chartRepository.save(t);

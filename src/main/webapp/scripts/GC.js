@@ -48,38 +48,20 @@ function createGCEditArea(id, div, chartsData) {
     table.append(tr3);
 
     chartsData.choiceGroups.forEach(function (item, i, arr) {
-        let tr = $('<tr class="choices"></tr>');
+        let choices = $('<tr class="choices"></tr>');
 
-        tr.append($('<td><input class="row-name" type="text" value="' + item.text + '"></td>'));
+        choices.append($('<td><input class="row-name" type="text" value="' + item.text + '"></td>'));
 
         item.choicesId.forEach(function (ID, i, arr) {
             let answers = $('<select  style="width: 250px" class="choice"></select>');
             answers.append('<option value="null">' + 'Вариант отсутствует' + '</option>');
-            $.ajax({
-                url: "/MonkeyStatistics/api/answers?id=" + quest[i],
-                dataType: "json",
-                success: function (questionsData) {
-
-                    for (var i = 0; i < questionsData.length; i++) {
-                        var t = questionsData[i];
-                        answers.append('<option value="' + t.id + '">' + t.name + '</option>');
-                    }
-                    answers.find('option[value=' + ID + ']').attr('selected', 'selected');
-                }
-            });
-
-
-            answers.on('change', function () {
-                let name =  $(this).closest('tr').find('.row-name').val();
-                if(name === '' || name == null) {
-                    $(this).closest('tr').find('.row-name').val($(this).find('option:selected').text());
-                }
-            });
-
-            tr.append($('<td></td>').append(answers));
+            let questionId = quest[i];
+            addOnChangeBehaviorToAnswersSelectGC(answers);
+            appendAnswersToSelectGC(questionId, answers, ID);
+            choices.append($('<td></td>').append(answers));
         });
 
-        table.append(tr);
+        table.append(choices);
     });
 
 
@@ -118,37 +100,12 @@ function newRow() {
 
     for (let i = 1; i < questions.children().length; i++) {
         let answers = $('<select  style="width: 250px" class="choice"></select>'); //TODO remove style
-        let td = $('<td></td>');
         answers.append('<option value="null">' + 'Вариант отсутствует' + '</option>');
-        choices.append(td);
-
-        answers.on('change', function () {
-            let name =  $(this).closest('tr').find('.row-name').val();
-
-            if(name === '' || name == null) {
-                $(this).closest('tr').find('.row-name').val($(this).find('option:selected').text());
-            }
-        });
-
         let questionId = questions.find('td:eq(' + i + ')').find('option:selected').val();
-        $.ajax({
-            url: "/MonkeyStatistics/api/answers?id=" + questionId,
-            dataType: "json",
-            async: false,
-            success: function (questionsData) {
-
-                for (var i = 0; i < questionsData.length; i++) {
-                    var t = questionsData[i];
-                    answers.append('<option value="' + t.id + '">' + t.name + '</option>');
-                }
-                td.append(answers);
-            }
-        });
-
-
-
+        addOnChangeBehaviorToAnswersSelectGC(answers);
+        appendAnswersToSelectGC(questionId, answers);
+        choices.append($('<td></td>').append(answers));
     }
-
     table.append(choices);
 
 
@@ -191,23 +148,33 @@ function newColumn() {
 
 
     table.find('.choices').each(function (index, element) {
-        let a = answers.clone();
-        a.on('change', function () {
-            let name =  $(this).closest('tr').find('.row-name').val();
-            if(name === '' || name == null) {
-                $(this).closest('tr').find('.row-name').val($(this).find('option:selected').text());
-            }
-        });
-        $(this).append(a);
+        let answers = answers.clone();
+        addOnChangeBehaviorToAnswersSelectGC(answers);
+        $(this).append(answers);
     })
-
-
 
 
 }
 
+function appendAnswersToSelectGC(questionId, answers, ID) {
+    $.ajax({
+        url: "/MonkeyStatistics/api/answers?id=" + questionId,
+        dataType: "json",
+        success: function (questionsData) {
 
-function addOnChangeBehaviorToQuestionsSelectGC(question){
+            for (var i = 0; i < questionsData.length; i++) {
+                var t = questionsData[i];
+                answers.append('<option value="' + t.id + '">' + t.name + '</option>');
+            }
+            if (ID != null) {
+                answers.find('option[value=' + ID + ']').attr('selected', 'selected');
+            }
+        }
+    });
+}
+
+
+function addOnChangeBehaviorToQuestionsSelectGC(question) {
     question.on('change', function () {
         let index = $(this).parent().index();
         let choices = $(this).closest('table').find('.choices td:nth-child(' + (index + 1) + ')').find('select'); // +1 так как это CSS селектор
@@ -227,8 +194,8 @@ function addOnChangeBehaviorToQuestionsSelectGC(question){
             }
         });
 
-        let chartName =  $(this).closest('.edit-area').find('.chart-name').val();
-        if(chartName === '' || chartName == null) {
+        let chartName = $(this).closest('.edit-area').find('.chart-name').val();
+        if (chartName === '' || chartName == null) {
             $(this).closest('.edit-area').find('.chart-name').val($(this).find('option:selected').text());
         }
 
@@ -252,14 +219,22 @@ function addOnChangeBehaviorToSurveysSelectGC(surveys) {
                 }
 
 
-
-                let chartName =  questions.closest('.edit-area').find('.chart-name').val();
+                let chartName = questions.closest('.edit-area').find('.chart-name').val();
                 questions.change();
-                if(chartName === '' || chartName == null) {
+                if (chartName === '' || chartName == null) {
                     questions.closest('.edit-area').find('.chart-name').val(chartName);
                 }
             }
         });
+    });
+}
+
+function addOnChangeBehaviorToAnswersSelectGC(answers) {
+    answers.on('change', function () {
+        let name = $(this).closest('tr').find('.row-name').val();
+        if (name === '' || name == null) {
+            $(this).closest('tr').find('.row-name').val($(this).find('option:selected').text());
+        }
     });
 }
 
