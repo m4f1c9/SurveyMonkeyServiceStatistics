@@ -21,4 +21,4 @@ public interface SurveyService extends Service<Survey> {
     void addNewResponses (Survey s, Collection<Response> c);
 
     String getSurveyNameBySurveyId(Long id);
-;}
+}

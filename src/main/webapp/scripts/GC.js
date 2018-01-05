@@ -25,8 +25,11 @@ function createGCEditArea(id, div, chartsData) {
         addOnChangeBehaviorToSurveysSelectGC(surveys);
 
         let question = $('<select  style="width: 250px" class="question"></select>'); //TODO remove style
+        let surveyId = item.surveyId;
+
+        appendQuestionsToSelectGC(surveyId, question, item.questionId)
         $.ajax({
-            url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + item.surveyId,
+            url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + surveyId,
             dataType: "json",
             success: function (questionsData) {
                 for (var i = 0; i < questionsData.length; i++) {
@@ -126,16 +129,9 @@ function newColumn() {
 
 
     let question = $('<select  style="width: 250px" class="question"></select>'); //TODO remove style
-    $.ajax({
-        url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + surveys.find('option:selected').val(),
-        dataType: "json",
-        success: function (questionsData) {
-            for (var i = 0; i < questionsData.length; i++) {
-                var t = questionsData[i];
-                question.append('<option value="' + t.id + '">' + t.name + '</option>');
-            }
-        }
-    });
+    let surveyId = surveys.find('option:selected').val();
+
+    appendQuestionsToSelectGC(surveyId, question);
 
     surveys.change();
     addOnChangeBehaviorToQuestionsSelectGC(question);
@@ -155,6 +151,24 @@ function newColumn() {
 
 
 }
+
+function appendQuestionsToSelectGC(surveyId, question, questionId) {
+    $.ajax({
+        url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + surveyId,
+        dataType: "json",
+        success: function (questionsData) {
+            for (var i = 0; i < questionsData.length; i++) {
+                var t = questionsData[i];
+                question.append('<option value="' + t.id + '">' + t.name + '</option>');
+            }
+            if(questionId != null) {
+                question.find('option[value=' + questionId + ']').attr('selected', 'selected');
+            }
+        }
+    });
+}
+
+
 
 function appendAnswersToSelectGC(questionId, answers, ID) {
     $.ajax({

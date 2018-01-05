@@ -49,6 +49,7 @@ public class ChartDataBuilder {
 
     private static int MINIMUM_HAXIS_UNGROUPED = 79; // На самом деле 100 (магия)
     private static int MINIMUM_HAXIS_GROUPED = 79; // также
+    private static int MINIMUM_HAXIS = 23; // 24
     private final String CUSTOM_CHOICE = "Свой вариант ответа";
     private final String NO_CHOICE = "Нет ответа";
     private static final Pattern REMOVE_TAGS = Pattern.compile("<.+?>");
@@ -224,6 +225,8 @@ public class ChartDataBuilder {
 
             chartData.addData(row);
         }
+
+        chartData.getOptions().gethAxis().setMaxValue(MINIMUM_HAXIS);
 
         return chartData;
     }
