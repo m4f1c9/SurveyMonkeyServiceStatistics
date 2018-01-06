@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @Controller
 public class SurveyController {
 
@@ -18,9 +20,9 @@ public class SurveyController {
     SurveyMonkeyClient surveyMonkeyClient;
 
     @RequestMapping(value = "/survey")
-    public String survey(Model model) {
-        Survey s = surveyService.get(88971560L);
-        model.addAttribute("Survey", s);
-        return "survey";
+    public String survey() {
+        List<Survey> l =  surveyService.getAll();
+        l.forEach(surveyService::delete);
+        return "OK";
     }
 }

@@ -1,5 +1,6 @@
 package org.jugru.monkeyStatistics.model;
 
+
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -31,6 +32,18 @@ public class QuestionMetaInformation {
     @ElementCollection(fetch = FetchType.EAGER)
     @Column
     private Set<Heading> headings = new HashSet<>();
+
+    @Embedded
+    @Column
+    private Required required;
+
+    public Required getRequired() {
+        return required;
+    }
+
+    public void setRequired(Required required) {
+        this.required = required;
+    }
 
     @Deprecated //TODO удалить
     public String getHeadingAsString() {

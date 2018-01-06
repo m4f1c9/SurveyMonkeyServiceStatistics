@@ -5,12 +5,12 @@ function createGCEditArea(id, div, chartsData) {
     div.append($(' <input style="width: 600px" class="chart-name" type="text" value="' + chartsData.chartName + '">'));
     div.append($('<h3>Вопросы</h3>'));
     let table = $('<table></table>');
-    let tr1 = $('<tr></tr>');
+
     let tr2 = $('<tr></tr>');
     let tr3 = $('<tr class="questions"></tr>');
-    tr1.append($('<td></td>'));
-    tr2.append($('<td></td>'));
-    tr3.append($('<td></td>'));
+
+    tr2.append($('<td>Конференции</td>'));
+    tr3.append($('<td>Вопросы</td>'));
     let quest = [];
     chartsData.questionDetails.forEach(function (item, i, arr) {
         quest[i] = item.questionId;
@@ -46,7 +46,7 @@ function createGCEditArea(id, div, chartsData) {
 
 
     });
-    table.append(tr1);
+
     table.append(tr2);
     table.append(tr3);
 

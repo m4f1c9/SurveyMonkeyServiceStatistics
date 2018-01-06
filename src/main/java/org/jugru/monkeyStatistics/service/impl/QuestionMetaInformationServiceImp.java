@@ -85,7 +85,7 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
         }
     }
 
-
+    @Transactional
     @Override
     public List<QuestionMetaInformation> getQuestionMetaInformationBySurveyId(Long id) {
         List<QuestionMetaInformation> list = new ArrayList<>();
