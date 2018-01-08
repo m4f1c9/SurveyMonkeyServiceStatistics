@@ -77,7 +77,6 @@ function addUngpoupedQuestions(div, chartsData) {
         let question = createQuestionsSelect(item);
         addOnChangeBehaviorToSurveysSelectU(surveys, question);
         addOnChangeBehaviorToQuestionsSelectU(question);
-
         let questionOptions = item.questionOptions
         singleQuestions.append($('<h3>Вопрос</h3>'));
         singleQuestions.append(question);
@@ -85,65 +84,104 @@ function addUngpoupedQuestions(div, chartsData) {
         div.append(singleQuestions);
     });
 }
+
 function createDeleteButton() {
-    let delChart= $('<button class="delete-gr">Удалить этот вопрос</button>');
+    let delChart = $('<button class="delete-gr">Удалить этот вопрос</button>');
     delChart.on('click', getGr);
     return delChart;
 }
 
 
-function createQuestionsSelect(item, surveys){
+function createQuestionsSelect(item, surveys) {
     let question = $('<select style="width: 500px" class="question"></select>');
     let id;
-    if(item != undefined) {
+    if (item != undefined) {
         id = item.surveyId;
     }
-    else{
+    else {
         id = surveys.find('option:selected').val();
     }
-    $.ajax({
-        url: "/MonkeyStatistics/api/questionsBySurveyId",
-        dataType: "json",
-        data: "id=" + id,
-        method: "POST",
-        success: function (questionsData) {
-            for (var i = 0; i < questionsData.length; i++) {
-                var t = questionsData[i];
-                question.append('<option value="' + t.id + '">' + t.name + '</option>');
-            }
-            if(item != undefined) {
-                question.find('option[value=' + item.questionMetaInfId + ']').attr('selected', 'selected');
-            }
-        }
-    });
+    getQuestionsDataAndAppendItToQuestionsSelectU(id, question, item);
     return question;
 }
 
 
 function addOnChangeBehaviorToSurveysSelectU(surveys, question) {
     surveys.on('change', function () {
-        $.ajax({
-            url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + $(this).find('option:selected').val(),
-            dataType: "json",
-            success: function (questionsData) {
-                question.empty();
-                for (var i = 0; i < questionsData.length; i++) {
-                    var t = questionsData[i];
-                    question.append('<option value="' + t.id + '">' + t.name + '</option>');
-                }
-            }
-        });
+        let id = $(this).find('option:selected').val();
+        getQuestionsDataAndAppendItToQuestionsSelectU(id, question);
     });
 }
 
-function addOnChangeBehaviorToQuestionsSelectU(question){
+function getQuestionsDataAndAppendItToQuestionsSelectU(id, question, item) {
+    let questionsData = sessionStorage.getItem('questionsBySurveyId' + id);
+    if (questionsData != null) {
+        appendQuestionsToQuestionsSelectU(question, JSON.parse(questionsData), item);
+    }
+    else {
+        $.ajax({
+            url: "/MonkeyStatistics/api/questionsBySurveyId",
+            dataType: "json",
+            data: "id=" + id,
+            method: "POST",
+            success: function (questionsData) {
+                sessionStorage.setItem('questionsBySurveyId' + id, JSON.stringify(questionsData));
+                appendQuestionsToQuestionsSelectU(question, questionsData, item);
+            }
+        });
+    }
+}
+
+function appendQuestionsToQuestionsSelectU(question, questionsData, item) {
+    question.empty();
+    for (var i = 0; i < questionsData.length; i++) {
+        var t = questionsData[i];
+        question.append('<option value="' + t.id + '">' + t.name + '</option>');
+    }
+    if (item != undefined) {
+        question.find('option[value=' + item.questionMetaInfId + ']').attr('selected', 'selected');
+    }
+    question.change(); // TODO вызможно следует внести в if
+    // Если когда ты это читаеш все работает нормально то просто удали TODO
+}
+
+function addOnChangeBehaviorToQuestionsSelectU(question) {
     question.on('change', function () {
-        let chartName =  $(this).closest('.edit-area').find('.chart-name').val();
-        if(chartName === '' || chartName == null) {
+        let chartName = $(this).closest('.edit-area').find('.chart-name').val();
+        if (chartName === '' || chartName == null) {
             $(this).closest('.edit-area').find('.chart-name').val($(this).find('option:selected').text());
         }
+        let surveyId =  $(this).closest('.single-question-div').find('.surveys-select-chart').find('option:selected').val();
+        let questionsData = sessionStorage.getItem('questionsBySurveyId' + surveyId);
+        if(questionsData != null){
+            questionsData = JSON.parse(questionsData);
+            let questionId = $(this).find('option:selected').val();
+            questionsData.forEach(function (item, i, arr) {
+                if(item.id == questionId){
+                    if(item.withCustomChoice){
+                        question.closest('.single-question-div').find('.custom-choice').attr('disabled', false);
+                    }
+                    else{
+                        question.closest('.single-question-div').find('.custom-choice').get(0).checked = false;
+                        question.closest('.single-question-div').find('.custom-choice').attr('disabled', true);
+                    }
+                    if(item.withNoChoice){
+                        question.closest('.single-question-div').find('.no-choice').attr('disabled', false);
+                    }
+                    else{
+                        question.closest('.single-question-div').find('.no-choice').get(0).checked = false;
+                        question.closest('.single-question-div').find('.no-choice').attr('disabled', true);
+                    }
+                }
+            })
+        }
+
     });
 }
+function disableButtonsU() {
+    
+}
+
 
 function createUEditArea(id, div, chartsData) {
     div.append($(' <input class="chart-id" hidden type="text" value="' + id + '">'));
@@ -194,7 +232,7 @@ function addUQuestion() {
 
     singleQuestions.append($('<h3>Опрос</h3>'));
     singleQuestions.append(surveys);
-    let question =  createQuestionsSelect(null, surveys);
+    let question = createQuestionsSelect(null, surveys);
     addOnChangeBehaviorToSurveysSelectU(surveys, question);
     addOnChangeBehaviorToQuestionsSelectU(question);
 

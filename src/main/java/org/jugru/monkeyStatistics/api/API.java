@@ -15,6 +15,7 @@ import org.jugru.monkeyStatistics.service.QuestionMetaInformationService;
 import org.jugru.monkeyStatistics.service.SurveyService;
 import org.jugru.monkeyStatistics.util.ChartDataBuilder;
 import org.jugru.monkeyStatistics.util.IdNamePair;
+import org.jugru.monkeyStatistics.util.Questions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -107,15 +108,17 @@ public class API {
     }
 
     @RequestMapping("/api/questionsBySurveyId")
-    public List<IdNamePair> questionsBySurveyId(@RequestParam(value = "id") Long id) {
+    public List<Questions> questionsBySurveyId(@RequestParam(value = "id") Long id) {
 
-        List<IdNamePair> questions = new ArrayList<>();
+        List<Questions> questions = new ArrayList<>();
         List<QuestionMetaInformation> list = questionMetaInformationService.getQuestionMetaInformationBySurveyId(id);
         list.forEach((t) -> {
             questions.add(
-                    new IdNamePair(
+                    new Questions(
                             t.getId(),
-                            ChartDataBuilder.removeTags(questionMetaInformationService.getHeadingAsStringFromQuestionMetaInformationId(t.getId()))));
+                            ChartDataBuilder.removeTags(questionMetaInformationService.getHeadingAsStringFromQuestionMetaInformationId(t.getId())),
+                            questionMetaInformationService.isWithCustomChoice(t.getId()),
+                            questionMetaInformationService.isWithNoChoice(t.getId())));
         });
         return questions;
     }

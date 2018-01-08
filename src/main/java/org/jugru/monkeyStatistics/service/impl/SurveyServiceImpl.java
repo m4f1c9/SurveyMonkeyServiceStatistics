@@ -29,7 +29,8 @@ public class SurveyServiceImpl implements SurveyService {
         return surveyRepository.saveAndFlush(survey);
     }
 
-    @Cacheable(cacheNames = "survey",  key="{ #root.methodName, #id}")
+    // TODO вернуть обратно после написания query по вложнным коллекциям
+    //@Cacheable(cacheNames = "survey",  key="{ #root.methodName, #id}")
     @Override
     public Survey get(long id) {
         return surveyRepository.findOne(id);

@@ -135,7 +135,15 @@ public class QuestionMetaInformation {
 
     @Override
     public String toString() {
-        return "Questions{" + "id=" + id + ", position=" + position + ", family=" + family + ", subtype=" + subtype + ", visible=" + visible + ", headings=" + headings + '}';
+        return "QuestionMetaInformation{" +
+                "id=" + id +
+                ", position=" + position +
+                ", family='" + family + '\'' +
+                ", subtype='" + subtype + '\'' +
+                ", visible=" + visible +
+                ", answers=" + answers +
+                ", headings=" + headings +
+                ", required=" + required +
+                '}';
     }
-
 }

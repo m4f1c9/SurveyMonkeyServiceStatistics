@@ -2,16 +2,13 @@ package org.jugru.monkeyStatistics.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import javax.transaction.Transactional;
 
-import org.jugru.monkeyStatistics.model.AnswerMetaInformation;
-import org.jugru.monkeyStatistics.model.Choice;
-import org.jugru.monkeyStatistics.model.ChoiceOrRow;
-import org.jugru.monkeyStatistics.model.Other;
-import org.jugru.monkeyStatistics.model.QuestionMetaInformation;
-import org.jugru.monkeyStatistics.model.Row;
-import org.jugru.monkeyStatistics.model.Survey;
+import org.jugru.monkeyStatistics.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.jugru.monkeyStatistics.repository.QuestionMetaInformationRepository;
 import org.jugru.monkeyStatistics.service.QuestionMetaInformationService;
@@ -31,6 +28,8 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
     @Autowired
     private SurveyService surveyService;
 
+    Logger logger = LoggerFactory.getLogger(QuestionMetaInformationServiceImp.class);
+
     @Override
     public QuestionMetaInformation save(QuestionMetaInformation t) {
         return questionMetaInformationRepository.save(t);
@@ -39,7 +38,9 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
     @Cacheable(cacheNames = "questionMetaInformation")
     @Override
     public QuestionMetaInformation get(long id) {
-        return questionMetaInformationRepository.findOne(id);
+        QuestionMetaInformation questionMetaInformation = questionMetaInformationRepository.findOne(id);
+        logger.debug("Get QuestionMetaInformation - {}",questionMetaInformation);
+        return questionMetaInformation;
     }
 
     @Override
@@ -77,24 +78,19 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
     }
 
 
-    public List<? extends ChoiceOrRow> getChoiceOrRowsByQuestionMetaInformationId(Long id, boolean UseRow_idInstedOfChoice_id) {
-        if (UseRow_idInstedOfChoice_id) {
+    public List<? extends ChoiceOrRow> getChoiceOrRowsByQuestionMetaInformationId(Long id, boolean UseRow_idInsteadOfChoice_id) {
+        if (UseRow_idInsteadOfChoice_id) {
             return questionMetaInformationService.getRowsByQuestionMetaInformationId(id);
         } else {
             return questionMetaInformationService.getChoicesByQuestionMetaInformationId(id);
         }
     }
 
-    @Transactional
+
+    @Cacheable(cacheNames = "listOfQuestionMetaInformation", key = "{ #root.methodName, #id}")
     @Override
     public List<QuestionMetaInformation> getQuestionMetaInformationBySurveyId(Long id) {
-        List<QuestionMetaInformation> list = new ArrayList<>();
-        Survey survey = surveyService.get(id);
-        survey.getPages().forEach((t) -> {
-            List<QuestionMetaInformation> list2 = t.getQuestions();
-            list.addAll(list2);
-        });
-        return list;
+         return questionMetaInformationRepository.getQuestionMetaInformationBySurveyId(id);
     }
 
     @Cacheable(cacheNames = "countById", key = "{ #root.methodName, #id}")
@@ -136,5 +132,23 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
     public boolean isUseRow_idInsteadOfChoice_idByQuestionMetaInformationId(Long id) {
         return (questionMetaInformationRepository.countAvailableRowsByQuestionMetaInformationId(id) >=
                 questionMetaInformationRepository.countAvailableChoicesByQuestionMetaInformationId(id));
+    }
+
+    @Transactional
+    @Cacheable(cacheNames = "booleanById", key = "{ #root.methodName, #id}")
+    @Override
+    public boolean isWithNoChoice(Long id) {
+        return Objects.isNull(questionMetaInformationService.get(id).getRequired());
+    }
+
+    @Transactional
+    @Override
+    @Cacheable(cacheNames = "booleanById", key = "{ #root.methodName, #id}")
+    public boolean isWithCustomChoice(Long id) {
+        return Optional.
+                ofNullable(questionMetaInformationService.get(id)).
+                map(QuestionMetaInformation::getAnswers).
+                map(AnswerMetaInformation::getOther).
+                map(Other::getIs_answer_choice).orElse(false);
     }
 }

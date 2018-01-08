@@ -31,6 +31,7 @@ public class ChartsPresetServiceImp implements ChartsPresetService {
     @Autowired
     ChartService chartService;
 
+
     @Override
     public ChartsPreset save(ChartsPreset t) {
         return chartsPresetRepository.save(t);
@@ -62,7 +63,7 @@ public class ChartsPresetServiceImp implements ChartsPresetService {
         return answer;
     }
 
-    @Cacheable(cacheNames = "listOfIdNamePair")
+
     @Override //TODO убрать проверку на null
     public List<IdNamePair> getIdNamePairsByPresetId(Long id) {
         List<IdNamePair> answer = new LinkedList<>();

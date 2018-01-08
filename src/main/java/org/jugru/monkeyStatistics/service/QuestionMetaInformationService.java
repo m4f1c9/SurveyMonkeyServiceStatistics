@@ -15,7 +15,7 @@ public interface QuestionMetaInformationService extends Service<QuestionMetaInfo
 
     List<Row> getRowsByQuestionMetaInformationId(Long id);
 
-    List<? extends ChoiceOrRow> getChoiceOrRowsByQuestionMetaInformationId(Long id, boolean UseRow_idInstedOfChoice_id);
+    List<? extends ChoiceOrRow> getChoiceOrRowsByQuestionMetaInformationId(Long id, boolean UseRow_idInsteadOfChoice_id);
 
     List<QuestionMetaInformation> getQuestionMetaInformationBySurveyId(Long id);
 
@@ -30,4 +30,9 @@ public interface QuestionMetaInformationService extends Service<QuestionMetaInfo
     String getHeadingAsStringFromQuestionMetaInformationId(Long id);
 
     boolean isUseRow_idInsteadOfChoice_idByQuestionMetaInformationId(Long id);
+
+    boolean isWithNoChoice(Long id);
+
+    boolean isWithCustomChoice(Long id);
+
 }
