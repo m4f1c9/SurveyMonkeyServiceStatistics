@@ -17,6 +17,11 @@
         <appender-ref ref="STDOUT" />
     </logger>
 
+    <logger name="org.jugru.monkeyStatistics.api" additivity="false">
+        <level value="warn" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
     <root level="warn">
         <appender-ref ref="STDOUT" />
     </root>

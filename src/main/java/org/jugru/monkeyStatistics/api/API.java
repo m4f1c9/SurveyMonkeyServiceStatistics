@@ -16,6 +16,8 @@ import org.jugru.monkeyStatistics.service.SurveyService;
 import org.jugru.monkeyStatistics.util.ChartDataBuilder;
 import org.jugru.monkeyStatistics.util.IdNamePair;
 import org.jugru.monkeyStatistics.util.Questions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +42,7 @@ public class API {
     @Autowired
     SurveyService surveyService;
 
+    Logger logger = LoggerFactory.getLogger(API.class);
 
     @RequestMapping("/api/saveChart")
     public Chart saveChart(@RequestBody Chart chart) {
@@ -152,6 +155,7 @@ public class API {
 
     @RequestMapping("/api/draw/chart")
     public List<ChartData> chartData(@RequestParam(value = "id") Long id) {
+        logger.debug("Draw chart. Id is {}",id);
         return chartService.get(id).createChartData(chartDataBuilder);
     }
 

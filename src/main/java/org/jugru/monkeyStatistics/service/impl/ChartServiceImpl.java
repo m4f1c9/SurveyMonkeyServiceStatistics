@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ChartServiceImpl implements ChartService {
 
-    Logger logger = LoggerFactory.getLogger(ChartService.class);
+    private Logger logger = LoggerFactory.getLogger(ChartService.class);
 
     @Autowired
     ChartRepository chartRepository;

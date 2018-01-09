@@ -32,7 +32,7 @@ import org.springframework.stereotype.Component;
 public class ChartDataBuilder {
 
 
-    Logger logger = LoggerFactory.getLogger(ChartDataBuilder.class);
+    private Logger logger = LoggerFactory.getLogger(ChartDataBuilder.class);
 
     @Autowired
     AnswerService answerService;
@@ -97,7 +97,7 @@ public class ChartDataBuilder {
         List row = new LinkedList();
         Long surveyId = surveyService.findSurveyIdByQuestionMetaInformationId(questionMetaInfId);
         String surveyName = surveyService.getSurveyNameBySurveyId(surveyId);
-        row.add(surveyName);
+        row.add(editRowName(surveyName));
 
 
         int conferenceAnswers = surveyService.countResponsesBySurveyId(surveyId);
@@ -135,16 +135,17 @@ public class ChartDataBuilder {
     }
 
 
-    private ChartData createChartDataFromSingleChart(CrossGroupingChart сrossGroupingChart){
+    private ChartData createChartDataFromSingleChart(CrossGroupingChart сrossGroupingChart) {
         SingleQuestionChart chart = new SingleQuestionChart();
         chart.setQuestionMetaInfId(сrossGroupingChart.getFirstQuestionMetaInformationId());
         chart.setQuestionOptions(сrossGroupingChart.getFirstQuestionOptions());
-        ChartData data = createChartDataFromSingleChart(chart, new ChartOptions(сrossGroupingChart.getChartOptions()), сrossGroupingChart.getFirstQuestionName() +" / " + сrossGroupingChart.getChartName());
+        ChartData data = createChartDataFromSingleChart(chart, new ChartOptions(сrossGroupingChart.getChartOptions()), сrossGroupingChart.getFirstQuestionName() + " / " + сrossGroupingChart.getChartName());
         data.getOptions().gethAxis().setMaxValue(MINIMUM_HAXIS_UNGROUPED);
         return data;
 
     }
-    public List<ChartData> createFullChartDataFromCrossGroupingChart(CrossGroupingChart сrossGroupingChart){
+
+    public List<ChartData> createFullChartDataFromCrossGroupingChart(CrossGroupingChart сrossGroupingChart) {
 
 
         List<ChartData> chartData = new ArrayList<>();
@@ -183,7 +184,7 @@ public class ChartDataBuilder {
 
         for (int firstChoicesCount = 0; firstChoicesCount < (firstChoices.size() - (сrossGroupingChart.isHideLastChoiceInFirstQuestion() ? 1 : 0)); firstChoicesCount++) { // -1!!
             List row = new LinkedList();
-            row.add(removeTags(firstChoices.get(firstChoicesCount).getText()));
+            row.add(editRowName(removeTags(firstChoices.get(firstChoicesCount).getText())));
 
             Long firstChoiceID = firstChoices.get(firstChoicesCount).getId();
             int firstChoiceCount = answerService.countById(firstChoiceID, isUseRow_idInsteadOfChoice_idForSecondQuestion);
@@ -243,12 +244,8 @@ public class ChartDataBuilder {
         for (int choiceCount = 0; choiceCount < groupedByChoiceChart.getChoiceGroups().size(); choiceCount++) {  // отходим ChoiceGroupList
             ChoiceGroup choiceGroup = groupedByChoiceChart.getChoiceGroups().get(choiceCount);
             List row = new LinkedList();
+            row.add(editRowName(choiceGroup.getText()));
 
-
-
-
-
-            row.add(choiceGroup.getText());
             for (int conferenceCount = 0; conferenceCount < choiceGroup.getChoicesId().size(); conferenceCount++) {  // обходим конкретные ответы 
                 Long choice_id = choiceGroup.getChoicesId().get(conferenceCount);
                 if (Objects.nonNull(choice_id)) {
@@ -266,7 +263,7 @@ public class ChartDataBuilder {
 
                     int conferenceAnswers = surveyService.countResponsesBySurveyId(surveyId);
 
-                    int thisAnswers = answerService.countById(choiceGroup.getChoicesId().get(conferenceCount),isUseRow_idInsteadOfChoice_idForSecondQuestion);
+                    int thisAnswers = answerService.countById(choiceGroup.getChoicesId().get(conferenceCount), isUseRow_idInsteadOfChoice_idForSecondQuestion);
                     double percent = countPercentAndFormat(thisAnswers, conferenceAnswers);
                     row.add(percent);
                     addMetaDataToRow(thisAnswers, conferenceAnswers, percent, groupedByChoiceChart.getChartOptions(), surveyName, row);
@@ -397,7 +394,6 @@ public class ChartDataBuilder {
         columnWithNames.add("");    //не нужен, но не может быть null, поэтому ""
 
 
-
         Long questionMetaInformationId = singleChart.getQuestionMetaInfId();
         boolean isUseRow_idInsteadOfChoice_id = questionMetaInformationService.isUseRow_idInsteadOfChoice_idByQuestionMetaInformationId(questionMetaInformationId);
 
@@ -427,8 +423,8 @@ public class ChartDataBuilder {
 
         for (int conferenceCount = 0; conferenceCount < questionDetails.size(); conferenceCount++) {
             Long questionId = questionDetails.get(conferenceCount).getQuestionId();
-           Long surveyId = surveyService.findSurveyIdByQuestionMetaInformationId(questionId);
-           String surveyName = surveyService.getSurveyNameBySurveyId(surveyId);
+            Long surveyId = surveyService.findSurveyIdByQuestionMetaInformationId(questionId);
+            String surveyName = surveyService.getSurveyNameBySurveyId(surveyId);
 
             addDataToColumnWithNames(surveyName,
                     chartOptions,
@@ -503,7 +499,7 @@ public class ChartDataBuilder {
         }
 
 
-        Options options = Options.create(crossGroupingChart,firstChoicesCount,secondChoicesCount);
+        Options options = Options.create(crossGroupingChart, firstChoicesCount, secondChoicesCount);
         return options;
     }
 
@@ -518,7 +514,7 @@ public class ChartDataBuilder {
         int questions = groupedByChoiceChart.getQuestionDetails().size();
 
 
-        Options options = Options.create(groupedByChoiceChart,choices,questions); //TODO подумать про высоту
+        Options options = Options.create(groupedByChoiceChart, choices, questions); //TODO подумать про высоту
         return options;
     }
 
@@ -582,6 +578,22 @@ public class ChartDataBuilder {
 
         Matcher m = REMOVE_TAGS.matcher(string);
         return m.replaceAll("");
+    }
+
+    private String editRowName(String string) {
+        if (string == null || string.length() == 0) {
+            return string;
+        }
+
+        StringBuilder builder = new StringBuilder(string);
+
+        for (int i = 1; i < builder.length(); i++)
+            if (builder.charAt(i) == '/' || builder.charAt(i) == '—') {
+                builder.insert(i +1, '\n');
+            }
+
+
+        return builder.toString();
     }
 
 }

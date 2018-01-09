@@ -77,7 +77,6 @@ function createPreset() {
     $('.add-chart').attr("disabled", false);
 
 
-
 }
 
 function showPresets() {
@@ -128,7 +127,7 @@ function editPreset() {
 }
 
 
-function drawChart(div, id) {
+function drawChartById(div, id) {
     $.ajax({
         url: "/MonkeyStatistics/api/draw/chart?id=" + id,
         success: function (chartData) {
@@ -222,7 +221,7 @@ function cancelChartChanges() {
     let id = $(this).closest('.edit-area').find('.chart-id').val();
     let editArea = $(this).closest('.edit-area');
 
-    createEditArea(id,editArea);
+    createEditArea(id, editArea);
 }
 
 function deleteChart() {
@@ -240,24 +239,6 @@ function deleteChart() {
     });
 }
 
-
-function drawChartById(div, id) {
-    $.ajax({
-        url: "/MonkeyStatistics/api/draw/chart?id=" + id,
-        success: function (chartData) {
-            div.empty()
-            chartData.forEach(function (item, i, arr) {
-                let newDiv = $('<div></div>');
-                div.append(newDiv);
-                var data = google.visualization.arrayToDataTable(item.data)
-                var options = item.options;
-                var chart = new google.visualization.BarChart(newDiv.get(0));
-                chart.draw(data, options);
-            });
-
-        }
-    });
-}
 
 function drawChartByData(div, data) {
     $.ajax({
@@ -327,3 +308,64 @@ function show() {
     });
 }
 
+
+function getQuestionsDataAndAppendItToQuestionsSelect(surveyId, questions, questionId) {
+    let questionsData = sessionStorage.getItem('questionsBySurveyId' + surveyId);
+    if (questionsData != null) {
+        appendQuestionsToQuestionsSelect(questions, JSON.parse(questionsData), questionId);
+    }
+    else {
+        $.ajax({
+            url: "/MonkeyStatistics/api/questionsBySurveyId",
+            dataType: "json",
+            data: "id=" + surveyId,
+            method: "POST",
+            success: function (questionsData) {
+                sessionStorage.setItem('questionsBySurveyId' + surveyId, JSON.stringify(questionsData));
+                appendQuestionsToQuestionsSelect(questions, questionsData, questionId);
+            }
+        });
+    }
+}
+
+function appendQuestionsToQuestionsSelect(questions, questionsData, questionId) {
+    questions.empty();
+    for (var i = 0; i < questionsData.length; i++) {
+        var t = questionsData[i];
+        questions.append('<option value="' + t.id + '">' + t.name + '</option>');
+    }
+    if (questionId != undefined) {
+        questions.find('option[value=' + questionId + ']').attr('selected', 'selected');
+    }
+
+}
+
+function getAnswersDataAndAppendItToAnswersSelect(questionId, answers, answerId) {
+    console.log("questionId " + questionId + " answers " + answers + " answerId " + answerId);
+    let answersData = sessionStorage.getItem('answers' + questionId);
+    if (answersData != null) {
+        appendAnswersToAnswersSelect(answers, JSON.parse(answersData), answerId);
+    }
+    else {
+        $.ajax({
+            url: "/MonkeyStatistics/api/answers?id=" + questionId,
+            dataType: "json",
+            success: function (answersData) {
+                sessionStorage.setItem('answers' + questionId, JSON.stringify(answersData));
+                appendAnswersToAnswersSelect(answers, answersData, answerId);
+            }
+        });
+    }
+}
+
+function appendAnswersToAnswersSelect(answers, answersData, answerId) {
+    answers.empty();
+    answers.append('<option value="null">' + 'Вариант отсутствует' + '</option>');
+    for (var i = 0; i < answersData.length; i++) {
+        var t = answersData[i];
+        answers.append('<option value="' + t.id + '">' + t.name + '</option>');
+    }
+    if (answerId != null) {
+        answers.find('option[value=' + answerId + ']').attr('selected', 'selected');
+    }
+}

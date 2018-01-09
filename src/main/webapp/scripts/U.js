@@ -101,7 +101,7 @@ function createQuestionsSelect(item, surveys) {
     else {
         id = surveys.find('option:selected').val();
     }
-    getQuestionsDataAndAppendItToQuestionsSelectU(id, question, item);
+    getQuestionsDataAndAppendItToQuestionsSelect(id, question, item.questionMetaInfId);
     return question;
 }
 
@@ -109,41 +109,11 @@ function createQuestionsSelect(item, surveys) {
 function addOnChangeBehaviorToSurveysSelectU(surveys, question) {
     surveys.on('change', function () {
         let id = $(this).find('option:selected').val();
-        getQuestionsDataAndAppendItToQuestionsSelectU(id, question);
+        getQuestionsDataAndAppendItToQuestionsSelect(id, question);
     });
 }
 
-function getQuestionsDataAndAppendItToQuestionsSelectU(id, question, item) {
-    let questionsData = sessionStorage.getItem('questionsBySurveyId' + id);
-    if (questionsData != null) {
-        appendQuestionsToQuestionsSelectU(question, JSON.parse(questionsData), item);
-    }
-    else {
-        $.ajax({
-            url: "/MonkeyStatistics/api/questionsBySurveyId",
-            dataType: "json",
-            data: "id=" + id,
-            method: "POST",
-            success: function (questionsData) {
-                sessionStorage.setItem('questionsBySurveyId' + id, JSON.stringify(questionsData));
-                appendQuestionsToQuestionsSelectU(question, questionsData, item);
-            }
-        });
-    }
-}
 
-function appendQuestionsToQuestionsSelectU(question, questionsData, item) {
-    question.empty();
-    for (var i = 0; i < questionsData.length; i++) {
-        var t = questionsData[i];
-        question.append('<option value="' + t.id + '">' + t.name + '</option>');
-    }
-    if (item != undefined) {
-        question.find('option[value=' + item.questionMetaInfId + ']').attr('selected', 'selected');
-    }
-    question.change(); // TODO вызможно следует внести в if
-    // Если когда ты это читаеш все работает нормально то просто удали TODO
-}
 
 function addOnChangeBehaviorToQuestionsSelectU(question) {
     question.on('change', function () {
@@ -179,7 +149,7 @@ function addOnChangeBehaviorToQuestionsSelectU(question) {
     });
 }
 function disableButtonsU() {
-    
+
 }
 
 
@@ -200,7 +170,8 @@ function createUEditArea(id, div, chartsData) {
     let chartDiv = $('<div class="chart"></div>');
     div.append($('<h3>Предпросмотр</h3>'));
     div.append(chartDiv);
-    drawChart(chartDiv, id);
+
+    setTimeout(drawChartById, 1000, chartDiv, id);
 
     buttons.append($('<button class="reDrawCG">Перерисовать</button>'))
     buttons.find('.reDrawCG').on('click', reDrawU);

@@ -27,19 +27,7 @@ function createGCEditArea(id, div, chartsData) {
         let question = $('<select  style="width: 250px" class="question"></select>'); //TODO remove style
         let surveyId = item.surveyId;
 
-        appendQuestionsToSelectGC(surveyId, question, item.questionId)
-        $.ajax({
-            url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + surveyId,
-            dataType: "json",
-            success: function (questionsData) {
-                for (var i = 0; i < questionsData.length; i++) {
-                    var t = questionsData[i];
-                    question.append('<option value="' + t.id + '">' + t.name + '</option>');
-                }
-                question.find('option[value=' + item.questionId + ']').attr('selected', 'selected');
-            }
-        });
-
+        getQuestionsDataAndAppendItToQuestionsSelect(surveyId, question, item.questionId)
         addOnChangeBehaviorToQuestionsSelectGC(question);
 
         tr3.append($('<td style="width: 250px"></td>').append(question)); //TODO remove style
@@ -55,12 +43,11 @@ function createGCEditArea(id, div, chartsData) {
 
         choices.append($('<td><input class="row-name" type="text" value="' + item.text + '"></td>'));
 
-        item.choicesId.forEach(function (ID, i, arr) {
+        item.choicesId.forEach(function (answerId, i, arr) {
             let answers = $('<select  style="width: 250px" class="choice"></select>');
-            answers.append('<option value="null">' + 'Вариант отсутствует' + '</option>');
             let questionId = quest[i];
             addOnChangeBehaviorToAnswersSelectGC(answers);
-            appendAnswersToSelectGC(questionId, answers, ID);
+            getAnswersDataAndAppendItToAnswersSelect(questionId, answers, answerId);
             choices.append($('<td></td>').append(answers));
         });
 
@@ -80,7 +67,7 @@ function createGCEditArea(id, div, chartsData) {
     let chartDiv = $('<div class="chart"></div>');
     div.append($('<h3>Предпросмотр</h3>'));
     div.append(chartDiv);
-    drawChart(chartDiv, id);
+    setTimeout(drawChartById, 1000, chartDiv, id);
 
     buttons.append($('<button class="reDrawGC">Перерисовать</button>'))
     buttons.find('.reDrawGC').on('click', reDrawGC);
@@ -103,10 +90,9 @@ function newRow() {
 
     for (let i = 1; i < questions.children().length; i++) {
         let answers = $('<select  style="width: 250px" class="choice"></select>'); //TODO remove style
-        answers.append('<option value="null">' + 'Вариант отсутствует' + '</option>');
         let questionId = questions.find('td:eq(' + i + ')').find('option:selected').val();
         addOnChangeBehaviorToAnswersSelectGC(answers);
-        appendAnswersToSelectGC(questionId, answers);
+        getAnswersDataAndAppendItToAnswersSelect(questionId, answers);
         choices.append($('<td></td>').append(answers));
     }
     table.append(choices);
@@ -131,7 +117,7 @@ function newColumn() {
     let question = $('<select  style="width: 250px" class="question"></select>'); //TODO remove style
     let surveyId = surveys.find('option:selected').val();
 
-    appendQuestionsToSelectGC(surveyId, question);
+    getQuestionsDataAndAppendItToQuestionsSelect(surveyId, question);
 
     surveys.change();
     addOnChangeBehaviorToQuestionsSelectGC(question);
@@ -152,61 +138,16 @@ function newColumn() {
 
 }
 
-function appendQuestionsToSelectGC(surveyId, question, questionId) {
-    $.ajax({
-        url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + surveyId,
-        dataType: "json",
-        success: function (questionsData) {
-            for (var i = 0; i < questionsData.length; i++) {
-                var t = questionsData[i];
-                question.append('<option value="' + t.id + '">' + t.name + '</option>');
-            }
-            if(questionId != null) {
-                question.find('option[value=' + questionId + ']').attr('selected', 'selected');
-            }
-        }
-    });
-}
-
-
-
-function appendAnswersToSelectGC(questionId, answers, ID) {
-    $.ajax({
-        url: "/MonkeyStatistics/api/answers?id=" + questionId,
-        dataType: "json",
-        success: function (questionsData) {
-
-            for (var i = 0; i < questionsData.length; i++) {
-                var t = questionsData[i];
-                answers.append('<option value="' + t.id + '">' + t.name + '</option>');
-            }
-            if (ID != null) {
-                answers.find('option[value=' + ID + ']').attr('selected', 'selected');
-            }
-        }
-    });
-}
-
 
 function addOnChangeBehaviorToQuestionsSelectGC(question) {
     question.on('change', function () {
         let index = $(this).parent().index();
-        let choices = $(this).closest('table').find('.choices td:nth-child(' + (index + 1) + ')').find('select'); // +1 так как это CSS селектор
-        choices.empty();
+        let answers = $(this).closest('table').find('.choices td:nth-child(' + (index + 1) + ')').find('select'); // +1 так как это CSS селектор
+        answers.empty();
 
         let questionId = $(this).find('option:selected').val();
-        $.ajax({
-            url: "/MonkeyStatistics/api/answers?id=" + questionId,
-            dataType: "json",
-            success: function (questionsData) {
-                choices.empty();
-                choices.append('<option value="null">' + 'Вариант отсутствует' + '</option>');
-                for (var i = 0; i < questionsData.length; i++) {
-                    var t = questionsData[i];
-                    choices.append('<option value="' + t.id + '">' + t.name + '</option>');
-                }
-            }
-        });
+        getAnswersDataAndAppendItToAnswersSelect(questionId, answers);
+
 
         let chartName = $(this).closest('.edit-area').find('.chart-name').val();
         if (chartName === '' || chartName == null) {
@@ -221,20 +162,16 @@ function addOnChangeBehaviorToSurveysSelectGC(surveys) {
     surveys.on('change', function () {
         let index = $(this).parent().index();
         let questions = $(this).parent().parent().next().children('td:eq(' + index + ')').find('select');
+        let surveyId = $(this).find('option:selected').val();
         $.ajax({
-            url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + $(this).find('option:selected').val(),
+            url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + surveyId,
             dataType: "json",
             success: function (questionsData) {
                 questions.empty();
 
-                for (var i = 0; i < questionsData.length; i++) {
-                    var t = questionsData[i];
-                    questions.append('<option value="' + t.id + '">' + t.name + '</option>');
-                }
-
-
-                let chartName = questions.closest('.edit-area').find('.chart-name').val();
+                appendQuestionsToQuestionsSelect(questions, questionsData);
                 questions.change();
+                let chartName = questions.closest('.edit-area').find('.chart-name').val();
                 if (chartName === '' || chartName == null) {
                     questions.closest('.edit-area').find('.chart-name').val(chartName);
                 }

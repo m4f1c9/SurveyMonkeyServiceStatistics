@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ChartsPresetServiceImp implements ChartsPresetService {
 
-    Logger logger = LoggerFactory.getLogger(ChartsPresetService.class);
+    private Logger logger = LoggerFactory.getLogger(ChartsPresetService.class);
 
     @Autowired
     ChartsPresetRepository chartsPresetRepository;
@@ -31,17 +31,19 @@ public class ChartsPresetServiceImp implements ChartsPresetService {
     @Autowired
     ChartService chartService;
 
-
+    @CacheEvict(value = "listOfChartsPreset", allEntries = true)
     @Override
     public ChartsPreset save(ChartsPreset t) {
         return chartsPresetRepository.save(t);
     }
+
 
     @Override
     public ChartsPreset get(long id) {
         return chartsPresetRepository.findOne(id);
     }
 
+    @CacheEvict(value = "listOfChartsPreset", allEntries = true)
     @Override
     public void delete(ChartsPreset t) {
         chartsPresetRepository.delete(t);

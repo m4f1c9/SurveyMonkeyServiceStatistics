@@ -28,7 +28,7 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
     @Autowired
     private SurveyService surveyService;
 
-    Logger logger = LoggerFactory.getLogger(QuestionMetaInformationServiceImp.class);
+    private Logger logger = LoggerFactory.getLogger(QuestionMetaInformationServiceImp.class);
 
     @Override
     public QuestionMetaInformation save(QuestionMetaInformation t) {
