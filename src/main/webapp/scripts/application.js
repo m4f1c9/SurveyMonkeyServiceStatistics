@@ -204,7 +204,7 @@ function deleteChart() {
     let editArea = $(this).closest('.edit-area');
 
     $.ajax({
-        url: "/MonkeyStatistics/api/delete/chart",
+        url: "/MonkeyStatistics/api/chart",
         data: "id=" + id,
         method: "DELETE",
         success: function (data) {

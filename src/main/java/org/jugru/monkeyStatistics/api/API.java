@@ -37,8 +37,6 @@ public class API {
 
     Logger logger = LoggerFactory.getLogger(API.class);
 
-
-    // TODO
     @RequestMapping(value = "/api/presets")
     public List<IdNamePair> presets() {
         return chartsPresetService.getIdNamePairOfPresets();
