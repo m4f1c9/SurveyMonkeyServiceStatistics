@@ -6,6 +6,7 @@ import org.jugru.monkeyStatistics.model.chart.Chart;
 import org.jugru.monkeyStatistics.model.chart.GroupedByChoiceChart;
 import org.jugru.monkeyStatistics.repository.ChartRepository;
 import org.jugru.monkeyStatistics.service.ChartService;
+import org.jugru.monkeyStatistics.service.SurveyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,13 @@ public class ChartServiceImpl implements ChartService {
     private Logger logger = LoggerFactory.getLogger(ChartService.class);
 
     @Autowired
+    SurveyService surveyService;
+
+    @Autowired
     ChartRepository chartRepository;
+
+    @Autowired
+    ChartService chartService;
 
     @CacheEvict(value = "chart", allEntries = true) // TODO все ли?
     @Override
@@ -28,7 +35,7 @@ public class ChartServiceImpl implements ChartService {
         return chartRepository.save(t);
     }
 
-    @Cacheable(cacheNames = "chart")
+    @Cacheable(cacheNames = "chart", key = "{ #root.methodName, #id}")
     @Override
     public Chart get(long id) {
         Chart chart = chartRepository.findOne(id);
@@ -45,6 +52,13 @@ public class ChartServiceImpl implements ChartService {
             chart = c;
         }
 
+        return chart;
+    }
+
+    @Override
+    public Chart getPreparedForSending(Long id) {
+        Chart chart = chartService.get(id);
+        chart.prepareForSending(surveyService);
         return chart;
     }
 

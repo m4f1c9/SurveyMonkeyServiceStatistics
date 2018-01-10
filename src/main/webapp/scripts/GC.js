@@ -198,7 +198,8 @@ function saveGC() {
     $.ajax({
         type: "POST",
         contentType: 'application/json',
-        url: "/MonkeyStatistics/api/saveChart",
+        url: "/MonkeyStatistics/api/chart",
+        method: "PUT",
         dataType: "json",
         async: false,
         data: JSON.stringify(answer),

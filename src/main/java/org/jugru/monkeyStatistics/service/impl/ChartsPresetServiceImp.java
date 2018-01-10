@@ -1,5 +1,6 @@
 package org.jugru.monkeyStatistics.service.impl;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import javax.transaction.Transactional;
@@ -67,7 +68,7 @@ public class ChartsPresetServiceImp implements ChartsPresetService {
 
 
     @Override //TODO убрать проверку на null
-    public List<IdNamePair> getIdNamePairsByPresetId(Long id) {
+    public List<IdNamePair> getIdNamePairsOfChartsByPresetId(Long id) {
         List<IdNamePair> answer = new LinkedList<>();
 
         get(id).getCharts().forEach((t) -> {
@@ -96,5 +97,15 @@ public class ChartsPresetServiceImp implements ChartsPresetService {
         preset.addChart(chart);
 
         return chart;
+    }
+
+    @Override
+    public List<IdNamePair> getIdNamePairOfPresets() {
+        List<ChartsPreset> presets = chartsPresetService.getAll();
+        List<IdNamePair> pairs = new ArrayList<>();
+        presets.forEach((t) -> {
+            pairs.add(new IdNamePair(t.getId(), t.getName()));
+        });
+        return pairs;
     }
 }

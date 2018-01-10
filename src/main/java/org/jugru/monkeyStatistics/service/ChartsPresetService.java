@@ -16,5 +16,7 @@ public interface ChartsPresetService extends Service<ChartsPreset> {
 
     List<Long> getChartsIdByPresetId(Long id);
 
-    List<IdNamePair> getIdNamePairsByPresetId(Long id);
+    List<IdNamePair> getIdNamePairsOfChartsByPresetId(Long id);
+
+    List<IdNamePair> getIdNamePairOfPresets();
 }

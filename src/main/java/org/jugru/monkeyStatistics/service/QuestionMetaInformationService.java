@@ -6,6 +6,8 @@ import org.jugru.monkeyStatistics.model.Choice;
 import org.jugru.monkeyStatistics.model.ChoiceOrRow;
 import org.jugru.monkeyStatistics.model.QuestionMetaInformation;
 import org.jugru.monkeyStatistics.model.Row;
+import org.jugru.monkeyStatistics.util.IdNamePair;
+import org.jugru.monkeyStatistics.util.Questions;
 
 public interface QuestionMetaInformationService extends Service<QuestionMetaInformation> {
 
@@ -17,7 +19,13 @@ public interface QuestionMetaInformationService extends Service<QuestionMetaInfo
 
     List<? extends ChoiceOrRow> getChoiceOrRowsByQuestionMetaInformationId(Long id, boolean UseRow_idInsteadOfChoice_id);
 
+    public List<? extends ChoiceOrRow> getChoiceOrRowsByQuestionMetaInformationId(Long id);
+
     List<QuestionMetaInformation> getQuestionMetaInformationBySurveyId(Long id);
+
+    List<IdNamePair> getIdNamePairOfChoiceOrRowByQuestionMetaInformationId(Long id);
+
+    List<Questions> getQuestionsBySurveyId(Long id);
 
     Integer countChoicesByQuestionMetaInformationId(Long id);
 

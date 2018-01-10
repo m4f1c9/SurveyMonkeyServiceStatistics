@@ -14,7 +14,7 @@ function addChart() {
     let id = $(this).closest('body').find('.presets').find('.presets-select').find('option:selected').val();
     let workArea = $(this).closest('body').find('.work-area');
     $.ajax({
-        url: "/MonkeyStatistics/api/create/chart",
+        url: "/MonkeyStatistics/api/chart",
         data: "type=" + type + "&id=" + id,
         method: "POST",
         success: function (data) {
@@ -34,9 +34,8 @@ function deletePreset() {
     let presets = $(this).closest('body').find('.presets').find('.presets-select');
     let workArea = $(this).closest('body').find('.work-area');
     $.ajax({
-        url: "/MonkeyStatistics/api/delete/preset?id=" + id,
-
-        method: "POST",
+        url: "/MonkeyStatistics/api//preset?id=" + id,
+        method: "DELETE",
         success: function (surveysData) {
             presets.find('option[value=' + id + ']').remove();
             workArea.empty();
@@ -50,7 +49,7 @@ function createPreset() {
     let text = $(this).closest('.main-buttons').find('.preset-name').val();
     let presets = $(this).closest('body').find('.presets').find('.presets-select');
     $.ajax({
-        url: "/MonkeyStatistics/api/create/preset",
+        url: "/MonkeyStatistics/api/preset",
         data: "name=" + text,
         method: "POST",
         success: function (surveysData) {
@@ -59,25 +58,12 @@ function createPreset() {
             presets.find('option[value=' + surveysData.id + ']').attr('selected', 'selected');
 
             let presetId = surveysData.id;
-            $.ajax({
-                url: "/MonkeyStatistics/api/charts?id=" + presetId,
-                dataType: "json",
-                success: function (chartsData) {
-                    let workArea = $('.work-area');
-                    workArea.empty();
-                    for (var i = 0; i < chartsData.length; i++) {
-                        let newDiv = $('<div class=edit-area></div>');
-                        workArea.append(newDiv);
-                        createEditArea(chartsData[i].id, newDiv);
-                    }
-                }
-            });
+            getPresetDataAndDrawIt(presetId);
         }
     });
     $('.add-chart').attr("disabled", false);
-
-
 }
+
 
 function showPresets() {
     $.ajax({
@@ -110,26 +96,15 @@ function showSurveys() {
 
 function editPreset() {
     let presetId = $('.presets-select option:selected').val();
-    $.ajax({
-        url: "/MonkeyStatistics/api/charts?id=" + presetId,
-        dataType: "json",
-        success: function (chartsData) {
-            let workArea = $('.work-area');
-            workArea.empty();
-            for (var i = 0; i < chartsData.length; i++) {
-                let newDiv = $('<div class=edit-area></div>');
-                workArea.append(newDiv);
-                createEditArea(chartsData[i].id, newDiv);
-            }
-        }
-    });
+    getPresetDataAndDrawIt(presetId);
     $('.add-chart').attr("disabled", false);
 }
 
 
 function drawChartById(div, id) {
     $.ajax({
-        url: "/MonkeyStatistics/api/draw/chart?id=" + id,
+        url: "/MonkeyStatistics/api/draw?id=" + id,
+        method: "GET",
         success: function (chartData) {
             div.empty();
             chartData.forEach(function (item, i, arr) {
@@ -140,7 +115,6 @@ function drawChartById(div, id) {
                 var chart = new google.visualization.BarChart(chartDiv.get(0));
                 chart.draw(data, options);
             });
-
         }
     });
 }
@@ -148,6 +122,7 @@ function drawChartById(div, id) {
 function createEditArea(id, div) {
     $.ajax({
         url: "/MonkeyStatistics/api/chart?id=" + id,
+        method: "GET",
         dataType: "json",
         success: function (chartsData) {
             div.empty();
@@ -231,7 +206,7 @@ function deleteChart() {
     $.ajax({
         url: "/MonkeyStatistics/api/delete/chart",
         data: "id=" + id,
-        method: "POST",
+        method: "DELETE",
         success: function (data) {
             editArea.remove();
 
@@ -242,7 +217,7 @@ function deleteChart() {
 
 function drawChartByData(div, data) {
     $.ajax({
-        type: "POST",
+        method: "POST",
         contentType: 'application/json',
         url: "/MonkeyStatistics/api/preview",
         dataType: "json",
@@ -266,28 +241,18 @@ function drawChartByData(div, data) {
 
 
 function drawPresets() {
+    let presetId = $("#presets :selected").val();
     $.ajax({
-        url: "/MonkeyStatistics/api/charts?id=" + $("#presets :selected").val(),
+        url: "/MonkeyStatistics/api/charts?id=" + presetId,
+        method: "GET",
         success: function (chartsData) {
             let div = $('#chart');
             div.empty();
             for (let i = 0; i < chartsData.length; i++) {
                 let newDiv = $('<div></div>');
                 div.append(newDiv);
-                $.ajax({
-                    url: "/MonkeyStatistics/api/draw/chart?id=" + chartsData[i].id,
-                    success: function (chartData) {
-                        chartData.forEach(function (item, i, arr) {
-                            let newDiv2 = $('<div></div>');
-                            newDiv.append(newDiv2);
-                            var data = google.visualization.arrayToDataTable(item.data)
-                            var options = item.options;
-                            var chart = new google.visualization.BarChart(newDiv2.get(0));
-                            chart.draw(data, options);
-                        });
-
-                    }
-                });
+                let id = chartsData[i].id;
+                drawChartById(newDiv, id);
             }
         }
     });
@@ -326,6 +291,23 @@ function getQuestionsDataAndAppendItToQuestionsSelect(surveyId, questions, quest
             }
         });
     }
+}
+
+function getPresetDataAndDrawIt(presetId) {
+    $.ajax({
+        url: "/MonkeyStatistics/api/charts?id=" + presetId,
+        method: "GET",
+        dataType: "json",
+        success: function (chartsData) {
+            let workArea = $('.work-area');
+            workArea.empty();
+            for (var i = 0; i < chartsData.length; i++) {
+                let newDiv = $('<div class=edit-area></div>');
+                workArea.append(newDiv);
+                createEditArea(chartsData[i].id, newDiv);
+            }
+        }
+    });
 }
 
 function appendQuestionsToQuestionsSelect(questions, questionsData, questionId) {

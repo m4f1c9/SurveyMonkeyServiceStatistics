@@ -7,6 +7,9 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.jugru.monkeyStatistics.model.*;
+import org.jugru.monkeyStatistics.util.ChartDataBuilder;
+import org.jugru.monkeyStatistics.util.IdNamePair;
+import org.jugru.monkeyStatistics.util.Questions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,6 +89,35 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
         }
     }
 
+    public List<? extends ChoiceOrRow> getChoiceOrRowsByQuestionMetaInformationId(Long id) {
+        boolean useRow_idInsteadOfChoice_id = questionMetaInformationService.isUseRow_idInsteadOfChoice_idByQuestionMetaInformationId(id);
+        if (useRow_idInsteadOfChoice_id) {
+            return questionMetaInformationService.getRowsByQuestionMetaInformationId(id);
+        } else {
+            return questionMetaInformationService.getChoicesByQuestionMetaInformationId(id);
+        }
+    }
+
+    @Override
+    public List<Questions> getQuestionsBySurveyId(Long id) {
+        List<Questions> questions = new ArrayList<>();
+        List<QuestionMetaInformation> list = questionMetaInformationService.getQuestionMetaInformationBySurveyId(id);
+        list.forEach((t) -> questions.add(
+                new Questions(
+                        t.getId(),
+                        ChartDataBuilder.removeTags(questionMetaInformationService.getHeadingAsStringFromQuestionMetaInformationId(t.getId())),
+                        questionMetaInformationService.isWithCustomChoice(t.getId()),
+                        questionMetaInformationService.isWithNoChoice(t.getId()))));
+        return questions;
+    }
+
+    @Override
+    public List<IdNamePair> getIdNamePairOfChoiceOrRowByQuestionMetaInformationId(Long id) {
+        List<IdNamePair> answers = new ArrayList<>();
+        List<? extends ChoiceOrRow> choices = questionMetaInformationService.getChoiceOrRowsByQuestionMetaInformationId(id);
+        choices.forEach((t) -> answers.add(new IdNamePair(t.getId(), ChartDataBuilder.removeTags(t.getText()))));
+        return answers;
+    }
 
     @Cacheable(cacheNames = "listOfQuestionMetaInformation", key = "{ #root.methodName, #id}")
     @Override

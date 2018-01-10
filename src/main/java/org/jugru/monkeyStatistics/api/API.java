@@ -3,11 +3,7 @@ package org.jugru.monkeyStatistics.api;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
-import org.jugru.monkeyStatistics.model.Choice;
-import org.jugru.monkeyStatistics.model.QuestionMetaInformation;
-import org.jugru.monkeyStatistics.model.Survey;
 import org.jugru.monkeyStatistics.model.chart.*;
 import org.jugru.monkeyStatistics.service.ChartService;
 import org.jugru.monkeyStatistics.service.ChartsPresetService;
@@ -19,10 +15,7 @@ import org.jugru.monkeyStatistics.util.Questions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class API {
@@ -44,134 +37,75 @@ public class API {
 
     Logger logger = LoggerFactory.getLogger(API.class);
 
-    @RequestMapping("/api/saveChart")
-    public Chart saveChart(@RequestBody Chart chart) {
-        return chartService.save(chart);
-    }
-
-
-    @RequestMapping("/api/create/preset")
-    public ChartsPreset preset(@RequestParam(value = "name") String name) {
-        return chartsPresetService.save(new ChartsPreset(name));
-
-    }
-
-
-    @RequestMapping("/api/create/chart")
-    public Chart createChart(@RequestParam(value = "id") Long id, @RequestParam(value = "type") String type) {
-        return chartsPresetService.createChart(id, type);
-
-
-    }
-
-    @RequestMapping("/api/delete/preset")
-    public void deletePreset(@RequestParam(value = "id") Long id) {
-        chartsPresetService.delete(chartsPresetService.get(id));
-
-    }
-
-    @RequestMapping("/api/delete/chart")
-    public void deleteChart(@RequestParam(value = "id") Long id) {
-        chartService.delete(chartService.get(id));
-
-    }
-
 
     // TODO
-    @RequestMapping("/api/presets")
+    @RequestMapping(value = "/api/presets")
     public List<IdNamePair> presets() {
-        List<ChartsPreset> presets = chartsPresetService.getAll();
-        List<IdNamePair> pairs = new ArrayList<>();
-        presets.forEach((t) -> {
-            pairs.add(new IdNamePair(t.getId(), t.getName()));
-        });
-        return pairs;
+        return chartsPresetService.getIdNamePairOfPresets();
     }
 
-    @RequestMapping("/api/surveys")
+    @RequestMapping(value = "/api/surveys")
     public Set<IdNamePair> surveys() {
-        List<Survey> surveys = surveyService.getAll();
-        Set<IdNamePair> pairs = new TreeSet<>();
-        surveys.forEach((t) -> {
-            pairs.add(new IdNamePair(t.getId(), t.getTitle()));
-        });
-        return pairs;
+        return surveyService.getIdNamePairOfSurveys();
     }
 
-    @RequestMapping("/api/questionsByOneQuestion")
-    public List<IdNamePair> questions(@RequestParam(value = "id") Long id) {
-
-        Long surveyId = surveyService.findSurveyIdByQuestionMetaInformationId(id);
-        List<IdNamePair> questions = new ArrayList<>();
-        List<QuestionMetaInformation> list = questionMetaInformationService.getQuestionMetaInformationBySurveyId(surveyId);
-        list.forEach((t) -> {
-            questions.add(new IdNamePair(t.getId(), ChartDataBuilder.removeTags(t.getHeadingAsString())));
-        });
-        return questions;
-    }
-
-    @RequestMapping("/api/questionsBySurveyId")
+    @RequestMapping(value = "/api/questionsBySurveyId")
     public List<Questions> questionsBySurveyId(@RequestParam(value = "id") Long id) {
-
-        List<Questions> questions = new ArrayList<>();
-        List<QuestionMetaInformation> list = questionMetaInformationService.getQuestionMetaInformationBySurveyId(id);
-        list.forEach((t) -> {
-            questions.add(
-                    new Questions(
-                            t.getId(),
-                            ChartDataBuilder.removeTags(questionMetaInformationService.getHeadingAsStringFromQuestionMetaInformationId(t.getId())),
-                            questionMetaInformationService.isWithCustomChoice(t.getId()),
-                            questionMetaInformationService.isWithNoChoice(t.getId())));
-        });
-        return questions;
+        return questionMetaInformationService.getQuestionsBySurveyId(id);
     }
 
-    @RequestMapping("/api/answers")
+    @RequestMapping(value = "/api/answers")
     public List<IdNamePair> answers(@RequestParam(value = "id") Long id) {
-
-        List<IdNamePair> answers = new ArrayList<>();
-        List<Choice> choices = questionMetaInformationService.getChoicesByQuestionMetaInformationId(id);
-        choices.forEach((t) -> {
-            answers.add(new IdNamePair(t.getId(), ChartDataBuilder.removeTags(t.getText())));
-        });
-        return answers;
+        return questionMetaInformationService.getIdNamePairOfChoiceOrRowByQuestionMetaInformationId(id);
     }
 
     /**
      * @param id id пресета
      * @return пары id/имя графиков
      */
-    @RequestMapping("/api/charts")
+    @RequestMapping(value = "/api/charts", method = RequestMethod.GET)
     public List<IdNamePair> charts(@RequestParam(value = "id") Long id) {
-        return chartsPresetService.getIdNamePairsByPresetId(id);
+        return chartsPresetService.getIdNamePairsOfChartsByPresetId(id);
     }
 
-    @RequestMapping("/api/chart")
+    @RequestMapping(value = "/api/preset", method = RequestMethod.POST)
+    public ChartsPreset preset(@RequestParam(value = "name") String name) {
+        return chartsPresetService.save(new ChartsPreset(name));
+    }
+
+    @RequestMapping(value = "/api/preset", method = RequestMethod.DELETE)
+    public void deletePreset(@RequestParam(value = "id") Long id) {
+        chartsPresetService.delete(chartsPresetService.get(id));
+    }
+
+    @RequestMapping(value = "/api/chart", method = RequestMethod.PUT)
+    public Chart saveChart(@RequestBody Chart chart) {
+        return chartService.save(chart);
+    }
+
+    @RequestMapping(value = "/api/chart", method = RequestMethod.POST)
+    public Chart createChart(@RequestParam(value = "id") Long id, @RequestParam(value = "type") String type) {
+        return chartsPresetService.createChart(id, type);
+    }
+
+    @RequestMapping(value = "/api/chart", method = RequestMethod.DELETE)
+    public void deleteChart(@RequestParam(value = "id") Long id) {
+        chartService.delete(chartService.get(id));
+    }
+
+    @RequestMapping(value = "/api/chart", method = RequestMethod.GET)
     public Chart chart(@RequestParam(value = "id") Long id) {
-        Chart chart = chartService.get(id);
-        chart.prepareForSending(surveyService);
-        return chart;
+        return chartService.getPreparedForSending(id);
     }
 
-    @RequestMapping("/api/draw/chart")
+    @RequestMapping(value = "/api/draw", method = RequestMethod.GET)
     public List<ChartData> chartData(@RequestParam(value = "id") Long id) {
-        logger.debug("Draw chart. Id is {}",id);
+        logger.debug("Draw chart. Id is {}", id);
         return chartService.get(id).createChartData(chartDataBuilder);
     }
 
-    @RequestMapping("/api/preview/CGC")
-    public ChartData drawCGC(@RequestBody CrossGroupingChart cgc) {
-        return chartDataBuilder.createChartDataFromCrossGroupingChart(cgc);
-    }
-
-    @RequestMapping("/api/preview/UC")
-    public List<ChartData> drawUC(@RequestBody UngroupedCharts uc) {
-        return chartDataBuilder.createChartDataFromUngroupedCharts(uc);
-    }
-
-    @RequestMapping("/api/preview")
+    @RequestMapping(value = "/api/preview", method = RequestMethod.POST)
     public List<ChartData> preview(@RequestBody Chart chart) {
         return chart.createChartData(chartDataBuilder);
     }
-
 }
