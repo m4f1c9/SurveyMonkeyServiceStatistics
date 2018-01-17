@@ -1,54 +1,54 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Страница редактирования</title>
-        <meta charset="UTF-8">
-        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="/MonkeyStatistics/scripts/application.js"></script>
-        <script src="/MonkeyStatistics/scripts/CG.js"></script>
-        <script src="/MonkeyStatistics/scripts/U.js"></script>
-        <script src="/MonkeyStatistics/scripts/GC.js"></script>
-        <script type="text/javascript">
-            $(document).ready(editpage);
-        </script>
-        <!-- Не забудь удалить стили -->
-        <style>
-            .edit-area {
-                border-style: solid;
-                padding: 5px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="presets">
-            <h3>Пресеты</h3>
-            <select class="presets-select" id="presets-select"></select>
-            <button class="preset-edit" type="button">Редактировать пресет</button>
-            <button class="preset-delete" type="button" >Удалить выбранный пресет</button>
-        </div>
-        <div class="surveys" hidden>
-            <h3>Опросы</h3>
-            <select style="width: 250px" class="surveys-select"></select>
+<head>
+    <title>Страница редактирования</title>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/MonkeyStatistics/scripts/application.js"></script>
+    <script src="/MonkeyStatistics/scripts/CG.js"></script>
+    <script src="/MonkeyStatistics/scripts/U.js"></script>
+    <script src="/MonkeyStatistics/scripts/GC.js"></script>
+    <script type="text/javascript">
+        $(document).ready(editpage);
+    </script>
+    <!-- Не забудь удалить стили -->
+    <style>
+        .edit-area {
+            border-style: solid;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="presets">
+    <h3>Пресеты</h3>
+    <select class="presets-select" id="presets-select"></select>
+    <button class="preset-edit" type="button">Редактировать пресет</button>
+    <button class="preset-delete" type="button">Удалить выбранный пресет</button>
+</div>
+<div class="surveys" hidden>
+    <h3>Опросы</h3>
+    <select style="width: 250px" class="surveys-select"></select>
 
-        </div>
-        <div class="main-buttons">
-            <h3>Кнопки</h3>
-            <input class="preset-name" type="text" value="">
-            <button class="preset-add"type="button" >Добавить пресет</button>
+</div>
+<div class="main-buttons">
+    <h3>Кнопки</h3>
+    <input class="preset-name" type="text" value="">
+    <button class="preset-add" type="button">Добавить пресет</button>
 
-            <select class="new-chart">
-                <option value="GC">Сгруппированный график</option>
-                <option value="U">Несгруппированный график</option>
-                  <option value="CG">Третий график</option>
+    <select class="new-chart">
+        <option value="GC">Сгруппированный график</option>
+        <option value="U">Несгруппированный график</option>
+        <option value="CG">Третий график</option>
 
-              </select>
-              <button class="add-chart" disabled type="button">Добавить график</button>
+    </select>
+    <button class="add-chart" disabled type="button">Добавить график</button>
 
-          </div>
-          <div class="work-area">
+</div>
+<div class="work-area">
 
-          </div>
+</div>
 
-      </body>
-  </html>
+</body>
+</html>

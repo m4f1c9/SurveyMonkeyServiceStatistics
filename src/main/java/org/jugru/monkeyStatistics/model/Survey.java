@@ -1,12 +1,9 @@
 package org.jugru.monkeyStatistics.model;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 import javax.persistence.*;
+import java.util.*;
+
+import static java.util.Objects.isNull;
 
 @Entity
 public class Survey implements Comparable<Survey> {
@@ -14,14 +11,16 @@ public class Survey implements Comparable<Survey> {
     @Id
     private Long id;
 
-    @Column(name = "title")
+    @Column
     private String title;
-    @Column(name = "nickname")
+    @Column
     private String nickname;
-    @Column(name = "with_details")
-    private boolean withDetails;
-    @Column(name = "status")
-    private String status;
+
+
+    @Embedded
+    @Column
+    private SurveyUserInformation surveyUserInformation;
+
 
     @OrderColumn
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -58,21 +57,6 @@ public class Survey implements Comparable<Survey> {
         this.nickname = nickname;
     }
 
-    public boolean isWithDetails() {
-        return withDetails;
-    }
-
-    public void setWithDetails(boolean withDetails) {
-        this.withDetails = withDetails;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public List<SurveyPage> getPages() {
         return pages;
@@ -89,6 +73,21 @@ public class Survey implements Comparable<Survey> {
     public void setResponses(Set<Response> responses) {
         this.responses = responses;
     }
+
+    public SurveyUserInformation getSurveyUserInformation() {
+        if (isNull(this.surveyUserInformation)) this.surveyUserInformation = new SurveyUserInformation();
+        return surveyUserInformation;
+    }
+
+
+    public void setSurveyUserInformation(SurveyUserInformation surveyUserInformation) {
+        this.surveyUserInformation = surveyUserInformation;
+    }
+
+    public boolean isConferenceSurvey() {
+        return getSurveyUserInformation().getConferenceSurvey();
+    }
+
 
     @Override
     public int hashCode() {
@@ -128,7 +127,8 @@ public class Survey implements Comparable<Survey> {
 
     @Override
     public String toString() {
-        return "Survey{" + "id=" + id + ", title=" + title + ", nickname=" + nickname + ", withDetails=" + withDetails + ", status=" + status + '}';
+        return "Survey{" + "id=" + id + ", title=" + title + ", nickname=" + nickname + '}';
     }
+
 
 }

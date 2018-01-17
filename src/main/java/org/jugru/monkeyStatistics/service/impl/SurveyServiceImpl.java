@@ -1,24 +1,33 @@
 package org.jugru.monkeyStatistics.service.impl;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-import javax.transaction.Transactional;
-
+import org.jugru.monkeyStatistics.client.SurveyMonkeyClient;
 import org.jugru.monkeyStatistics.model.Response;
 import org.jugru.monkeyStatistics.model.Survey;
 import org.jugru.monkeyStatistics.model.SurveyPage;
 import org.jugru.monkeyStatistics.repository.SurveyRepository;
 import org.jugru.monkeyStatistics.service.SurveyService;
 import org.jugru.monkeyStatistics.util.IdNamePair;
+import org.jugru.monkeyStatistics.util.SurveyMetaInformation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
+
 @Transactional()
 @Service
 public class SurveyServiceImpl implements SurveyService {
+
+    Logger logger = LoggerFactory.getLogger(SurveyService.class);
 
     @Autowired
     private SurveyService surveyService;
@@ -26,6 +35,8 @@ public class SurveyServiceImpl implements SurveyService {
     @Autowired
     private SurveyRepository surveyRepository;
 
+    @Autowired
+    SurveyMonkeyClient surveyMonkeyClient;
 
     @Override
     public Survey save(Survey survey) {
@@ -45,7 +56,7 @@ public class SurveyServiceImpl implements SurveyService {
         surveyRepository.delete(survey);
     }
 
-    @Cacheable(cacheNames = "listOfSurveys")
+    //  @Cacheable(cacheNames = "listOfSurveys")
     @Override
     public List<Survey> getAll() {
         return surveyRepository.findAll();
@@ -69,11 +80,25 @@ public class SurveyServiceImpl implements SurveyService {
         return surveyRepository.findSurveyIdByQuestionMetaInformationId(id);
     }
 
+    @Deprecated
     @Transactional
     @Override
     public void addNewResponses(Survey s, Collection<Response> c) {
         s.getResponses().size(); //TODO
         s.addNewResponses(c);
+    }
+
+    @Transactional
+    @Override
+    public void addNewResponses(Survey survey) {
+        Collection<Response> c = surveyMonkeyClient.getAllResponsesBySurveyId(survey.getId());
+        survey.getResponses().size(); //TODO
+        survey.addNewResponses(c);
+    }
+
+    @Override
+    public void parseAndSetStatus(Survey s) {
+        s.getSurveyUserInformation().setStatus(surveyMonkeyClient.getSurveyStatus(s));
     }
 
     @Cacheable(cacheNames = "stringsById", key = "{ #root.methodName, #id}")
@@ -90,5 +115,47 @@ public class SurveyServiceImpl implements SurveyService {
             pairs.add(new IdNamePair(t.getId(), t.getTitle()));
         });
         return pairs;
+    }
+
+    @Override
+    public Set<SurveyMetaInformation> getSurveyMetaInformationOfNewSurveys() {
+        List<Survey> list = surveyService.getAll();
+        Set<SurveyMetaInformation> answer = new TreeSet<>();
+        for (Survey s : list) {
+            Boolean isProcessed = s.getSurveyUserInformation().getProcessed();
+            if (isNull(isProcessed) || !isProcessed) {
+                SurveyMetaInformation smi = new SurveyMetaInformation();
+                smi.setId(s.getId());
+                smi.setName(s.getTitle());
+                smi.setConferenceSurvey(s.getSurveyUserInformation().getConferenceSurvey());
+                smi.setProcessed(false);
+                answer.add(smi);
+            }
+        }
+        return answer;
+    }
+
+    @Override
+    public Set<SurveyMetaInformation> getSurveyMetaInformationOfAllSurveys() {
+        List<Survey> list = surveyService.getAll();
+        Set<SurveyMetaInformation> answer = new TreeSet<>();
+        for (Survey s : list) {
+            SurveyMetaInformation smi = new SurveyMetaInformation();
+            smi.setId(s.getId());
+            smi.setName(s.getTitle());
+            smi.setConferenceSurvey(s.getSurveyUserInformation().getConferenceSurvey());
+            Boolean isProcessed = s.getSurveyUserInformation().getProcessed();
+            smi.setProcessed(nonNull(isProcessed) && isProcessed);
+            answer.add(smi);
+        }
+        return answer;
+    }
+
+    @Override
+    public void setConferenceSurvey(Long id, boolean isConferenceSurvey) {
+        Survey survey = surveyService.get(id);
+        survey.getSurveyUserInformation().setProcessed(true);
+        survey.getSurveyUserInformation().setConferenceSurvey(isConferenceSurvey);
+        surveyService.save(survey);
     }
 }

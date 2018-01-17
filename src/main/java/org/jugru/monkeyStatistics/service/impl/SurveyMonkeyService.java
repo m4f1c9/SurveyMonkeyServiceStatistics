@@ -1,13 +1,12 @@
 package org.jugru.monkeyStatistics.service.impl;
 
-import java.util.List;
-import java.util.Objects;
-import javax.transaction.Transactional;
-import org.jugru.monkeyStatistics.model.Survey;
 import org.jugru.monkeyStatistics.client.SurveyMonkeyClient;
+import org.jugru.monkeyStatistics.model.Survey;
 import org.jugru.monkeyStatistics.service.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class SurveyMonkeyService {
@@ -29,31 +28,16 @@ public class SurveyMonkeyService {
     public void parseAndSaveDetailedSurvey(Survey survey) {
         // TODO запретить повторное сохранение (дублирование) 
         Survey result = surveyMonkeyClient.getSurvey(survey.getId());
-        result.setWithDetails(true);
         surveyService.save(result);
     }
 
     // TODO убрать разобратся с сессией
- //   @Transactional
+    //   @Transactional
     public void refreshAnswers() {
         surveyService.getAll().stream().
-                filter((t) -> {
-                    return !Objects.equals(t.getStatus(), "closed");
-                }).
-                limit(2).
-                peek((survey) -> {
-                    surveyService.addNewResponses(survey, surveyMonkeyClient.getAllResponsesBySurveyId(survey.getId()));
-                 //   survey.addNewResponses(surveyMonkeyClient.getAllResponsesBySurveyId(survey.getId()));
-                }).
-                peek((survey) -> {
-                 //   survey.setStatus(surveyMonkeyClient.getSurveyStatus(survey));
-                     survey.setStatus("closed"); //TODO настроить обновление ответов(убрать дублирование)
-                }).
-               // forEach(surveyService::save);
-                       forEach(survey -> {
-                   surveyService.save(survey);
-                   System.gc();
-               });
+                filter(Survey::isConferenceSurvey).
+                peek(surveyService::addNewResponses).
+                peek(surveyService::parseAndSetStatus).
+                forEach(surveyService::save);
     }
-
 }

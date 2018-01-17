@@ -1,10 +1,5 @@
 package org.jugru.monkeyStatistics.client;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 import org.jugru.monkeyStatistics.model.Response;
 import org.jugru.monkeyStatistics.model.Survey;
 import org.jugru.monkeyStatistics.model.util.Collector;
@@ -13,6 +8,8 @@ import org.jugru.monkeyStatistics.model.util.ListOfResponses;
 import org.jugru.monkeyStatistics.model.util.ListOfSurveys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.*;
 
 /**
  * Работает с SurveyMonkey API.
@@ -80,11 +77,9 @@ public class SurveyMonkeyClient {
         for (Long monkeyCollectorID : collectorsID) {
             Collector collector = restClient.getCollector(monkeyCollectorID);
             if (!collector.getStatus().equals("closed")) {
-                answer = "active";
+                answer = "open";
             }
-
         }
-
         return answer;
     }
 

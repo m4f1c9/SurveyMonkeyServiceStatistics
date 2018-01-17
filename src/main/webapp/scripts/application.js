@@ -81,7 +81,8 @@ function showPresets() {
 
 function showSurveys() {
     $.ajax({
-        url: "/MonkeyStatistics/api/surveys",
+        url: "/MonkeyStatistics/api/preset",
+        method: "GET",
         dataType: "json",
         success: function (surveysData) {
             let surveys = $('.surveys-select');

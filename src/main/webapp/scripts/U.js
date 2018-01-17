@@ -96,13 +96,17 @@ function createDeleteButton() {
 function createQuestionsSelect(item, surveys) {
     let question = $('<select style="width: 500px" class="question"></select>');
     let id;
+    let questionMetaInfId;
+    if(item !=undefined ){
+        questionMetaInfId = item.questionMetaInfId;
+    }
     if (item != undefined) {
         id = item.surveyId;
     }
     else {
         id = surveys.find('option:selected').val();
     }
-    getQuestionsDataAndAppendItToQuestionsSelect(id, question, item.questionMetaInfId);
+    getQuestionsDataAndAppendItToQuestionsSelect(id, question, questionMetaInfId);
     return question;
 }
 

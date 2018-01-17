@@ -18,7 +18,12 @@
     </logger>
 
     <logger name="org.jugru.monkeyStatistics.api" additivity="false">
-        <level value="warn" />
+        <level value="info" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+    <logger name="org.jugru.monkeyStatistics.service" >
+        <level value="info" />
         <appender-ref ref="STDOUT" />
     </logger>
 

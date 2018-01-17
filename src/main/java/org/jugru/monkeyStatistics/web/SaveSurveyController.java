@@ -1,8 +1,8 @@
 package org.jugru.monkeyStatistics.web;
 
 import org.jugru.monkeyStatistics.model.Survey;
-import org.jugru.monkeyStatistics.service.impl.SurveyMonkeyService;
 import org.jugru.monkeyStatistics.service.ChartsPresetService;
+import org.jugru.monkeyStatistics.service.impl.SurveyMonkeyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +19,7 @@ public class SaveSurveyController {
 
     @RequestMapping(value = "/save")
     public String save(Model model) {
-//        Survey survey;
+        Survey survey;
 //
 //        survey = new Survey();
 //        survey.setId(80191211L);
@@ -33,9 +33,9 @@ public class SaveSurveyController {
 //        survey.setId(117652322L);
 //        surveyMonkeyService.parseAndSaveDetailedSurvey(survey);
 //
-//        survey = new Survey();
-//        survey.setId(125742994L);
-//        surveyMonkeyService.parseAndSaveDetailedSurvey(survey);
+   //     survey = new Survey();
+    //    survey.setId(125742994L);
+    //    surveyMonkeyService.parseAndSaveDetailedSurvey(survey);
 //
 //        survey = new Survey();
 //        survey.setId(88971560L);
