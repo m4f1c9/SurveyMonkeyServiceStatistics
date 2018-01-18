@@ -1,23 +1,23 @@
 package org.jugru.monkeyStatistics.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import javax.transaction.Transactional;
-
 import org.jugru.monkeyStatistics.model.*;
+import org.jugru.monkeyStatistics.repository.QuestionMetaInformationRepository;
+import org.jugru.monkeyStatistics.service.QuestionMetaInformationService;
+import org.jugru.monkeyStatistics.service.SurveyService;
 import org.jugru.monkeyStatistics.util.ChartDataBuilder;
 import org.jugru.monkeyStatistics.util.IdNamePair;
 import org.jugru.monkeyStatistics.util.Questions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.jugru.monkeyStatistics.repository.QuestionMetaInformationRepository;
-import org.jugru.monkeyStatistics.service.QuestionMetaInformationService;
-import org.jugru.monkeyStatistics.service.SurveyService;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Transactional
 @Service
@@ -38,7 +38,6 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
         return questionMetaInformationRepository.save(t);
     }
 
-    @Cacheable(cacheNames = "questionMetaInformation")
     @Override
     public QuestionMetaInformation get(long id) {
         QuestionMetaInformation questionMetaInformation = questionMetaInformationRepository.findOne(id);
@@ -51,7 +50,6 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
         questionMetaInformationRepository.delete(t);
     }
 
-    @Cacheable(cacheNames = "listOfQuestionMetaInformation", key = "{ #root.methodName}")
     @Override
     public List<QuestionMetaInformation> getAll() {
         return questionMetaInformationRepository.findAll();
@@ -68,13 +66,11 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
                 map(Other::getId).orElse(null);
     }
 
-    @Cacheable(cacheNames = "listOfChoice")
     @Override
     public List<Choice> getChoicesByQuestionMetaInformationId(Long id) {
         return questionMetaInformationRepository.getChoicesByQuestionMetaInformationId(id);
     }
 
-    @Cacheable(cacheNames = "listOfRow")
     @Override
     public List<Row> getRowsByQuestionMetaInformationId(Long id) {
         return questionMetaInformationRepository.getRowsByQuestionMetaInformationId(id);
@@ -119,7 +115,6 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
         return answers;
     }
 
-    @Cacheable(cacheNames = "listOfQuestionMetaInformation", key = "{ #root.methodName, #id}")
     @Override
     public List<QuestionMetaInformation> getQuestionMetaInformationBySurveyId(Long id) {
          return questionMetaInformationRepository.getQuestionMetaInformationBySurveyId(id);

@@ -7,6 +7,7 @@ import org.jugru.monkeyStatistics.service.ChartService;
 import org.jugru.monkeyStatistics.service.ChartsPresetService;
 import org.jugru.monkeyStatistics.service.QuestionMetaInformationService;
 import org.jugru.monkeyStatistics.service.SurveyService;
+import org.jugru.monkeyStatistics.service.impl.SurveyMonkeyService;
 import org.jugru.monkeyStatistics.util.ChartDataBuilder;
 import org.jugru.monkeyStatistics.util.IdNamePair;
 import org.jugru.monkeyStatistics.util.Questions;
@@ -36,6 +37,9 @@ public class API {
 
     @Autowired
     SurveyService surveyService;
+
+    @Autowired
+    SurveyMonkeyService surveyMonkeyService;
 
     Logger logger = LoggerFactory.getLogger(API.class);
 
@@ -124,5 +128,11 @@ public class API {
     @RequestMapping(value = "/api/surveys")
     public void saveSurvey(@RequestParam(value = "id") Long id, @RequestParam(value = "isConferenceSurvey") boolean isConferenceSurvey) {
         surveyService.setConferenceSurvey(id, isConferenceSurvey);
+    }
+
+    @RequestMapping(value = "/api/update")
+    public void update() {
+        logger.debug("update surveys");
+        surveyMonkeyService.updateAll();
     }
 }

@@ -1,7 +1,5 @@
 package org.jugru.monkeyStatistics.service.impl;
 
-import java.util.List;
-import javax.transaction.Transactional;
 import org.jugru.monkeyStatistics.model.chart.Chart;
 import org.jugru.monkeyStatistics.model.chart.GroupedByChoiceChart;
 import org.jugru.monkeyStatistics.repository.ChartRepository;
@@ -10,9 +8,10 @@ import org.jugru.monkeyStatistics.service.SurveyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.List;
 
 @Transactional
 @Service
@@ -29,13 +28,11 @@ public class ChartServiceImpl implements ChartService {
     @Autowired
     ChartService chartService;
 
-    @CacheEvict(value = "chart", allEntries = true) // TODO все ли?
     @Override
     public Chart save(Chart t) {
         return chartRepository.save(t);
     }
 
-    @Cacheable(cacheNames = "chart", key = "{ #root.methodName, #id}")
     @Override
     public Chart get(long id) {
         Chart chart = chartRepository.findOne(id);
@@ -62,7 +59,6 @@ public class ChartServiceImpl implements ChartService {
         return chart;
     }
 
-    @CacheEvict(value = "chart", allEntries = true)
     @Override
     public void delete(Chart t) {
        chartRepository.delete(t);

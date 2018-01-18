@@ -1,7 +1,5 @@
 package org.jugru.monkeyStatistics.service.impl;
 
-import java.util.List;
-import javax.transaction.Transactional;
 import org.jugru.monkeyStatistics.model.Answer;
 import org.jugru.monkeyStatistics.repository.AnswerRepository;
 import org.jugru.monkeyStatistics.service.AnswerService;
@@ -9,6 +7,9 @@ import org.jugru.monkeyStatistics.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.List;
 
 @Transactional
 @Service
@@ -39,25 +40,21 @@ public class AnswerServiceImpl implements AnswerService {
         answerRepository.delete(entity);
     }
 
-    @Cacheable(cacheNames = "listOfAnswers", key="{ #root.methodName}")
     @Override
     public List<Answer> getAll() {
         return answerRepository.findAll();
     }
 
-    @Cacheable(cacheNames = "listOfAnswers", key="{ #root.methodName, #id}")
     @Override
     public List<Answer> getByOther_id(long id) {
         return answerRepository.findAnswerByOther_id(id);
     }
 
-    @Cacheable(cacheNames = "listOfAnswers", key="{ #root.methodName, #choice_id}")
     @Override
     public List<Answer> getByChoice_id(long choice_id) {
         return answerRepository.findAnswerByChoice_id(choice_id);
     }
 
-    @Cacheable(cacheNames = "listOfAnswers", key="{ #root.methodName, #row_id}")
     @Override
     public List<Answer> getByRow_id(long row_id) {
         return answerRepository.findAnswerByRow_id(row_id);

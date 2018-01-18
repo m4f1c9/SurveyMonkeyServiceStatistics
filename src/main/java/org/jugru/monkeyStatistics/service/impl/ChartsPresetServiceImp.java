@@ -1,10 +1,5 @@
 package org.jugru.monkeyStatistics.service.impl;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import javax.transaction.Transactional;
-
 import org.jugru.monkeyStatistics.model.chart.*;
 import org.jugru.monkeyStatistics.repository.ChartsPresetRepository;
 import org.jugru.monkeyStatistics.service.ChartService;
@@ -14,8 +9,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 @Transactional
 @Service
@@ -32,7 +31,6 @@ public class ChartsPresetServiceImp implements ChartsPresetService {
     @Autowired
     ChartService chartService;
 
-    @CacheEvict(value = "listOfChartsPreset", allEntries = true)
     @Override
     public ChartsPreset save(ChartsPreset t) {
         return chartsPresetRepository.save(t);
@@ -44,13 +42,11 @@ public class ChartsPresetServiceImp implements ChartsPresetService {
         return chartsPresetRepository.findOne(id);
     }
 
-    @CacheEvict(value = "listOfChartsPreset", allEntries = true)
     @Override
     public void delete(ChartsPreset t) {
         chartsPresetRepository.delete(t);
     }
 
-    @Cacheable(cacheNames = "listOfChartsPreset")
     @Override
     public List<ChartsPreset> getAll() {
         return chartsPresetRepository.findAll();

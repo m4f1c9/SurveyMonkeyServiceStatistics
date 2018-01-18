@@ -1,9 +1,9 @@
 package org.jugru.monkeyStatistics.model;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import javax.persistence.*;
 
 @Entity
 public class SurveyPage {
@@ -13,7 +13,7 @@ public class SurveyPage {
 
     @Column(name = "position")
     private Integer position;
-    @Column(name = "description")
+    @Column(name = "description", length=2047)
     private String description;
     @Column(name = "title")
     private String title;

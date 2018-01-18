@@ -84,10 +84,14 @@ public class Survey implements Comparable<Survey> {
         this.surveyUserInformation = surveyUserInformation;
     }
 
+
     public boolean isConferenceSurvey() {
         return getSurveyUserInformation().getConferenceSurvey();
     }
 
+    public boolean isWithDetails() {
+        return getSurveyUserInformation().getWithDetails();
+    }
 
     @Override
     public int hashCode() {

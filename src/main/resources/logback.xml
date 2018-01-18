@@ -23,7 +23,13 @@
     </logger>
 
     <logger name="org.jugru.monkeyStatistics.service" >
-        <level value="info" />
+        <level value="debug" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+
+    <logger name="org.jugru.monkeyStatistics.api.System" >
+        <level value="debug" />
         <appender-ref ref="STDOUT" />
     </logger>
 

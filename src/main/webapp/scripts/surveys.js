@@ -1,5 +1,6 @@
 function surveys() {
     $('.survey-button').on('click', showSurveys);
+    $('.update-button').on('click', updateSurveys);
 }
 
 function showSurveys() {
@@ -80,6 +81,16 @@ function sendSelectInfo() {
             else{
                 $(this).closest('tr').removeClass("table-primary").addClass("table-dark");
             }
+        }
+    });
+}
+
+function updateSurveys() {
+    $.ajax({
+        context: this,
+        url: "/MonkeyStatistics/api/update",
+        method: "POST",
+        success: function () {
         }
     });
 }

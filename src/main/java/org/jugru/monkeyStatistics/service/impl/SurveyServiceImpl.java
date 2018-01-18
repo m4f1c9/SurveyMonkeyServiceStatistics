@@ -38,13 +38,13 @@ public class SurveyServiceImpl implements SurveyService {
     @Autowired
     SurveyMonkeyClient surveyMonkeyClient;
 
+    @Transactional()
     @Override
     public Survey save(Survey survey) {
+        logger.debug("Save survey {}", survey);
         return surveyRepository.saveAndFlush(survey);
     }
 
-    // TODO вернуть обратно после написания query по вложнным коллекциям
-    //@Cacheable(cacheNames = "survey",  key="{ #root.methodName, #id}")
     @Override
     public Survey get(long id) {
         return surveyRepository.findOne(id);
@@ -56,7 +56,6 @@ public class SurveyServiceImpl implements SurveyService {
         surveyRepository.delete(survey);
     }
 
-    //  @Cacheable(cacheNames = "listOfSurveys")
     @Override
     public List<Survey> getAll() {
         return surveyRepository.findAll();
@@ -68,7 +67,6 @@ public class SurveyServiceImpl implements SurveyService {
         return surveyRepository.findOne(id).getResponses().size(); //TODO написать запрос на count
     }
 
-    @Cacheable(cacheNames = "listOfSurveyPage", key = "{ #root.methodName, #id}")
     @Override
     public List<SurveyPage> getSurveyPagesFromSurvey(Long id) {
         return surveyService.get(id).getPages();
@@ -78,14 +76,6 @@ public class SurveyServiceImpl implements SurveyService {
     @Override
     public Long findSurveyIdByQuestionMetaInformationId(Long id) {
         return surveyRepository.findSurveyIdByQuestionMetaInformationId(id);
-    }
-
-    @Deprecated
-    @Transactional
-    @Override
-    public void addNewResponses(Survey s, Collection<Response> c) {
-        s.getResponses().size(); //TODO
-        s.addNewResponses(c);
     }
 
     @Transactional
@@ -157,5 +147,16 @@ public class SurveyServiceImpl implements SurveyService {
         survey.getSurveyUserInformation().setProcessed(true);
         survey.getSurveyUserInformation().setConferenceSurvey(isConferenceSurvey);
         surveyService.save(survey);
+    }
+
+    @Transactional
+    @Override
+    public void refreshAnswers() {
+        surveyService.getAll().stream().
+                filter(Survey::isConferenceSurvey).
+                filter(Survey::isWithDetails). //не должно ничего фильтровать при нормальной работе
+                peek(surveyService::addNewResponses).
+                peek(surveyService::parseAndSetStatus).
+                forEach(surveyService::save);
     }
 }
