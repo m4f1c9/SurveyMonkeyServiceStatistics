@@ -26,21 +26,14 @@ public class Options {
 
     public List<String> colors;
 
-    public static Options createOptionForUngropudChart(Integer height, String title, boolean withCustomColorsOfLegend) {
-        Options options = new Options(height, title, withCustomColorsOfLegend);
-        options.bar = options.new Bar();
-        options.chartArea = options.new ChartArea();
-        options.chartArea.height = (height - options.chartArea.top) - HAXIS_HEIGHT; // TODO убрать консттанту
-        options.bar.groupWidth = options.chartArea.height - SPACE_BETWEEN_GROUPS_OF_BARS; //отступы сверку и снизу
-        options.hAxis.setMaxValue(0);
-        return options;
-    }
-
     /**
      * для несгруппированного графика
      */
     public static Options create(ChartOptions chartOptions, String title, int choices) {
-        Options options = new Options(title, chartOptions.isUseGradient());
+        Options options = new Options(title);
+        if (chartOptions.isUseGradient()) {
+            options.addGradient(choices);
+        }
         options.bar = options.new Bar();
         options.chartArea = options.new ChartArea();
         options.bar.groupWidth = BAR_HEIGHT * choices;
@@ -56,7 +49,10 @@ public class Options {
 
 
     public static Options create(GroupedByChoiceChart groupedByChoiceChart, int choices, int questions) {
-        Options options = new Options(groupedByChoiceChart.getChartName(), groupedByChoiceChart.getChartOptions().isUseGradient());
+        Options options = new Options(groupedByChoiceChart.getChartName());
+        if (groupedByChoiceChart.getChartOptions().isUseGradient()) {
+            options.addGradient(choices);
+        }
         options.bar = options.new Bar();
         options.chartArea = options.new ChartArea();
         options.bar.groupWidth = BAR_HEIGHT * questions;
@@ -67,8 +63,10 @@ public class Options {
     }
 
     public static Options create(CrossGroupingChart сrossGroupingChart, int firstChoices, int secondChoices) {
-        Options options = new Options(сrossGroupingChart.getSecondQuestionName(), сrossGroupingChart.getChartOptions().isUseGradient());
-
+        Options options = new Options(сrossGroupingChart.getSecondQuestionName());
+        if (сrossGroupingChart.getChartOptions().isUseGradient()) {
+            options.addGradient(secondChoices);
+        }
         options.bar = options.new Bar();
         options.chartArea = options.new ChartArea();
         options.bar.groupWidth = BAR_HEIGHT * secondChoices;
@@ -79,26 +77,21 @@ public class Options {
     }
 
 
-    public Options(Integer height, String title, boolean withCustomColorsOfLegend) {
-        this.height = height;
+    public Options(String title) {
         this.title = title;
-        if (withCustomColorsOfLegend) {
-            this.colors = new LinkedList<>(Arrays.asList("#ffe0cc", "#ffc299", "#ffa366", "#ff8533", "#ff6600", "#cc5200", "#993d00", "#331400"));
+    }
+
+
+    private void addGradient(int choicesCount) {
+        if (choicesCount <= 8) {
+            this.colors = new LinkedList<>(Arrays.asList("#C94B4B", "#BB8543", "#A2AD3B", "#5AA034", "#2E9241",
+                    "#27856D", "#225E77", "#1C296A", "#32175C", "#4A124F"));
+        } else {
+            this.colors = new LinkedList<>(Arrays.asList("#C94B4B", "#C06E46", "#B88F41", "#B0AF3D", "#85A838", "#5AA034", "#339830", "#2C904A",
+                    "#298764", "#257F7C", "#225E77", "#1E3D6F", "#1B1F67", "#2C185F", "#3D1557", "#4A124F"));
         }
-
     }
 
-    public Options(String title, boolean withCustomColorsOfLegend) {
-        this.title = title;
-        if (withCustomColorsOfLegend) {
-            this.colors = new LinkedList<>(Arrays.asList("#ffe0cc", "#ffc299", "#ffa366", "#ff8533", "#ff6600", "#cc5200", "#993d00", "#331400"));
-        }
-
-    }
-
-    public Options(Integer height, String bars, String title, boolean withCustomColorsOfLegend) {
-        this(height, bars, withCustomColorsOfLegend);
-    }
 
     public HAxis gethAxis() {
         return hAxis;

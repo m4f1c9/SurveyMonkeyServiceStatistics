@@ -6,29 +6,15 @@
             <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
         </layout>
     </appender>
-
-    <logger name="org.hibernate.SQL" additivity="false" >
+<!--
+    <logger name="org.hibernate.SQL" >
         <level value="warn" />
         <appender-ref ref="STDOUT" />
     </logger>
-
-    <logger name="org.jugru.monkeyStatistics" additivity="false" >
-        <level value="warn" />
-        <appender-ref ref="STDOUT" />
-    </logger>
-
-    <logger name="org.jugru.monkeyStatistics.api" additivity="false">
-        <level value="info" />
-        <appender-ref ref="STDOUT" />
-    </logger>
-
-    <logger name="org.jugru.monkeyStatistics.service" >
-        <level value="debug" />
-        <appender-ref ref="STDOUT" />
-    </logger>
+-->
 
 
-    <logger name="org.jugru.monkeyStatistics.api.System" >
+    <logger name="org.jugru.monkeyStatistics" additivity="false">
         <level value="debug" />
         <appender-ref ref="STDOUT" />
     </logger>
@@ -36,4 +22,5 @@
     <root level="warn">
         <appender-ref ref="STDOUT" />
     </root>
+
 </configuration>

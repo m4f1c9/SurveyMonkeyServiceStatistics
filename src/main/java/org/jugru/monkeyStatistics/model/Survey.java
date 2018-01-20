@@ -131,8 +131,11 @@ public class Survey implements Comparable<Survey> {
 
     @Override
     public String toString() {
-        return "Survey{" + "id=" + id + ", title=" + title + ", nickname=" + nickname + '}';
+        return "Survey{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", surveyUserInformation=" + surveyUserInformation +
+                '}';
     }
-
-
 }

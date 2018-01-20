@@ -31,7 +31,7 @@ public class SurveyMonkeyClient {
     public List<Survey> getAllSurveys() {
         List<Survey> answer = new ArrayList<>(200);
         int page = 1;
-        int per_page = 100;
+        int per_page = 200;
         ListOfSurveys surveyWrapper;
         do {
             surveyWrapper = restClient.getListOfSurveys(page, per_page);

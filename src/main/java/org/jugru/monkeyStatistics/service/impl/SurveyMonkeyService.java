@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -32,22 +33,31 @@ public class SurveyMonkeyService {
         fromSurveyMonkey.parallelStream().forEach(surveyService::save);
     }
 
-    private void parseAndSaveDetailedSurvey(Survey survey) {
-        if (survey.isConferenceSurvey() && !survey.isWithDetails()) {
-            Survey result = surveyMonkeyClient.getSurvey(survey.getId());
-            result.getSurveyUserInformation().setWithDetails(true);
-            result.getSurveyUserInformation().setConferenceSurvey(surveyService.get(survey.getId()).isConferenceSurvey());
-            surveyService.save(result);
+    public void parseAndSaveDetailedSurvey(Survey survey) {
+        synchronized (lock) {
+            if (survey.isConferenceSurvey() && !survey.isWithDetails()) {
+                try {
+                    Survey result = surveyMonkeyClient.getSurvey(survey.getId());
+                    result.getSurveyUserInformation().setWithDetails(true);
+                    result.getSurveyUserInformation().setProcessed(true);
+                    result.getSurveyUserInformation().setConferenceSurvey(surveyService.get(survey.getId()).isConferenceSurvey());
+                    surveyService.save(result);
+                } catch (Exception e) {
+                    logger.error("parseAndSaveDetailedSurvey Survey id is " + survey.getId(), e); //игнорируем ошибку и парсим дальше
+                }
+            }
         }
     }
 
-    // @Scheduled(cron = "0 1 1 * * *", zone = "Europe/Moscow")
+    @Scheduled(cron = "0 1 4 * * *", zone = "Europe/Moscow")
     @CacheEvict(value = {"countById", "getIdById", "stringsById", "booleanById"}, allEntries = true)
     public void updateAll() {
         synchronized (lock) {
+            logger.debug("updateAll");
             parseAndSaveAllNewSurveys();
             surveyService.getAll().forEach(this::parseAndSaveDetailedSurvey);
             surveyService.refreshAnswers();
         }
     }
+
 }

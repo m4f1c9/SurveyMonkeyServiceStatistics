@@ -23,6 +23,7 @@ function showSurveys() {
             let header = $('<tr></tr>');
             header.append($('<td>Название опроса</td>'));
             header.append($('<td colspan="2">Опрос по конференции</td>'));
+            header.append($('<td></td>'));
             table.append(header);
             for (let i = 0; i < data.length; i++) {
                 let t = data[i];
@@ -86,11 +87,13 @@ function sendSelectInfo() {
 }
 
 function updateSurveys() {
+    $(this).prop('disabled', true);
     $.ajax({
         context: this,
         url: "/MonkeyStatistics/api/update",
         method: "POST",
         success: function () {
+            $(this).prop('disabled', false);
         }
     });
 }
