@@ -9,7 +9,7 @@ public class Options {
     public final static int TITLE_HEIGHT = 40;
     public final static int HAXIS_HEIGHT = 20;
     public final static int SPACE_BETWEEN_GROUPS_OF_BARS = 35;
-    public final static int BAR_HEIGHT = 26;
+    public final static int BAR_HEIGHT = 30;
 
     private Integer height;
     private String title;

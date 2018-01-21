@@ -4,7 +4,7 @@ function createGCEditArea(id, div, chartsData) {
     div.append($('<h3>Имя графика</h3>'));
     div.append($(' <input style="width: 600px" class="chart-name" type="text" value="' + chartsData.chartName + '">'));
     div.append($('<h3>Вопросы</h3>'));
-    let table = $('<table></table>');
+    let table = $('<table class = "table-responsive"></table>');
 
     let tr2 = $('<tr></tr>');
     let tr3 = $('<tr class="questions"></tr>');
