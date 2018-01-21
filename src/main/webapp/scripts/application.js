@@ -14,8 +14,7 @@ function addChart() {
     let id = $(this).closest('body').find('.presets').find('.presets-select').find('option:selected').val();
     let workArea = $(this).closest('body').find('.work-area');
     $.ajax({
-        url: "/MonkeyStatistics/api/chart",
-        data: "type=" + type + "&id=" + id,
+        url: "/MonkeyStatistics/api/chart?" + "type=" + type + "&id=" + id,
         method: "POST",
         success: function (data) {
             let newDiv = $('<div class=edit-area></div>');
@@ -34,7 +33,7 @@ function deletePreset() {
     let presets = $(this).closest('body').find('.presets').find('.presets-select');
     let workArea = $(this).closest('body').find('.work-area');
     $.ajax({
-        url: "/MonkeyStatistics/api//preset?id=" + id,
+        url: "/MonkeyStatistics/api/preset?id=" + id,
         method: "DELETE",
         success: function (surveysData) {
             presets.find('option[value=' + id + ']').remove();
@@ -81,7 +80,7 @@ function showPresets() {
 
 function showSurveys() {
     $.ajax({
-        url: "/MonkeyStatistics/api/preset",
+        url: "/MonkeyStatistics/api/surveys",
         method: "GET",
         dataType: "json",
         success: function (surveysData) {
@@ -205,8 +204,7 @@ function deleteChart() {
     let editArea = $(this).closest('.edit-area');
 
     $.ajax({
-        url: "/MonkeyStatistics/api/chart",
-        data: "id=" + id,
+        url: "/MonkeyStatistics/api/chart?" + "id=" + id,
         method: "DELETE",
         success: function (data) {
             editArea.remove();
@@ -324,7 +322,6 @@ function appendQuestionsToQuestionsSelect(questions, questionsData, questionId) 
 }
 
 function getAnswersDataAndAppendItToAnswersSelect(questionId, answers, answerId) {
-    console.log("questionId " + questionId + " answers " + answers + " answerId " + answerId);
     let answersData = sessionStorage.getItem('answers' + questionId);
     if (answersData != null) {
         appendAnswersToAnswersSelect(answers, JSON.parse(answersData), answerId);

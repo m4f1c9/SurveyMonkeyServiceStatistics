@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
  * и отладки
  */
 @RestController
-public class System {
-    Logger logger = LoggerFactory.getLogger(System.class);
+public class ProjectsSystem {
+    Logger logger = LoggerFactory.getLogger(ProjectsSystem.class);
 
     @Autowired
     SurveyMonkeyService surveyMonkeyService;

@@ -15,10 +15,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.concurrent.ForkJoinPool;
 
 import static java.util.Objects.isNull;
@@ -106,7 +103,7 @@ public class SurveyServiceImpl implements SurveyService {
     @Cacheable(cacheNames = "stringsById", key = "{ #root.methodName, #id}")
     @Override
     public String getSurveyNameBySurveyId(Long id) {
-        return surveyService.get(id).getTitle();
+        return Optional.ofNullable(surveyService.get(id)).map(Survey::getTitle).orElse("");
     }
 
     @Transactional
@@ -115,7 +112,9 @@ public class SurveyServiceImpl implements SurveyService {
         List<Survey> surveys = surveyService.getAll();
         Set<IdNamePair> pairs = new TreeSet<>();
         surveys.forEach((t) -> {
-            pairs.add(new IdNamePair(t.getId(), t.getTitle()));
+            if (t.isConferenceSurvey()) {
+                pairs.add(new IdNamePair(t.getId(), t.getTitle()));
+            }
         });
         return pairs;
     }

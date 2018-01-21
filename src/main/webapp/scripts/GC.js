@@ -111,7 +111,7 @@ function newColumn() {
 
     addOnChangeBehaviorToSurveysSelectGC(surveys);
 
-    table.find('tr:nth-child(2)').append($('<td></td>').append(surveys));
+    table.find('tr:nth-child(1)').append($('<td></td>').append(surveys));
 
 
     let question = $('<select  style="width: 250px" class="question"></select>'); //TODO remove style
@@ -122,15 +122,15 @@ function newColumn() {
     surveys.change();
     addOnChangeBehaviorToQuestionsSelectGC(question);
 
-    table.find('tr:nth-child(3)').append($('<td style="width: 250px"></td>').append(question)); //TODO remove style
+    table.find('tr:nth-child(2)').append($('<td style="width: 250px"></td>').append(question)); //TODO remove style
 
 
-    let answers = $('<td><select  style="width: 250px" class="choice"></select></td>');
-    answers.find('select').prepend('<option value="null">' + 'Вариант отсутствует' + '</option>');
+    let answersTemplate = $('<td><select  style="width: 250px" class="choice"></select></td>');
+    answersTemplate.find('select').prepend('<option value="null">' + 'Вариант отсутствует' + '</option>');
 
 
     table.find('.choices').each(function (index, element) {
-        let answers = answers.clone();
+        let answers = answersTemplate.clone();
         addOnChangeBehaviorToAnswersSelectGC(answers);
         $(this).append(answers);
     })

@@ -1,12 +1,12 @@
 package org.jugru.monkeyStatistics.model.chart;
 
-import java.util.List;
-import javax.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.jugru.monkeyStatistics.service.SurveyService;
 import org.jugru.monkeyStatistics.util.ChartDataBuilder;
+
+import javax.persistence.*;
+import java.util.List;
 
 
 
@@ -26,7 +26,7 @@ public abstract class Chart {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column
+    @Column(length = 1024)
     private String chartName;
 
     @Embedded

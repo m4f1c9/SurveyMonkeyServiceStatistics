@@ -79,11 +79,6 @@ public class API {
         chartsPresetService.delete(chartsPresetService.get(id));
     }
 
-    @RequestMapping(value = "/api/preset", method = RequestMethod.GET)
-    public Set<IdNamePair> surveys() {
-        return surveyService.getIdNamePairOfSurveys();
-    }
-
     @RequestMapping(value = "/api/chart", method = RequestMethod.PUT)
     public Chart saveChart(@RequestBody Chart chart) {
         return chartService.save(chart);
@@ -125,9 +120,15 @@ public class API {
         return surveyService.getSurveyMetaInformationOfAllSurveys();
     }
 
-    @RequestMapping(value = "/api/surveys")
+    @RequestMapping(value = "/api/surveys",  method = RequestMethod.PUT)
     public void saveSurvey(@RequestParam(value = "id") Long id, @RequestParam(value = "isConferenceSurvey") boolean isConferenceSurvey) {
+        System.out.println("---------");
         surveyService.setConferenceSurvey(id, isConferenceSurvey);
+    }
+
+    @RequestMapping(value = "/api/surveys", method = RequestMethod.GET)
+    public Set<IdNamePair> surveys() {
+        return surveyService.getIdNamePairOfSurveys();
     }
 
     @RequestMapping(value = "/api/update")

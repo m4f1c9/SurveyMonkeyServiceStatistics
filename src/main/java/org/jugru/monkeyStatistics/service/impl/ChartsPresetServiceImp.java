@@ -8,7 +8,6 @@ import org.jugru.monkeyStatistics.util.IdNamePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -75,7 +74,7 @@ public class ChartsPresetServiceImp implements ChartsPresetService {
         return answer;
     }
 
-    @CacheEvict(value = "listOfIdNamePair", allEntries = true) // TODO наверно все инвалидировать не надо
+
     @Override
     public Chart createChart(Long id, String type) {
         Chart chart;

@@ -72,9 +72,8 @@ function sendSelectInfo() {
     let isConferenceSurvey =  radioButtonValue === 'yes';
     $.ajax({
         context: this,
-        url: "/MonkeyStatistics/api/surveys",
-        data: "id=" + id + '&isConferenceSurvey=' + isConferenceSurvey,
-        method: "POST",
+        url: "/MonkeyStatistics/api/surveys?" + "id=" + id + '&isConferenceSurvey=' + isConferenceSurvey,
+        method: "PUT",
         success: function () {
             if(isConferenceSurvey){
                 $(this).closest('tr').removeClass("table-dark").addClass("table-primary");
