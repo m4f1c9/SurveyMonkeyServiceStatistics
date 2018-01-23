@@ -41,7 +41,7 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
     @Override
     public QuestionMetaInformation get(long id) {
         QuestionMetaInformation questionMetaInformation = questionMetaInformationRepository.findOne(id);
-        logger.debug("Get QuestionMetaInformation - {}",questionMetaInformation);
+        logger.debug("Get QuestionMetaInformation - {}", questionMetaInformation);
         return questionMetaInformation;
     }
 
@@ -103,7 +103,8 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
                         t.getId(),
                         ChartDataBuilder.removeTags(questionMetaInformationService.getHeadingAsStringFromQuestionMetaInformationId(t.getId())),
                         questionMetaInformationService.isWithCustomChoice(t.getId()),
-                        questionMetaInformationService.isWithNoChoice(t.getId()))));
+                        questionMetaInformationService.isWithNoChoice(t.getId()),
+                        isSupported(t))));
         return questions;
     }
 
@@ -117,7 +118,7 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
 
     @Override
     public List<QuestionMetaInformation> getQuestionMetaInformationBySurveyId(Long id) {
-         return questionMetaInformationRepository.getQuestionMetaInformationBySurveyId(id);
+        return questionMetaInformationRepository.getQuestionMetaInformationBySurveyId(id);
     }
 
     @Cacheable(cacheNames = "countById", key = "{ #root.methodName, #id}")
@@ -177,5 +178,24 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
                 map(QuestionMetaInformation::getAnswers).
                 map(AnswerMetaInformation::getOther).
                 map(Other::getIs_answer_choice).orElse(false);
+    }
+
+    private boolean isSupported(QuestionMetaInformation questionMetaInformation) {
+        String type = questionMetaInformation.getFamily();
+        if ("presentation".equals(type)) {
+            return false;
+        } else if ("multiple_choice".equals(type)) {
+            return true;
+        } else if ("datetime".equals(type)) {
+            return false;
+        } else if ("demographic".equals(type)) {
+            return false;
+        } else if ("open_ended".equals(type)) { //TODO тут вопросы по возрасту и городу
+            return false;
+        } else if ("matrix".equals(type)) {
+            return true;
+        } else if ("single_choice".equals(type)) {
+            return true;
+        } else return false;
     }
 }

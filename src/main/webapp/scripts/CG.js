@@ -23,8 +23,15 @@ function createCGEditArea(id, div, chartsData) {
                 secondQuestion.empty();
                 for (var i = 0; i < questionsData.length; i++) {
                     var t = questionsData[i];
-                    firstQuestion.append('<option value="' + t.id + '">' + t.name + '</option>');
-                    secondQuestion.append('<option value="' + t.id + '">' + t.name + '</option>');
+
+                    let option1 = $('<option value="' + t.id + '">' + t.name + '</option>');
+                    let option2 = $('<option value="' + t.id + '">' + t.name + '</option>');
+                    if(!t.show){
+                        option1.prop( "disabled", true );
+                        option2.prop( "disabled", true );
+                    }
+                    firstQuestion.append(option1);
+                    secondQuestion.append(option2);
                 }
 
             }
@@ -92,8 +99,14 @@ function createCGEditArea(id, div, chartsData) {
             secondQuestion.empty();
             for (var i = 0; i < questionsData.length; i++) {
                 var t = questionsData[i];
-                firstQuestion.append('<option value="' + t.id + '">' + t.name + '</option>');
-                secondQuestion.append('<option value="' + t.id + '">' + t.name + '</option>');
+                let option1 = $('<option value="' + t.id + '">' + t.name + '</option>');
+                let option2 = $('<option value="' + t.id + '">' + t.name + '</option>');
+                if(!t.show){
+                    option1.prop( "disabled", true );
+                    option2.prop( "disabled", true );
+                }
+                firstQuestion.append(option1);
+                secondQuestion.append(option2);
             }
             firstQuestion.find('option[value=' + chartsData.firstQuestionMetaInformationId + ']').attr('selected', 'selected');
             secondQuestion.find('option[value=' + chartsData.secondQuestionMetaInformationId + ']').attr('selected', 'selected');

@@ -313,7 +313,11 @@ function appendQuestionsToQuestionsSelect(questions, questionsData, questionId) 
     questions.empty();
     for (var i = 0; i < questionsData.length; i++) {
         var t = questionsData[i];
-        questions.append('<option value="' + t.id + '">' + t.name + '</option>');
+        let option = $('<option value="' + t.id + '">' + t.name + '</option>');
+        if(!t.show){
+            option.prop( "disabled", true );
+        }
+        questions.append(option);
     }
     if (questionId != undefined) {
         questions.find('option[value=' + questionId + ']').attr('selected', 'selected');

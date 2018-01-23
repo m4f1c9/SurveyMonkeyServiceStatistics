@@ -122,7 +122,6 @@ public class API {
 
     @RequestMapping(value = "/api/surveys",  method = RequestMethod.PUT)
     public void saveSurvey(@RequestParam(value = "id") Long id, @RequestParam(value = "isConferenceSurvey") boolean isConferenceSurvey) {
-        System.out.println("---------");
         surveyService.setConferenceSurvey(id, isConferenceSurvey);
     }
 

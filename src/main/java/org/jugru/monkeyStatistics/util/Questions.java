@@ -5,7 +5,7 @@ public class Questions {
     private String name;
     private boolean withCustomChoice;
     private boolean withNoChoice;
-
+    private boolean show;
 
     public Questions() {
     }
@@ -15,6 +15,22 @@ public class Questions {
         this.name = name;
         this.withCustomChoice = withCustomChoice;
         this.withNoChoice = withNoChoice;
+    }
+
+    public Questions(Long id, String name, boolean withCustomChoice, boolean withNoChoice, boolean show) {
+        this.id = id;
+        this.name = name;
+        this.withCustomChoice = withCustomChoice;
+        this.withNoChoice = withNoChoice;
+        this.show = show;
+    }
+
+    public boolean isShow() {
+        return show;
+    }
+
+    public void setShow(boolean show) {
+        this.show = show;
     }
 
     public Long getId() {
