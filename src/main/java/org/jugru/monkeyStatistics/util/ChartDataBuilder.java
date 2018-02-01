@@ -1,32 +1,22 @@
 package org.jugru.monkeyStatistics.util;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.jugru.monkeyStatistics.model.Choice;
 import org.jugru.monkeyStatistics.model.ChoiceOrRow;
-import org.jugru.monkeyStatistics.model.chart.ChartOptions;
-import org.jugru.monkeyStatistics.model.chart.ChartsPreset;
-import org.jugru.monkeyStatistics.model.chart.CrossGroupingChart;
-import org.jugru.monkeyStatistics.model.chart.GroupedByChoiceChart;
-import org.jugru.monkeyStatistics.model.chart.SingleQuestionChart;
-import org.jugru.monkeyStatistics.model.chart.UngroupedCharts;
-import org.jugru.monkeyStatistics.model.chart.ChartData;
-import org.jugru.monkeyStatistics.model.chart.Options;
-import org.jugru.monkeyStatistics.model.chart.ChoiceGroup;
-import org.jugru.monkeyStatistics.model.chart.QuestionDetails;
-import org.jugru.monkeyStatistics.service.*;
+import org.jugru.monkeyStatistics.model.chart.*;
+import org.jugru.monkeyStatistics.service.AnswerService;
+import org.jugru.monkeyStatistics.service.QuestionMetaInformationService;
+import org.jugru.monkeyStatistics.service.QuestionService;
+import org.jugru.monkeyStatistics.service.SurveyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
 public class ChartDataBuilder {
@@ -82,6 +72,8 @@ public class ChartDataBuilder {
     }
 
     private ChartData createChartDataFromSingleChart(SingleQuestionChart singleChart, ChartOptions chartOptions, String title) {
+        Long questionMetaInfId = singleChart.getQuestionMetaInfId();
+        questionMetaInformationService.isSupportedElseThrowException(questionMetaInfId);
         ChartData chartData = new ChartData();
 
 
@@ -92,7 +84,7 @@ public class ChartDataBuilder {
         List columnsNames = createColumnWithNamesFromSingleChart(singleChart, chartOptions);
         chartData.addData(columnsNames);
 
-        Long questionMetaInfId = singleChart.getQuestionMetaInfId();
+
         boolean isUseRow_idInsteadOfChoice_id = questionMetaInformationService.isUseRow_idInsteadOfChoice_idByQuestionMetaInformationId(questionMetaInfId);
         List row = new LinkedList();
         Long surveyId = surveyService.findSurveyIdByQuestionMetaInformationId(questionMetaInfId);
@@ -156,6 +148,11 @@ public class ChartDataBuilder {
     }
 
     public ChartData createChartDataFromCrossGroupingChart(CrossGroupingChart сrossGroupingChart) {
+        Long firstQuestionMetaInfId = сrossGroupingChart.getFirstQuestionMetaInformationId();
+        Long secondQuestionMetaInfId = сrossGroupingChart.getSecondQuestionMetaInformationId();
+        questionMetaInformationService.isSupportedElseThrowException(firstQuestionMetaInfId);
+        questionMetaInformationService.isSupportedElseThrowException(secondQuestionMetaInfId);
+
         ChartOptions chartOptions = сrossGroupingChart.getChartOptions();
         ChartData chartData = new ChartData();
         Options options = createDefaultOptions(сrossGroupingChart);
@@ -165,8 +162,6 @@ public class ChartDataBuilder {
 
         chartData.addData(columnWithNames);
 
-        Long firstQuestionMetaInfId = сrossGroupingChart.getFirstQuestionMetaInformationId();
-        Long secondQuestionMetaInfId = сrossGroupingChart.getSecondQuestionMetaInformationId();
 
         boolean isUseRow_idInsteadOfChoice_idForFirstQuestion = questionMetaInformationService.isUseRow_idInsteadOfChoice_idByQuestionMetaInformationId(firstQuestionMetaInfId);
         boolean isUseRow_idInsteadOfChoice_idForSecondQuestion = questionMetaInformationService.isUseRow_idInsteadOfChoice_idByQuestionMetaInformationId(secondQuestionMetaInfId);
@@ -254,6 +249,7 @@ public class ChartDataBuilder {
 
 
                     Long questionMetaInfId = questionDetails.getQuestionId();
+                    questionMetaInformationService.isSupportedElseThrowException(questionMetaInfId);
                     boolean isUseRow_idInsteadOfChoice_idForSecondQuestion = questionMetaInformationService.isUseRow_idInsteadOfChoice_idByQuestionMetaInformationId(questionMetaInfId);
 
 

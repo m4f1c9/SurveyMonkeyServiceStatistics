@@ -1,13 +1,13 @@
 package org.jugru.monkeyStatistics.service;
 
-import java.util.List;
-
 import org.jugru.monkeyStatistics.model.Choice;
 import org.jugru.monkeyStatistics.model.ChoiceOrRow;
 import org.jugru.monkeyStatistics.model.QuestionMetaInformation;
 import org.jugru.monkeyStatistics.model.Row;
 import org.jugru.monkeyStatistics.util.IdNamePair;
 import org.jugru.monkeyStatistics.util.Questions;
+
+import java.util.List;
 
 public interface QuestionMetaInformationService extends Service<QuestionMetaInformation> {
 
@@ -42,5 +42,9 @@ public interface QuestionMetaInformationService extends Service<QuestionMetaInfo
     boolean isWithNoChoice(Long id);
 
     boolean isWithCustomChoice(Long id);
+
+    boolean isSupportedElseThrowException(QuestionMetaInformation questionMetaInformation);
+
+    boolean isSupportedElseThrowException(Long id);
 
 }

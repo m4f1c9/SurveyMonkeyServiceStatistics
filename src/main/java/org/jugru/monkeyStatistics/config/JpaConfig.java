@@ -38,7 +38,7 @@ public class JpaConfig {
 
     private static final String PROP_HIBERNATE_DIALECT = "hibernate.dialect";
     private static final String PROP_HIBERNATE_SHOW_SQL = "show_sql";
-    private static final String PROP_ENTITYMANAGER_PACKAGES_TO_SCAN = "db.entitymanager.packages.to.scan";
+    private static final String PROP_ENTITY_MANAGER_PACKAGES_TO_SCAN = "org.jugru.monkeyStatistics.model";
     private static final String PROP_HIBERNATE_SCHEMA_GENERATION = "javax.persistence.schema-generation.database.action";
 
     @Resource
@@ -61,7 +61,7 @@ public class JpaConfig {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactoryBean.setDataSource(dataSource());
         entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
-        entityManagerFactoryBean.setPackagesToScan(env.getRequiredProperty(PROP_ENTITYMANAGER_PACKAGES_TO_SCAN));
+        entityManagerFactoryBean.setPackagesToScan(PROP_ENTITY_MANAGER_PACKAGES_TO_SCAN);
 
         entityManagerFactoryBean.setJpaProperties(getHibernateProperties());
 
@@ -84,12 +84,6 @@ public class JpaConfig {
 
         return properties;
     }
-
-//    @Bean
-//    public CacheManager cacheManager() {
-//        // configure and return an implementation of Spring's CacheManager SPI
-//        return new ConcurrentMapCacheManager("default");
-//    }
 
     @Bean
     public CacheManager cacheManager() {

@@ -7,6 +7,7 @@ import org.jugru.monkeyStatistics.service.SurveyService;
 import org.jugru.monkeyStatistics.util.ChartDataBuilder;
 import org.jugru.monkeyStatistics.util.IdNamePair;
 import org.jugru.monkeyStatistics.util.Questions;
+import org.jugru.monkeyStatistics.util.UnsupportedQuestionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -197,5 +198,16 @@ public class QuestionMetaInformationServiceImp implements QuestionMetaInformatio
         } else if ("single_choice".equals(type)) {
             return true;
         } else return false;
+    }
+
+    @Override
+    public boolean isSupportedElseThrowException(QuestionMetaInformation questionMetaInformation) {
+        if(isSupported(questionMetaInformation)) return true;
+        else throw new UnsupportedQuestionException(questionMetaInformation.getFamily() + " type of question is not supported");
+    }
+
+    @Override
+    public boolean isSupportedElseThrowException(Long id) {
+        return this.isSupportedElseThrowException(this.get(id));
     }
 }

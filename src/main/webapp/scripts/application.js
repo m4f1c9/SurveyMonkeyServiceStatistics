@@ -6,6 +6,7 @@ function editpage() {
     $('.preset-add').on('click', createPreset);
     $('.preset-delete').on('click', deletePreset);
     $('.add-chart').on('click', addChart);
+    $('.preset-rename').on('click', renamePreset);
 }
 
 
@@ -23,6 +24,25 @@ function addChart() {
 
         }
     });
+}
+
+function renamePreset() {
+    let text = $('.preset-name').val();
+    let presetId = $('.presets-select option:selected').val();
+    let data = {};
+    data.id = presetId;
+    data.name = text
+    $.ajax({
+        method: "PUT",
+        context: this,
+        contentType: 'application/json',
+        url: "/MonkeyStatistics/api/preset",
+        data: JSON.stringify(data),
+        success: function () {
+             $('.presets-select option:selected').text(text);
+        }
+    });
+
 }
 
 
@@ -314,8 +334,8 @@ function appendQuestionsToQuestionsSelect(questions, questionsData, questionId) 
     for (var i = 0; i < questionsData.length; i++) {
         var t = questionsData[i];
         let option = $('<option value="' + t.id + '">' + t.name + '</option>');
-        if(!t.show){
-            option.prop( "disabled", true );
+        if (!t.show) {
+            option.prop("disabled", true);
         }
         questions.append(option);
     }
@@ -348,6 +368,7 @@ function appendAnswersToAnswersSelect(answers, answersData, answerId) {
     for (var i = 0; i < answersData.length; i++) {
         var t = answersData[i];
         answers.append('<option value="' + t.id + '">' + t.name + '</option>');
+        console.log(t.name);
     }
     if (answerId != null) {
         answers.find('option[value=' + answerId + ']').attr('selected', 'selected');

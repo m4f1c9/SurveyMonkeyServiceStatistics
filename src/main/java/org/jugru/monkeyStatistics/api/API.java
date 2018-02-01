@@ -8,13 +8,11 @@ import org.jugru.monkeyStatistics.service.ChartsPresetService;
 import org.jugru.monkeyStatistics.service.QuestionMetaInformationService;
 import org.jugru.monkeyStatistics.service.SurveyService;
 import org.jugru.monkeyStatistics.service.impl.SurveyMonkeyService;
-import org.jugru.monkeyStatistics.util.ChartDataBuilder;
-import org.jugru.monkeyStatistics.util.IdNamePair;
-import org.jugru.monkeyStatistics.util.Questions;
-import org.jugru.monkeyStatistics.util.SurveyMetaInformation;
+import org.jugru.monkeyStatistics.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,7 +47,6 @@ public class API {
     }
 
 
-
     @RequestMapping(value = "/api/questionsBySurveyId")
     public List<Questions> questionsBySurveyId(@RequestParam(value = "id") Long id) {
         return questionMetaInformationService.getQuestionsBySurveyId(id);
@@ -77,6 +74,11 @@ public class API {
     @RequestMapping(value = "/api/preset", method = RequestMethod.DELETE)
     public void deletePreset(@RequestParam(value = "id") Long id) {
         chartsPresetService.delete(chartsPresetService.get(id));
+    }
+
+    @RequestMapping(value = "/api/preset", method = RequestMethod.PUT)
+    public void renamePreset(@RequestBody IdNamePair pair) {
+        chartsPresetService.rename(pair.getId(),pair.getName());
     }
 
     @RequestMapping(value = "/api/chart", method = RequestMethod.PUT)
@@ -120,7 +122,7 @@ public class API {
         return surveyService.getSurveyMetaInformationOfAllSurveys();
     }
 
-    @RequestMapping(value = "/api/surveys",  method = RequestMethod.PUT)
+    @RequestMapping(value = "/api/surveys", method = RequestMethod.PUT)
     public void saveSurvey(@RequestParam(value = "id") Long id, @RequestParam(value = "isConferenceSurvey") boolean isConferenceSurvey) {
         surveyService.setConferenceSurvey(id, isConferenceSurvey);
     }
@@ -134,5 +136,11 @@ public class API {
     public void update() {
         logger.debug("update surveys");
         surveyMonkeyService.updateAll();
+    }
+
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(UnsupportedQuestionException.class)
+    public void exceptionHandler() {
     }
 }

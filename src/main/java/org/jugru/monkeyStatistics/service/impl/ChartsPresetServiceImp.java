@@ -103,4 +103,11 @@ public class ChartsPresetServiceImp implements ChartsPresetService {
         });
         return pairs;
     }
+
+    @Override
+    public void rename(Long id, String name) {
+        ChartsPreset preset = chartsPresetService.get(id);
+        preset.setName(name);
+        chartsPresetService.save(preset);
+    }
 }

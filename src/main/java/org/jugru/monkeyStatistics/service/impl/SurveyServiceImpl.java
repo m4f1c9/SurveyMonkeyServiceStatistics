@@ -26,7 +26,7 @@ import static java.util.Objects.nonNull;
 public class SurveyServiceImpl implements SurveyService {
 
     Logger logger = LoggerFactory.getLogger(SurveyService.class);
-    private static int MAXIMUM_FORK_JOIN_POOL_SIZE = 3;
+    private static int MAXIMUM_FORK_JOIN_POOL_SIZE = 1;
 
     @Autowired
     private SurveyService surveyService;

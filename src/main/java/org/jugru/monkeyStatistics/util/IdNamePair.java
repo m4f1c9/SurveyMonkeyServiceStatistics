@@ -12,6 +12,9 @@ public class IdNamePair implements Comparable<IdNamePair> {
         this.name = name;
     }
 
+    public IdNamePair() {
+    }
+
     public Long getId() {
         return id;
     }

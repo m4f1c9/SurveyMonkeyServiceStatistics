@@ -1,10 +1,10 @@
 package org.jugru.monkeyStatistics.service;
 
-import java.util.List;
-
 import org.jugru.monkeyStatistics.model.chart.Chart;
 import org.jugru.monkeyStatistics.model.chart.ChartsPreset;
 import org.jugru.monkeyStatistics.util.IdNamePair;
+
+import java.util.List;
 
 /**
  *
@@ -19,4 +19,6 @@ public interface ChartsPresetService extends Service<ChartsPreset> {
     List<IdNamePair> getIdNamePairsOfChartsByPresetId(Long id);
 
     List<IdNamePair> getIdNamePairOfPresets();
+
+    void rename(Long id, String name);
 }

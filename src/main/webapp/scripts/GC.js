@@ -125,17 +125,18 @@ function newColumn() {
     table.find('tr:nth-child(2)').append($('<td style="width: 250px"></td>').append(question)); //TODO remove style
 
 
-    let answersTemplate = $('<td><select  style="width: 250px" class="choice"></select></td>');
+    let answersTemplate = $('<select  style="width: 250px" class="choice"></select>');
     answersTemplate.find('select').prepend('<option value="null">' + 'Вариант отсутствует' + '</option>');
 
 
     table.find('.choices').each(function (index, element) {
         let answers = answersTemplate.clone();
         addOnChangeBehaviorToAnswersSelectGC(answers);
-        $(this).append(answers);
+        let questionId = question.find('option:selected').val();
+        getAnswersDataAndAppendItToAnswersSelect(questionId, answers);
+        getAnswersDataAndAppendItToAnswersSelect(questionId, answers);
+        $(this).append($('<td></td>').append(answers));
     })
-
-
 }
 
 
