@@ -118,7 +118,7 @@ function createCGEditArea(id, div, chartsData) {
     div.append($('<h3>Предпросмотр</h3>'));
     div.append(chartDiv);
 
-    setTimeout(drawChartById, 1000, chartDiv, id);
+    setTimeout(drawChartById, chartTimeOut, chartDiv, id);
 
     buttons.append($('<button class="reDrawCG">Перерисовать</button>'))
    buttons.find('.reDrawCG').on('click', reDrawCG);

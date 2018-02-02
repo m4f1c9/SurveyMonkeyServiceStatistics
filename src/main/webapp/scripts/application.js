@@ -1,3 +1,6 @@
+var defaultTimeOut = 500;
+var chartTimeOut = 500;
+
 function editpage() {
     google.charts.load('current', {'packages': ['corechart']});
     showPresets();
@@ -39,7 +42,7 @@ function renamePreset() {
         url: "/MonkeyStatistics/api/preset",
         data: JSON.stringify(data),
         success: function () {
-             $('.presets-select option:selected').text(text);
+            $('.presets-select option:selected').text(text);
         }
     });
 
@@ -267,11 +270,13 @@ function drawPresets() {
         success: function (chartsData) {
             let div = $('#chart');
             div.empty();
+            let timeOut = 0;
             for (let i = 0; i < chartsData.length; i++) {
+
                 let newDiv = $('<div></div>');
                 div.append(newDiv);
                 let id = chartsData[i].id;
-                drawChartById(newDiv, id);
+                setTimeout(drawChartById, i * defaultTimeOut, newDiv, id);
             }
         }
     });
@@ -323,7 +328,8 @@ function getPresetDataAndDrawIt(presetId) {
             for (var i = 0; i < chartsData.length; i++) {
                 let newDiv = $('<div class=edit-area></div>');
                 workArea.append(newDiv);
-                createEditArea(chartsData[i].id, newDiv);
+                // createEditArea(chartsData[i].id, newDiv);
+                setTimeout(createEditArea, i * defaultTimeOut, chartsData[i].id, newDiv);
             }
         }
     });
@@ -368,7 +374,6 @@ function appendAnswersToAnswersSelect(answers, answersData, answerId) {
     for (var i = 0; i < answersData.length; i++) {
         var t = answersData[i];
         answers.append('<option value="' + t.id + '">' + t.name + '</option>');
-        console.log(t.name);
     }
     if (answerId != null) {
         answers.find('option[value=' + answerId + ']').attr('selected', 'selected');
