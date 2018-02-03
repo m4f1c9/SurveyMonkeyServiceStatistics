@@ -1,4 +1,4 @@
-var defaultTimeOut = 500;
+var defaultTimeOut = 800;
 var chartTimeOut = 500;
 
 function editpage() {
@@ -360,6 +360,7 @@ function getAnswersDataAndAppendItToAnswersSelect(questionId, answers, answerId)
         $.ajax({
             url: "/MonkeyStatistics/api/answers?id=" + questionId,
             dataType: "json",
+            async: false,
             success: function (answersData) {
                 sessionStorage.setItem('answers' + questionId, JSON.stringify(answersData));
                 appendAnswersToAnswersSelect(answers, answersData, answerId);

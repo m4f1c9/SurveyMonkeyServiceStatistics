@@ -118,25 +118,23 @@ function newColumn() {
     let surveyId = surveys.find('option:selected').val();
 
     getQuestionsDataAndAppendItToQuestionsSelect(surveyId, question);
-
-    surveys.change();
     addOnChangeBehaviorToQuestionsSelectGC(question);
+
+
 
     table.find('tr:nth-child(2)').append($('<td style="width: 250px"></td>').append(question)); //TODO remove style
 
 
     let answersTemplate = $('<select  style="width: 250px" class="choice"></select>');
-    answersTemplate.find('select').prepend('<option value="null">' + 'Вариант отсутствует' + '</option>');
+    answersTemplate.prepend('<option value="null">' + 'Вариант отсутствует' + '</option>');
 
 
     table.find('.choices').each(function (index, element) {
         let answers = answersTemplate.clone();
         addOnChangeBehaviorToAnswersSelectGC(answers);
-        let questionId = question.find('option:selected').val();
-        getAnswersDataAndAppendItToAnswersSelect(questionId, answers);
-        getAnswersDataAndAppendItToAnswersSelect(questionId, answers);
         $(this).append($('<td></td>').append(answers));
     })
+    surveys.change();
 }
 
 
