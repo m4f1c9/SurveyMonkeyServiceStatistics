@@ -114,15 +114,14 @@ function newColumn() {
     table.find('tr:nth-child(1)').append($('<td></td>').append(surveys));
 
 
-    let question = $('<select  style="width: 250px" class="question"></select>'); //TODO remove style
+    let questions = $('<select  style="width: 250px" class="question"></select>'); //TODO remove style
     let surveyId = surveys.find('option:selected').val();
 
-    getQuestionsDataAndAppendItToQuestionsSelect(surveyId, question);
-    addOnChangeBehaviorToQuestionsSelectGC(question);
+    getQuestionsDataAndAppendItToQuestionsSelect(surveyId, questions);
+    addOnChangeBehaviorToQuestionsSelectGC(questions);
 
 
-
-    table.find('tr:nth-child(2)').append($('<td style="width: 250px"></td>').append(question)); //TODO remove style
+    table.find('tr:nth-child(2)').append($('<td style="width: 250px"></td>').append(questions)); //TODO remove style
 
 
     let answersTemplate = $('<select  style="width: 250px" class="choice"></select>');
@@ -134,7 +133,21 @@ function newColumn() {
         addOnChangeBehaviorToAnswersSelectGC(answers);
         $(this).append($('<td></td>').append(answers));
     })
-    surveys.change();
+    //TODO копипаста из addOnChangeBehaviorToQuestionsSelectGC и addOnChangeBehaviorToSurveysSelectGC
+    //из-за изменения имени графика при имене вопроса
+    let index = questions.parent().index();
+    $.ajax({
+        url: "/MonkeyStatistics/api/questionsBySurveyId?id=" + surveyId,
+        dataType: "json",
+        success: function (questionsData) {
+            questions.empty();
+            appendQuestionsToQuestionsSelect(questions, questionsData);
+            let answers = questions.closest('table').find('.choices td:nth-child(' + (index + 1) + ')').find('select'); // +1 так как это CSS селектор
+            answers.empty();
+            let questionId = questions.find('option:selected').val();
+            getAnswersDataAndAppendItToAnswersSelect(questionId, answers);
+        }
+    });
 }
 
 
@@ -257,7 +270,10 @@ function collectGCData(editArea) {
 
     });
 
-    editArea.find('.choices').each(function (rowIndex, element) {
+    // TODO при добавлении 6 ряда ответов воявляется лишний .choices не в table
+    editArea.find('table:first').find('.choices').each(function (rowIndex, element) {
+        console.log(rowIndex);
+        console.log($(this).find('.row-name').val());
         answer.choiceGroups[rowIndex] = {};
         answer.choiceGroups[rowIndex].text = $(this).find('.row-name').val();
         answer.choiceGroups[rowIndex].choicesId = [];
