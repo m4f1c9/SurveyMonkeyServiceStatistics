@@ -179,7 +179,7 @@ function createQuestionsCheckboxes(questionOptions) {
 
 function createChartCheckboxes(chartOptions) {
     let div = $('<div class="chart-checkboxes"></div>');
-    let cb1 = $(' <input type="checkbox" class="tooltip">Полные тултипы<Br> ');
+    let cb1 = $('<input hidden type="checkbox" class="tooltip">');
     let cb2 = $(' <input type="checkbox" class="annotation">Полные подписи<Br> ');
     let cb3 = $(' <input type="checkbox" class="gradient">Использовать градиент<Br> ');
     if (chartOptions.tooltip == 'FULL') {
